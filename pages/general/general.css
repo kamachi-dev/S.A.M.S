@@ -1,3 +1,16 @@
+html {
+    height: 100%;
+    display: block;
+    margin: auto;
+}
+body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    margin: 0;
+    overflow: hidden;
+    justify-content: center;
+}
 button {
     font: 1.5em sans-serif;
     color: white;
@@ -8,6 +21,75 @@ button {
 button:hover {
     background-color: #758da3;
     transition-duration: 0.4s;
+}
+
+.background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    filter: brightness(0.3);
+}
+.slip {
+    background-color: white;
+    height: 100%;
+    width: 80%;
+    z-index: 1;
+}
+.headerPicture {
+    height: 13em;
+    width: 100%;
+    filter: brightness(0.8);
+    object-fit: cover;
+    border-bottom: 2px solid black;
+}
+.longLogo {
+    position: absolute;
+    top: 2.5em;
+    left: 0;
+    height: 8em;
+    width: 100%;
+    object-fit: contain;
+    filter: invert(1) drop-shadow(0 0 0.3em black);
+    z-index: 2;
+}
+.navBar {
+    position: absolute;
+    top: 6em;
+    left: 10%;
+    height: 10em;
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+.navBar > li {
+    position: relative;
+    top: 2.4em;
+    font: 1.5em sans-serif;
+    border-radius: 5%;
+    height: 6em;
+    width: 6em;
+    background-color: white;
+    border: 1.5px solid black;
+    z-index: 2;
+}
+.navBar > li:hover {
+    top: 2em;
+    transition: 0.2s;
+}
+.navBar > li > a {
+    text-decoration: none;
+}
+.content {
+    top: -4px;
+    position: relative;
+    background-color: white;
+    height: 10em;
+    width: 100%;
+    z-index: 3;
 }
 
 /*popup section##############################################################*/
