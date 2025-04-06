@@ -1,0 +1,51 @@
+button {
+    font: 1.5em sans-serif;
+    color: white;
+    background-color: #4CA8F3;
+    border: none;
+    border-radius: 5px;
+}
+button:hover {
+    background-color: #758da3;
+    transition-duration: 0.4s;
+}
+
+/*popup section##############################################################*/
+.popup {
+    visibility: hidden;
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup > div {
+    overflow-y: scroll;
+    width: 70%;
+    height: 80%;
+    background-color: white;
+    border-radius: 15px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-wrap: wrap;
+}
+.popup > div > * {
+    margin: 0% 5% 0% 5%;
+}
+.popup > div > h1 {
+    margin-top: 5%;
+}
+.popup.show {
+    transition: 0.4s;
+    opacity: 1;
+    visibility: visible;
+}
+.popup.hide {
+    transition: 0.4s;
+    opacity: 0;
+    visibility: hidden;
+}
