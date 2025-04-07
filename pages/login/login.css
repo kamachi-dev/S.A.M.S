@@ -90,5 +90,7 @@
 }
 .popup > div > button {
     align-self: center;
+    width: 90%;
+    height: 2em;
     margin: 5%;
 }

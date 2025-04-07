@@ -1,3 +1,8 @@
+:root {
+    --blue: #4CA8F3;
+    --grey: #7e7e7e;
+}
+
 html {
     height: 100%;
     display: block;
@@ -14,12 +19,12 @@ body {
 button {
     font: 1.5em sans-serif;
     color: white;
-    background-color: #4CA8F3;
+    background-color: var(--blue);
     border: none;
     border-radius: 5px;
 }
 button:hover {
-    background-color: #758da3;
+    background-color: var(--grey);
     transition-duration: 0.4s;
 }
 
@@ -47,8 +52,8 @@ button:hover {
     border-bottom: 2px solid black;
 }
 .longLogo {
-    position: absolute;
-    top: 2.5em;
+    position: relative;
+    top: -11em;
     left: 0;
     height: 8em;
     width: 100%;
@@ -56,42 +61,93 @@ button:hover {
     filter: invert(1) drop-shadow(0 0 0.3em black);
     z-index: 2;
 }
-.navBar {
-    position: absolute;
-    top: 6em;
-    left: 10%;
-    height: 10em;
+nav > ul {
     display: flex;
     align-items: center;
     list-style: none;
 }
-.navBar > li {
+nav > ul > .currentTab {
+    background-color: white;
+}
+nav > ul > li {
     position: relative;
-    top: 2.4em;
     font: 1.5em sans-serif;
     border-radius: 5%;
-    height: 6em;
-    width: 6em;
-    background-color: white;
+    padding: 0% 1% 0% 1%;
+    background-color: var(--grey);
     border: 1.5px solid black;
     z-index: 2;
+    align-items: start;
+    display: flex;
 }
-.navBar > li:hover {
+nav > ul > li > img {
+    margin: 0.1em;
+    width: 0.8em;
+    object-fit: contain;
+}
+nav > ul > li > a {
+    color: black;
+    white-space: nowrap;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+.navBar {
+    position: relative;
+    top: -15em;
+}
+.navBar > ul > li{
+    height: 6em;
+    top: 2.4em;
+    width: fit-content;
+}
+.navBar > ul > li:hover {
     top: 2em;
     transition: 0.2s;
 }
-.navBar > li > a {
-    text-decoration: none;
+.menuNav {
+    width: 80%;
+}
+.menuNav > ul {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.menuNav > ul > li {
+    border: black solid 3px;
+    border-radius: 10px;
+    width: 100%;
+    height: 1.5em;
+}
+.menuNav > ul > li:hover {
+    border: var(--blue) solid 3px;
+    transition: 0.2s;
 }
 .content {
-    top: -4px;
+    padding: 0% 3% 0% 3%;
+    overflow-y: scroll;
+    height: calc(100vh - 13em);
     position: relative;
     background-color: white;
-    height: 10em;
-    width: 100%;
+    top: -19.8em;
+    width: 94%;
     z-index: 3;
 }
-
+.content > * {
+    font: 2em sans-serif;
+}
+.menu {
+    visibility: hidden;
+    position: absolute;
+    width: 2em;
+    aspect-ratio: 1/1;
+    top: calc(100vh - 4em);
+    left: 2em;
+    z-index: 10;
+}
+.menu > img {
+    filter: invert(1);
+}
 /*popup section##############################################################*/
 .popup {
     visibility: hidden;
@@ -110,13 +166,14 @@ button:hover {
     height: 80%;
     background-color: white;
     border-radius: 15px;
-    display: grid;
+    display: block;
     justify-content: center;
     align-items: center;
     text-wrap: wrap;
 }
 .popup > div > * {
     margin: 0% 5% 0% 5%;
+    font-size: larger;
 }
 .popup > div > h1 {
     margin-top: 5%;
@@ -130,4 +187,16 @@ button:hover {
     transition: 0.4s;
     opacity: 0;
     visibility: hidden;
+}
+/*responsiveness##############################################################*/
+@media only screen and (max-width: 750px) {
+    .navBar {
+        visibility: hidden;
+    }
+    .slip {
+        width: 100%;
+    }
+    .menu {
+        visibility: visible;
+    }
 }
