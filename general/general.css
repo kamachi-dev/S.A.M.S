@@ -68,6 +68,12 @@ nav > ul {
 }
 nav > ul > .currentTab {
     background-color: white;
+    animation: down 0.4s linear;
+}
+@keyframes down {
+    0% {
+        top: 2em;
+    }
 }
 nav > ul > li {
     position: relative;

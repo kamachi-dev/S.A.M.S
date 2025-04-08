@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>SAMS : View Report</title>
-        <link rel="shortcut icon" type="image/png" href="../../../assets/HatLogo.png">
+        <title>SAMS : User Profile</title>
+        <link rel="shortcut icon" type="image/png" href="../assets/HatLogo.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="../../general/general.css">
-        <link rel="stylesheet" type="text/css" href="userProfile.css">
-        <script defer src="../parent.js"></script>
+        <link rel="stylesheet" type="text/css" href="../general/general.css">
+        <link rel="stylesheet" type="text/css" href="parent.css">
+        <link rel="stylesheet" type="text/css" href="userProfile/userProfile.css">
+        <script defer src="../general/general.js"></script>
+        <script defer src="userProfile/userProfile.js"></script>
+        <script defer src="parent.js"></script>
     </head>
     <body>
-        <img src="../../../assets/School1.jpg" alt="background" class="background"/>
+        <img src="../assets/School1.jpg" alt="background" class="background"/>
         <div class="slip">
-            <img src="../../../assets/School1.jpg" alt="headerPicture" class="headerPicture"/>
-            <img src="../../../assets/LongLogo.png" alt="longLogo" class="longLogo"/>
+            <img src="../assets/School1.jpg" alt="headerPicture" class="headerPicture"/>
+            <img src="../assets/LongLogo.png" alt="longLogo" class="longLogo"/>
             <nav class="navBar">
                 <ul>
                     <li>
-                        <img src="../../../assets/icons/View Report.png"/>
-                        <a href="../viewReport/viewReport.html">View Report</a>
+                        <img src="../assets/icons/View Report.png"/>
+                        <a href="viewReport.html">View Report</a>
                     </li>
                     <li class="currentTab">
-                        <img src="../../../assets/icons/User Profile.png"/>
-                        <a href="../userProfile/userProfile.html">User Profile</a>
+                        <img src="../assets/icons/User Profile.png"/>
+                        <a href="userProfile.html">User Profile</a>
                     </li>
                 </ul>
             </nav>
@@ -39,18 +42,18 @@
             </p></section>
         </div>
         <button class="menu" onclick="TogglePopup()">
-            <img src="../../../assets/icons/Hamburger.png" alt="menu"/>
+            <img src="../assets/icons/Hamburger.png" alt="menu"/>
         </button>
         <section class="popup" id="popup">
             <div>
                 <nav class="menuNav">
                     <ul>
                         <li>
-                            <img src="../../../assets/icons/View Report.png"/>
+                            <img src="../assets/icons/View Report.png"/>
                             <a href="../viewReport/viewReport.html">View Report</a>
                         </li>
                         <li class="currentTab">
-                            <img src="../../../assets/icons/User Profile.png"/>
+                            <img src="../assets/icons/User Profile.png"/>
                             <a href="../userProfile/userProfile.html">User Profile</a>
                         </li>
                     </ul>
