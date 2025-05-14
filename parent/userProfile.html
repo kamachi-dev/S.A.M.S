@@ -19,28 +19,61 @@
             <img src="../assets/LongLogo.png" alt="longLogo" class="longLogo"/>
             <nav class="navBar">
                 <ul>
-                    <li>
+                    <li class="currentTab">
                         <img src="../assets/icons/View Report.png"/>
                         <a href="viewReport.html">View Report</a>
                     </li>
-                    <li class="currentTab">
+                    <li>
                         <img src="../assets/icons/User Profile.png"/>
                         <a href="userProfile.html">User Profile</a>
                     </li>
                 </ul>
             </nav>
-            <section class="content"><p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer mauris eros, ultrices nec elementum porttitor, efficitur non sem. Donec mauris lorem, semper porttitor massa ac, maximus faucibus ipsum. Curabitur eget enim eleifend, ullamcorper augue sit amet, pulvinar sem. Donec convallis elit at placerat scelerisque. Suspendisse venenatis eros malesuada orci finibus mollis. Aenean arcu velit, mollis vitae finibus ut, ultricies id risus. Suspendisse tincidunt, urna non dignissim lobortis, lacus est feugiat dolor, vel placerat sem ex vel lectus. Sed eleifend tincidunt risus, ultricies venenatis metus tempus vitae. Maecenas viverra, orci at elementum condimentum, metus erat facilisis nisl, eget vestibulum ligula lorem nec nulla. Fusce dignissim tellus ut ante blandit, interdum aliquam massa malesuada. Aliquam vulputate sapien iaculis mi blandit, ornare ultrices justo blandit. Vivamus feugiat finibus consectetur. Integer cursus odio quis nisl consequat ultricies.
 
-                Phasellus lacinia magna vitae est dignissim, sed mollis orci accumsan. Nam nec libero sem. Quisque urna ligula, maximus vitae bibendum sed, mollis rutrum nisi. Morbi sem erat, aliquet eget sem faucibus, facilisis molestie diam. Nam venenatis condimentum augue eget scelerisque. In tincidunt, urna ut maximus cursus, quam dui congue risus, sit amet tincidunt purus odio in arcu. Vestibulum posuere ex at vestibulum auctor. Duis pellentesque odio ut eros finibus aliquet. Etiam sem ipsum, pellentesque at tortor sed, hendrerit finibus tellus. Vivamus vel lacus eros. Etiam eleifend pretium convallis. Fusce faucibus ligula metus, vel dapibus tellus lobortis sed. Morbi non felis blandit, venenatis dui id, mattis tortor. Morbi eu commodo ligula, ut varius nunc. Nullam placerat pellentesque ex, sit amet ultricies urna maximus a. Fusce bibendum augue eu auctor ullamcorper.
+        <div class="user-profile-container">
+            <div class="profile-header-area">
+                 <div class="profile-picture-container">
+                     <img src="https://via.placeholder.com/120x120?text=Profile+Pic" alt="lol" class="profile-picture"/>
+                 </div>
+            </div>
 
-                Fusce sit amet risus ultrices metus hendrerit aliquet in nec ligula. Integer enim neque, pharetra porttitor nunc eu, molestie laoreet nunc. Sed pretium eros id nibh laoreet, ac laoreet turpis tincidunt. Aenean ut sapien id erat ullamcorper tincidunt. Donec varius dapibus eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec tempus magna eu neque gravida elementum. Morbi elit nibh, condimentum eget interdum sed, maximus eget tellus.
+            <label for="yourName" class="form-label">Your Name</label>
+            <input type="text" id="yourName" class="form-input" value="Cameron Williamson" readonly>
 
-                Nullam laoreet, ipsum ac tempor hendrerit, lacus enim mollis leo, vitae ullamcorper quam velit vitae leo. Vivamus pretium rutrum quam a porttitor. Nunc tellus eros, lacinia quis lacus ut, convallis dictum magna. Ut tempor bibendum nulla, non semper diam volutpat quis. Phasellus ac turpis diam. Etiam quis elementum turpis, non rhoncus eros. Vivamus eros tellus, suscipit ut fringilla et, imperdiet sed urna. Mauris dapibus fermentum condimentum. Vivamus porta pretium metus eleifend ultricies.
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-input" value="cameronwilliamson@mail.com" readonly>
 
-                Fusce ultricies turpis ac urna tempor ullamcorper et sit amet metus. Maecenas semper ullamcorper diam id tempor. Nam eget feugiat neque. Sed vestibulum massa nibh, nec congue nibh convallis id. Suspendisse rutrum lorem non lacus molestie vestibulum vel mattis nunc. Sed hendrerit faucibus ante eget pretium. Fusce non risus quis urna porta gravida sodales ut metus.
-            </p></section>
+            <label for="userID" class="form-label">User ID</label>
+            <input type="text" id="userID" class="form-input" value="202516498235" readonly>
+
+            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <input type="tel" id="phoneNumber" class="form-input" value="(406) 555-0120" readonly>
+
+            <label for="password" class="form-label">Password</label>
+            <div class="password-container">
+                <input type="password" id="password" class="password-input" value="placeholderpassword" readonly>
+                <button class="password-toggle" type="button" onclick="togglePasswordVisibility()">
+
+                    <!-- https://icons.getbootstrap.com/icons/eye-slash-fill/ -->
+                    <svg class="bi hide-icon" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                    </svg>
+                    
+                    <!-- https://icons.getbootstrap.com/icons/eye/ -->
+                     <svg class="bi show-icon" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="display: none;">
+                       <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                       <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                     </svg>
+                </button>
+            </div>
+
+            <div class="button-container">
+                <button class="button manage-button">MANAGE</button>
+                <button class="button logout-button">LOGOUT</button>
+            </div>
         </div>
+
         <button class="menu" onclick="TogglePopup()">
             <img src="../assets/icons/Hamburger.png" alt="menu"/>
         </button>
