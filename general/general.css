@@ -104,7 +104,7 @@ nav > ul > li > a {
 }
 .navBar > ul > li{
     height: 6em;
-    top: 2.4em;
+    top: 2.3em;
     width: fit-content;
 }
 .navBar > ul > li:hover {
@@ -129,16 +129,46 @@ nav > ul > li > a {
     border: var(--blue) solid 3px;
     transition: 0.2s;
 }
-.content {
-    padding: 0% 3% 0% 3%;
-    overflow-y: scroll;
-    height: calc(100vh - 13em);
+.content-border {
+    display: block;
+    background-color: rgb(122, 22, 22);
+    height: calc(100.5vh - 13em);
     position: relative;
-    background-color: white;
     top: -19.8em;
-    width: 94%;
+    width: auto;
     z-index: 3;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border: 20px solid #ffffff;
 }
+
+.content {
+    display: block;
+    background-color: #dad8d8;
+    overflow-y: scroll;
+    position: static; /* make it stretch over content */
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1; /* stays behind any actual content */
+    border: 2px solid #757575; /* Adds a ridge-style border */
+    box-sizing: border-box; /* Ensures the border is included in sizing */
+}
+
+.profile-contents {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.left-contents, .right-contents {
+    flex: 1;
+    padding: 16px;
+    border-radius: 10px;
+}
+
 .content > * {
     font: 2em sans-serif;
 }

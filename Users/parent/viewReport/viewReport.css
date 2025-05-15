@@ -1,0 +1,44 @@
+.ReportTab {
+    background-color: white;
+}
+
+.ProfileTab {
+    background-color: #757575;
+}
+
+.Profile-area {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 20px;
+    height: auto;
+    margin-left: 40px;
+    margin-right: 0;
+}
+
+.Profile-box {
+    display: inline-block;
+    vertical-align: top;    
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    height: 250px;
+    width: 300px;
+    margin: 0 auto; /* centers it horizontally */
+}
+.Summary-area{
+    height: auto;
+    background-color: #fff;
+}
+
+p {
+    margin:0;
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+.Summary-contents{
+    padding: 20px;
+}

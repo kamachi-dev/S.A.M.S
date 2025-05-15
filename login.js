@@ -30,13 +30,13 @@ function ChangeImg() {
     setTimeout(function() {
         img.parentNode.removeChild(img);
         changing = false;
-    }, 1000);
+    }, 1500);
 }
 async function LoopImg() {
     setTimeout(function() {
         imgIndex = imgIndex % 3 + 1;
         ChangeImg();
         LoopImg();
-    }, 11000);
+    }, 7000);
 }
 LoopImg();
