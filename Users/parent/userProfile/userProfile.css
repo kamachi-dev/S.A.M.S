@@ -262,8 +262,8 @@ input {
 }
 
 .manage-button {
-    background: #4ab446;
-    color: white;
+    background: var(--mclblue);
+    color: var(--white);
 }
 
 .logout-button {

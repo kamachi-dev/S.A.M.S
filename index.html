@@ -5,6 +5,7 @@
         <link rel="shortcut icon" type="image/png" href="assets/HatLogo.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="general/general.css">
         <link rel="stylesheet" type="text/css" href="login.css">
         <script defer src="login.js"></script>
@@ -15,16 +16,18 @@
             <img src="assets/School1.jpg" alt="School Pictures" id="school"/>
             <button class="next" onclick="NextImg()"></button>
         </section>
-        <section class="panel">
-            <img src="assets/HatLogo2.png" alt="Logo">
-            <!--<h1 class="title">Student Attendance Management System S.A.M.S</h1>-->
-            <input type="text" placeholder="USERNAME" id="username" autocomplete="username" required>
-            <input type="password" placeholder="PASSWORD" id="password" required>
-            <button class="signIn" type="submit">
-                <a href="Users/parent/viewReport.html">Sign 'TEST' In</a>
-            </button>
-            <button class="terms" onclick="OpenPopup()">Terms and Services</a>
-        </section>
+        <div class="border">
+            <section class="panel">
+                <img src="assets/MMCL_Logo.png" alt="Logo">
+                <h1 class="title">Student Attendance Management System<br>S.A.M.S</h1>
+                <input type="text" placeholder="USERNAME" id="username" autocomplete="username" required>
+                <input type="password" placeholder="PASSWORD" id="password" required>
+                <button class="signIn" type="submit">
+                    <a href="Users/parent/viewReport.html" class="signInBtn">Sign In</a>
+                </button>
+                <button class="terms" onclick="OpenPopup()">Terms and Services</a>
+            </section>
+        </div>
         <section class="popup" id="popup">
             <div>
                 <h1>

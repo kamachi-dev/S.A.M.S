@@ -1,6 +1,12 @@
 :root {
     --blue: #4CA8F3;
     --grey: #7e7e7e;
+    --green: #4ab446;
+    --mclblue: #172852;
+    --mclred: #ec1f28;
+    --darktrans: rgba(0, 0, 0, 0.678);
+    --white: white;
+    --darkgrey: #333;
 }
 
 html {
@@ -19,7 +25,7 @@ body {
 button {
     font: 1.5em sans-serif;
     color: white;
-    background-color: var(--blue);
+    background-color: var(--mclblue);
     border: none;
     border-radius: 5px;
 }
@@ -41,16 +47,18 @@ button:hover {
 .slip {
     background-color: white;
     height: 100%;
-    width: 80%;
+    width: 100%;
     z-index: 1;
 }
 .headerPicture {
     height: 13em;
     width: 100%;
-    filter: brightness(0.8);
+    filter: brightness(0.7);
     object-fit: cover;
     border-bottom: 2px solid black;
+    opacity: 0.5;
 }
+
 .longLogo {
     position: relative;
     top: -11em;
@@ -58,7 +66,7 @@ button:hover {
     height: 8em;
     width: 100%;
     object-fit: contain;
-    filter: invert(1) drop-shadow(0 0 0.3em black);
+    /* filter: drop-shadow(0 4px 6px rgb(255, 255, 255)); */
     z-index: 2;
 }
 nav > ul {
@@ -155,18 +163,6 @@ nav > ul > li > a {
     z-index: -1; /* stays behind any actual content */
     border: 2px solid #757575; /* Adds a ridge-style border */
     box-sizing: border-box; /* Ensures the border is included in sizing */
-}
-
-.profile-contents {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-}
-
-.left-contents, .right-contents {
-    flex: 1;
-    padding: 16px;
-    border-radius: 10px;
 }
 
 .content > * {
