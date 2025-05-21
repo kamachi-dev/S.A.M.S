@@ -385,6 +385,7 @@ input {
         display: none;                  /* Chrome, Safari */
     }
 
+    .messageMenu,
     .viewMenu,
     .profileMenu {
         display: flex;
