@@ -322,3 +322,75 @@ input {
     }
 }
 
+
+@media only screen and (max-width: 750px){
+    .menu {
+        position: fixed; /* so it stays at viewport position */
+        width: 2em;
+        aspect-ratio: 1 / 1;
+        top: calc(100vh - 4em); /* bottom-ish */
+        left: 2em; /* left side */
+        z-index: 10;
+        cursor: pointer;
+        /* REMOVE visibility: hidden */
+    }
+
+    .hiddenMenu {
+        position: fixed;
+        top: calc(100vh - 6.1em);
+        margin-left: 60px;
+        left: 2.2em;
+        z-index: 999; /* behind button */
+    }
+    
+    .popup {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18em;
+        height: 200px;
+        background: white;
+        border-radius: 0.5em;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+
+        /* Hide scrollbar completely */
+        overflow-y: scroll;
+        -ms-overflow-style: none;       /* IE/Edge */
+        scrollbar-width: none;          /* Firefox */
+    }
+    .popup::-webkit-scrollbar {
+        display: none;                  /* Chrome, Safari */
+    }
+
+    .popup.show{
+        height: 50px;
+        width: 300px;
+    }
+    
+    .menuNav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow-y: scroll;
+        -ms-overflow-style: none;       /* IE/Edge */
+        scrollbar-width: none; 
+    }
+
+    .menuNav a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .menuNav::-webkit-scrollbar {
+        display: none;                  /* Chrome, Safari */
+    }
+
+    .viewMenu,
+    .profileMenu {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+
+}
