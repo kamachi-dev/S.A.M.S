@@ -32,7 +32,17 @@
                         <div class="content">
                             <div class="Profile-area">
                                 <p class="Profile-title">Student's Attendance Record</p>
-                                <div class="Profile-box"></div>
+                                <div class="Profile-box">
+                                    <!-- <img src="../../../assets/Sample.png"/> -->
+                                    <!-- <a class="Name">Joshua Simon S. Komachi</a>
+                                    <a class="ID">20211535356</a>
+                                    <a class="Grade">Grade 11</a>
+                                    <div class="attendanceArea">
+                                        <a class="attendanceGrade">20211535356</a>
+                                        <a class="attendanceA">Attendance</a>
+                                    </div>
+                                    <a href="viewReport.html">View Report</a> -->
+                                </div>
                                 <div class="Profile-box"></div>
                                 <div class="Profile-box"></div>
                                 <div class="Profile-box"></div>
@@ -61,23 +71,21 @@
             </div>
         </div>
         <button class="menu" onclick="TogglePopup()">
-            <img src="../../../assets/icons/Hamburger.png" alt="menu"/>
+        <img src="../../../assets/icons/Hamburger.png" alt="menu"/>
         </button>
-        <section class="popup" id="popup">
-            <div>
-                <nav class="menuNav">
-                    <ul>
-                        <li class="ReportTab">
-                            <img src="../../../assets/icons/View Report.png"/>
-                            <a href="../viewReport/viewReport.html">View Report</a>
-                        </li>
-                        <li>
-                            <img src="../assets/icons/User Profile.png"/>
-                            <a href="../userProfile/userProfile.html">User Profile</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </section>
+        <div class="hiddenMenu">
+            <section class="popup" id="popup">
+                <div class="menuNav">
+                    <div class="viewMenu">
+                        <img src="../../../assets/icons/View Report.png"/>
+                        <a href="viewReport.html">View Report</a>
+                    </div>
+                    <div class="profileMenu">
+                        <img src="../../../assets/icons/User Profile.png"/>
+                        <a href="userProfile.html">User Profile</a>
+                    </div>
+                </div>
+            </section>
+        </div>
     </body>
 </html>
