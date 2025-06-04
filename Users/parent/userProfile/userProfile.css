@@ -257,8 +257,8 @@ input {
     align-content: space-around;
     cursor: pointer;
     font-weight: bold;
-    height: 60px;
-    font-size: 0.9em;
+    height: 50px;
+    font-size: 0.4em;
     text-transform: uppercase;
     transition: opacity 0.2s ease;
     text-align: center;
@@ -280,7 +280,9 @@ input {
     color: #3f474c;
 }
 
-
+.form-input{
+    font-size: 18px;
+}
 
 @media only screen and (max-width: 1000px) {
     .top-box,.bot-box {
