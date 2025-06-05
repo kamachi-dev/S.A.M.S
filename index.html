@@ -21,11 +21,11 @@
                 <img src="assets/MMCL_Logo.png" alt="Logo">
                 <h1 class="title">Student Attendance Management System<br>S.A.M.S</h1>
                 <input type="text" placeholder="USERNAME" id="username" autocomplete="username" required>
+                <span id="usernameError" class="error-message"></span>
                 <input type="password" placeholder="PASSWORD" id="password" required>
-                <button class="signIn" type="submit">
-                    <a href="Users/parent/viewReport.html" class="signInBtn">Sign In</a>
-                </button>
-                <button class="terms" onclick="OpenPopup()">Terms and Services</a>
+                <span id="passwordError" class="error-message"></span>
+                <button class="signIn" id="signInBtn" type="button">Sign In</button>
+                <button class="terms" onclick="OpenPopup()">Terms and Services</button>
             </section>
         </div>
         <section class="popup" id="popup">
@@ -69,6 +69,12 @@
                     By using SAMS, you agree to these Terms and Services.<br>
                 </p>
                 <button onclick="ClosePopup()">Close</button>
+            </div>
+        </section>
+        <section class="error-popup" id="errorPopup" style="display:none;">
+            <div class="error-popup-content">
+                <p id="errorMessage">Error message here</p>
+                <button onclick="closeErrorPopup()">OK</button>
             </div>
         </section>
     </body>

@@ -197,3 +197,12 @@ a {
     }
 
 }
+
+/*Error Popups#####################################*/
+.error-message {
+    color: #d32f2f;
+    font-size: 0.9em;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+}
