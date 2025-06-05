@@ -75,9 +75,6 @@
             $role_info = $res["ID"];
             $role_type = $res["Type"];
 
-            $role_info = 1;
-            $role_type = 'parent';
-
             #generate token
             $token = bin2hex(random_bytes(10));
             $data = json_encode([
