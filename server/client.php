@@ -1,7 +1,7 @@
 <?php
     $client = new SoapClient(null, [
-        "location" => "http://localhost/SAMS/server.php",
-        "uri" => "http://localhost/SAMS/server.php"
+        "location" => "http://127.0.0.1/SAMS/server.php",
+        "uri" => "http://127.0.0.1/SAMS/server.php"
     ]);
 
     $loginResponse = $client->__soapCall('LogIn', [[
@@ -14,7 +14,7 @@
     // Future call: Authenticated with token
     $auth = new stdClass();
     $auth->Token = $token;
-    $header = new SoapHeader('http://localhost/SAMS/server.php', 'AuthHeader', $auth);
+    $header = new SoapHeader('http://127.0.0.1/SAMS/server.php', 'AuthHeader', $auth);
 
    $client->__setSoapHeaders($header);
     $response = $client->__soapCall('GetCurrentUser', []);
