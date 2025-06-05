@@ -89,8 +89,7 @@
         }
 
         private function cleanupTokens() {
-            $dir = "./tmp";
-            foreach (glob("$dir/token_*") as $file) {
+            foreach (glob("./tmp/token_*") as $file) {
                 $data = json_decode(file_get_contents($file), true);
                 if (!$data || time() - $data['created'] > 300) unlink($file);
             }
