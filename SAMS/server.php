@@ -29,17 +29,12 @@
                     UNION ALL
                     SELECT * FROM `parent` WHERE `Email` = '$email'";
             $qry = mysqli_query($this->con, $sql);
-            if (mysqli_num_rows($qry) > 0) {
-                return new SoapFault('Server', 'Email already registered');
-            }
+            if (mysqli_num_rows($qry) > 0) return new SoapFault('Server', 'Email already registered');
 
             // Insert new user
             $sql = "INSERT INTO `$role` (`Email`, `Password`, `First name`, `Last name`) VALUES ('$email', '$password', '$first_name', '$last_name')";
-            if (mysqli_query($this->con, $sql)) {
-                return ['Status' => 'Success'];
-            } else {
-                return new SoapFault('Server', 'Database error: '.mysqli_error($this->con));
-            }
+            if (mysqli_query($this->con, $sql)) return ['Status' => 'Success'];
+            else return new SoapFault('Server', 'Database error: '.mysqli_error($this->con));
         }
         public function Login($email, $password) {
             #rate limiting
@@ -100,9 +95,7 @@
             $dir = "./tmp";
             foreach (glob("$dir/token_*") as $file) {
                 $data = json_decode(file_get_contents($file), true);
-                if (!$data || time() - $data['created'] > 300) {
-                    unlink($file);
-                }
+                if (!$data || time() - $data['created'] > 300) unlink($file);
             }
         }
 
