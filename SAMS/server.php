@@ -85,7 +85,7 @@
             ]);
             file_put_contents("./tmp/token_$token", $data);
             $this->cleanupTokens();
-            return ['Token' => $token];
+            return $token;
         }
 
         private function cleanupTokens() {
