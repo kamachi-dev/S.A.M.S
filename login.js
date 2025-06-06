@@ -89,10 +89,15 @@ function LogIn(e) {
             return null;
         }
         console.log(txt);
-        return xmlDoc.getElementsByTagName("token")[0];
-    }).then((token) => {
-        if (token == null) return;
-        window.location.href = `Users/parent/viewReport.html?token=${token}`;
+        const res = {};
+        const keys = xmlDoc.getElementsByTagName("key");
+        const values = xmlDoc.getElementsByTagName("value");
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i].textContent;
+            const value = values[i].textContent;
+            if (key) res[key] = value;
+        }
+        window.location.href = `Users/${res["type"]}/viewReport.html?token=${res["token"]}`;
     });
 }
 document.querySelector('#loginForm').addEventListener('submit', function(e) {
