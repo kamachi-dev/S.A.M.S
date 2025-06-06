@@ -39,42 +39,6 @@ function ChangeImg() {
     }, 1500);
 }
 
-document.getElementById("signInBtn").addEventListener("click", function () {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const usernameError = document.getElementById("usernameError");
-    const passwordError = document.getElementById("passwordError");
-
-    // Clear previous errors
-    usernameError.textContent = "";
-    passwordError.textContent = "";
-
-    if (!username && !password){
-        usernameError.textContent = "Username is required.";
-        passwordError.textContent = "Password is required.";
-        return
-    } 
-
-    else if (!username) {
-        usernameError.textContent = "Username is required.";
-        return;
-    }
-
-    else if (!password) {
-        passwordError.textContent = "Password is required.";
-        return;
-    }
-
-
-    // Apply API here for checking Accounts
-    if (username !== "demo" || password !== "demo") {
-        passwordError.textContent = "Invalid username or password.";
-        return;
-    }
-
-    window.location.href = "Users/parent/viewReport.html";
-});
-
 async function LoopImg() {
     setTimeout(function() {
         imgIndex = imgIndex % 3 + 1;
@@ -85,6 +49,28 @@ async function LoopImg() {
 
 //sign in///////////////////////////////////////////////////////////////
 function LogIn(e) {
+    // const username = document.getElementById("username").value.trim();
+    // const password = document.getElementById("password").value.trim();
+    // const usernameError = document.getElementById("usernameError");
+    // const passwordError = document.getElementById("passwordError");
+
+    // // Clear previous errors
+    // usernameError.textContent = "";
+    // passwordError.textContent = "";
+
+    // if (!username && !password) {
+    //     usernameError.textContent = "Username is required.";
+    //     passwordError.textContent = "Password is required.";
+    //     return
+    // } else if (!username) {
+    //     usernameError.textContent = "Username is required.";
+    //     return;
+    // } else if (!password) {
+    //     passwordError.textContent = "Password is required.";
+    //     return;
+    // }
+
+    //call api
     const soapBody = `
         <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
             <soap:Body>
@@ -120,6 +106,7 @@ function LogIn(e) {
             e.preventDefault();
             return;
         }
+        window.location.href = "Users/parent/viewReport.html";
     });
 }
 document.querySelector('#loginForm').addEventListener('submit', function(e) {
@@ -127,6 +114,5 @@ document.querySelector('#loginForm').addEventListener('submit', function(e) {
     console.log('iya~~ (*/ω＼*)'); //PLEASE PLEASE PLEASE REMOVE THIS PLEASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     LogIn(e);
 });
-
 
 LoopImg();
