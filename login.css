@@ -208,3 +208,8 @@ a {
     display: block;
     min-height: 1em;
 }
+
+form {
+    align-items: center;
+    display: block;
+}

@@ -41,18 +41,23 @@
         display: none;                  /* Chrome, Safari */
     }
 
-    .popup.show{
-        height: 50px;
-        width: 300px;
-    }
-    
+    .popup.show {
+        height: auto;           
+        width: 30vw;            
+        max-width: 300px;       
+    }   
+
+    /* IE/Edge */
     .menuNav {
         display: flex;
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
         overflow-y: scroll;
-        -ms-overflow-style: none;       /* IE/Edge */
+        -ms-overflow-style: none;       
         scrollbar-width: none; 
+        gap: 1em;             
+        align-items: center;
     }
 
     .menuNav a {
@@ -67,10 +72,10 @@
     .messageMenu,
     .viewMenu,
     .profileMenu {
-        display: flex;
-        align-items: center;
+        display: flex; 
+        align-items: center; 
         gap: 8px;
+        object-fit: contain;
     }
-
 
 }
