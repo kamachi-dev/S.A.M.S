@@ -617,19 +617,11 @@
     }
 
     .menu {
-<<<<<<< Updated upstream
-        position: fixed;
-        width: 2em;
-        aspect-ratio: 1 / 1;
-        top: calc(100vh - 4em);
-        left: 2em;
-=======
         position: fixed; /* so it stays at viewport position */
         width: 1.9em;
         aspect-ratio: 1 / 1;
         top: calc(100vh - 2.8em); /* bottom-ish */
         left: 1em; /* left side */
->>>>>>> Stashed changes
         z-index: 10;
         cursor: pointer;
     }
