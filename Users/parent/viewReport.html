@@ -31,42 +31,201 @@
                     </li>
                 </ul>
             </nav>
-                <div class="content-wrapper">
-                    <div class="content-border">
-                        <div class="content">
-                            <div class="Profile-area">
-                                <p class="Profile-title">Student's Attendance Record</p>
-                                <div class="Profile-box">
-                                    <!-- <img src="../../../assets/Sample.png"/> -->
-                                    <!-- <a class="Name">Joshua Simon S. Komachi</a>
-                                    <a class="ID">20211535356</a>
-                                    <a class="Grade">Grade 11</a>
-                                    <div class="attendanceArea">
-                                        <a class="attendanceGrade">20211535356</a>
-                                        <a class="attendanceA">Attendance</a>
+            <div class="content-wrapper">
+                <div class="content-border">
+                    <div class="content">
+                        <div class="dashboard-container">
+                            <!-- Left Section: Student Profile -->
+                            <div class="student-profile-section">
+                                <div class="student-profile-card">
+                                    <div class="student-photo">
+                                        <img src="../../../assets/Sample.png" alt="Student Photo"/>
                                     </div>
-                                    <a href="viewReport.html">View Report</a> -->
+                                    <div class="student-info">
+                                        <div class="info-row">
+                                            <span class="label">Student Name</span>
+                                            <div class="value">Joshua Simon S. Komachi</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Student ID</span>
+                                            <div class="value">20211535356</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Grade Level / Section</span>
+                                            <div class="value">Grade 10 - CIS12</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Email</span>
+                                            <div class="value">jsikomochi@gmail.com</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <span class="label">Phone Number</span>
+                                            <div class="value">(406) 555-0120</div>
+                                        </div>
+                                    </div>
+                                    <button class="back-button">BACK</button>
                                 </div>
-                                <div class="Profile-box"></div>
-                                <div class="Profile-box"></div>
-                                <div class="Profile-box"></div>
-                                <div class="Profile-box"></div>
-                                <div class="Profile-box"></div>
-                                <div class="Profile-box"></div>
                             </div>
-                            <div class="Summary-area">
-                                <div class="Summary-contents">
-                                    <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer mauris eros, ultrices nec elementum porttitor, efficitur non sem. Donec mauris lorem, semper porttitor massa ac, maximus faucibus ipsum. Curabitur eget enim eleifend, ullamcorper augue sit amet, pulvinar sem. Donec convallis elit at placerat scelerisque. Suspendisse venenatis eros malesuada orci finibus mollis. Aenean arcu velit, mollis vitae finibus ut, ultricies id risus. Suspendisse tincidunt, urna non dignissim lobortis, lacus est feugiat dolor, vel placerat sem ex vel lectus. Sed eleifend tincidunt risus, ultricies venenatis metus tempus vitae. Maecenas viverra, orci at elementum condimentum, metus erat facilisis nisl, eget vestibulum ligula lorem nec nulla. Fusce dignissim tellus ut ante blandit, interdum aliquam massa malesuada. Aliquam vulputate sapien iaculis mi blandit, ornare ultrices justo blandit. Vivamus feugiat finibus consectetur. Integer cursus odio quis nisl consequat ultricies.
 
-                                    Phasellus lacinia magna vitae est dignissim, sed mollis orci accumsan. Nam nec libero sem. Quisque urna ligula, maximus vitae bibendum sed, mollis rutrum nisi. Morbi sem erat, aliquet eget sem faucibus, facilisis molestie diam. Nam venenatis condimentum augue eget scelerisque. In tincidunt, urna ut maximus cursus, quam dui congue risus, sit amet tincidunt purus odio in arcu. Vestibulum posuere ex at vestibulum auctor. Duis pellentesque odio ut eros finibus aliquet. Etiam sem ipsum, pellentesque at tortor sed, hendrerit finibus tellus. Vivamus vel lacus eros. Etiam eleifend pretium convallis. Fusce faucibus ligula metus, vel dapibus tellus lobortis sed. Morbi non felis blandit, venenatis dui id, mattis tortor. Morbi eu commodo ligula, ut varius nunc. Nullam placerat pellentesque ex, sit amet ultricies urna maximus a. Fusce bibendum augue eu auctor ullamcorper.
+                            <!-- Right Section: Schedule and Calendar -->
+                            <div class="schedule-section">
+                                <!-- Weekly Schedule -->
+                                <div class="weekly-schedule">
+                                    <table class="schedule-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="time-header"></th>
+                                                <th class="day-header">Monday</th>
+                                                <th class="day-header">Tuesday</th>
+                                                <th class="day-header">Wednesday</th>
+                                                <th class="day-header">Thursday</th>
+                                                <th class="day-header">Friday</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="time-slot">7:00 AM - 8:00 AM</td>
+                                                <td class="subject math">MATH - CIS12<br><small>Ms. B. Burgos</small></td>
+                                                <td class="empty"></td>
+                                                <td class="empty"></td>
+                                                <td class="subject english">ENG - CIS12<br><small>Ms. J. Simone</small></td>
+                                                <td class="empty"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="time-slot">8:00 AM - 9:00 AM</td>
+                                                <td class="subject math">MATH - CIS12<br><small>Ms. B. Burgos</small></td>
+                                                <td class="subject english">ENG - CIS12<br><small>Ms. J. Simone</small></td>
+                                                <td class="subject math">MATH - CIS12<br><small>Ms. B. Burgos</small></td>
+                                                <td class="subject english">ENG - CIS12<br><small>Ms. J. Simone</small></td>
+                                                <td class="empty"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="time-slot">9:00 AM - 10:00 AM</td>
+                                                <td class="subject science">AP - CIS12<br><small>Mr. A. Anton</small></td>
+                                                <td class="subject english">ENG - CIS12<br><small>Ms. J. Simone</small></td>
+                                                <td class="subject math">MATH - CIS12<br><small>Ms. B. Burgos</small></td>
+                                                <td class="subject arts">ARTS - CIS12<br><small>Ms. L. Comy</small></td>
+                                                <td class="subject math">MATH - CIS12<br><small>Ms. B. Burgos</small></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="time-slot">11:00 AM - 12:00 PM</td>
+                                                <td class="subject filipino">FIL - CIS12<br><small>Mr. J. Siochi</small></td>
+                                                <td class="subject filipino">FIL - CIS12<br><small>Mr. J. Siochi</small></td>
+                                                <td class="subject filipino">FIL - CIS12<br><small>Mr. J. Siochi</small></td>
+                                                <td class="subject filipino">FIL - CIS12<br><small>Mr. J. Siochi</small></td>
+                                                <td class="subject filipino">FIL - CIS12<br><small>Mr. J. Siochi</small></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="time-slot">12:00 PM - 1:00 PM</td>
+                                                <td class="lunch">Lunch<br>Break</td>
+                                                <td class="lunch">Lunch<br>Break</td>
+                                                <td class="lunch">Lunch<br>Break</td>
+                                                <td class="lunch">Lunch<br>Break</td>
+                                                <td class="lunch">Lunch<br>Break</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="time-slot">1:00 PM - 2:00 PM</td>
+                                                <td class="subject arts">ARTS - CIS12<br><small>Ms. L. Comy</small></td>
+                                                <td class="subject science">SCI - CIS12<br><small>Ms. M. Komi</small></td>
+                                                <td class="subject economics">ECO - CIS12<br><small>Mr. M. Michael</small></td>
+                                                <td class="subject science">SCI - CIS12<br><small>Ms. M. Komi</small></td>
+                                                <td class="subject science">AP - CIS12<br><small>Mr. A. Anton</small></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="time-slot">2:00 PM - 3:00 PM</td>
+                                                <td class="subject economics">ECO - CIS12<br><small>Mr. M. Michael</small></td>
+                                                <td class="subject science">SCI - CIS12<br><small>Ms. M. Komi</small></td>
+                                                <td class="empty"></td>
+                                                <td class="subject science">SCI - CIS12<br><small>Ms. M. Komi</small></td>
+                                                <td class="subject science">AP - CIS12<br><small>Mr. A. Anton</small></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                                    Fusce sit amet risus ultrices metus hendrerit aliquet in nec ligula. Integer enim neque, pharetra porttitor nunc eu, molestie laoreet nunc. Sed pretium eros id nibh laoreet, ac laoreet turpis tincidunt. Aenean ut sapien id erat ullamcorper tincidunt. Donec varius dapibus eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec tempus magna eu neque gravida elementum. Morbi elit nibh, condimentum eget interdum sed, maximus eget tellus.
+                                <!-- Calendar and Charts Section -->
+                                <div class="calendar-charts-section">
+                                    <!-- Calendar -->
+                                    <div class="calendar-container">
+                                        <div class="calendar-header">
+                                            <button class="nav-button" onclick="previousMonth()">&lt;</button>
+                                            <h3 id="monthYear">December 2026</h3>
+                                            <button class="nav-button" onclick="nextMonth()">&gt;</button>
+                                        </div>
+                                        <div class="calendar-grid">
+                                            <div class="day-header">Mo</div>
+                                            <div class="day-header">Tu</div>
+                                            <div class="day-header">We</div>
+                                            <div class="day-header">Th</div>
+                                            <div class="day-header">Fr</div>
+                                            <div class="day-header">Sa</div>
+                                            <div class="day-header">Su</div>
+                                            <!-- Calendar days will be populated by JavaScript -->
+                                        </div>
+                                    </div>
 
-                                    Nullam laoreet, ipsum ac tempor hendrerit, lacus enim mollis leo, vitae ullamcorper quam velit vitae leo. Vivamus pretium rutrum quam a porttitor. Nunc tellus eros, lacinia quis lacus ut, convallis dictum magna. Ut tempor bibendum nulla, non semper diam volutpat quis. Phasellus ac turpis diam. Etiam quis elementum turpis, non rhoncus eros. Vivamus eros tellus, suscipit ut fringilla et, imperdiet sed urna. Mauris dapibus fermentum condimentum. Vivamus porta pretium metus eleifend ultricies.
+                                    <!-- Attendance Charts -->
+                                    <div class="charts-container">
+                                        <div class="chart-section">
+                                            <h4>Student's Current Attendance</h4>
+                                            <div class="chart-wrapper">
+                                                <canvas id="currentChart" width="150" height="150"></canvas>
+                                                <div class="chart-legend">
+                                                    <div class="legend-item">
+                                                        <div class="legend-color present"></div>
+                                                        <span>Presents</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color late"></div>
+                                                        <span>Lates</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color absent"></div>
+                                                        <span>Absents</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    Fusce ultricies turpis ac urna tempor ullamcorper et sit amet metus. Maecenas semper ullamcorper diam id tempor. Nam eget feugiat neque. Sed vestibulum massa nibh, nec congue nibh convallis id. Suspendisse rutrum lorem non lacus molestie vestibulum vel mattis nunc. Sed hendrerit faucibus ante eget pretium. Fusce non risus quis urna porta gravida sodales ut metus.
-                                    </p>
+                                        <div class="chart-section">
+                                            <h4>Student's Term Attendance</h4>
+                                            <div class="chart-wrapper">
+                                                <canvas id="termChart" width="150" height="150"></canvas>
+                                                <div class="chart-legend">
+                                                    <div class="legend-item">
+                                                        <div class="legend-color present"></div>
+                                                        <span>Presents</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color late"></div>
+                                                        <span>Lates</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color absent"></div>
+                                                        <span>Absents</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bottom Info Section -->
+                                <div class="info-section">
+                                    <div class="info-text">
+                                        <p><strong>ℹ️</strong> This tracks which subjects the child attended based on the selected day on the schedule</p>
+                                    </div>
+                                    <div class="time-blocks">
+                                        <div class="time-block time-7">7:00</div>
+                                        <div class="time-block time-8">8:00</div>
+                                        <div class="time-block time-9">9:00</div>
+                                        <div class="time-block time-10">10:00</div>
+                                        <div class="time-block time-11">11:00 Lunch</div>
+                                        <div class="time-block time-12">12:00</div>
+                                        <div class="time-block time-1">1:00</div>
+                                        <div class="time-block time-2">2:00</div>
+                                        <div class="time-block time-3">3:00</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +234,7 @@
             </div>
         </div>
         <button class="menu" onclick="TogglePopup()">
-        <img src="../../../assets/icons/Hamburger.png" alt="menu"/>
+            <img src="../../../assets/icons/Hamburger.png" alt="menu"/>
         </button>
         <div class="hiddenMenu">
             <section class="popup" id="popup">
@@ -90,7 +249,7 @@
                     </div>
                     <div class="messageMenu">
                         <img src="../../../assets/icons/message.png"/>
-                        <a href="userProfile.html">User Profile</a>
+                        <a href="Messages.html">Messages</a>
                     </div>
                 </div>
             </section>
