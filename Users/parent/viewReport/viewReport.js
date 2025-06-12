@@ -3,6 +3,19 @@ function TogglePopup() {
     popup.classList.toggle("show");
 }
 
+// Navigation functions
+function viewStudentProfile(studentId) {
+    // Store the student ID in sessionStorage for later use if needed
+    sessionStorage.setItem('selectedStudentId', studentId);
+    // Navigate to the detailed view
+    window.location.href = 'viewReport.html';
+}
+
+function goBackToOverview() {
+    // Navigate back to the overview page
+    window.location.href = 'studentOverview.html';
+}
+
 // Calendar functionality
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
@@ -123,6 +136,8 @@ function nextMonth() {
 // Chart functionality
 function drawDonutChart(canvasId, data, colors) {
     const canvas = document.getElementById(canvasId);
+    if (!canvas) return; // Exit if canvas doesn't exist
+    
     const ctx = canvas.getContext('2d');
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
