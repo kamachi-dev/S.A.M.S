@@ -1,4 +1,4 @@
-/index.html                                 /
-/users/admin/studentInfo/studentInfo.html   /admin/studentInfo
-/users/teacher/overview/overview.html       /teacher/overview
-/users/parent/viewReport/viewReport.html    /parent/viewReport
+/                   /index.html
+/admin/studentInfo  /users/admin/studentInfo/studentInfo.html
+/teacher/overview   /users/teacher/overview/overview.html
+/parent/viewReport  /users/parent/viewReport/viewReport.html
