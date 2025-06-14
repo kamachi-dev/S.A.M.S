@@ -1,0 +1,348 @@
+/* ==== GENERAL FONT SETTING ==== */
+body, html {
+    font-family: 'Montserrat', Arial, sans-serif !important;
+    font-size: 16px;
+    color: #232323;
+    background: none;
+    overflow-x: hidden;
+}
+
+/* ==== BACKGROUND ==== */
+.background {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    z-index: 0;
+    object-fit: cover;
+    filter: brightness(0.47);
+    top: 0;
+    left: 0;
+}
+
+/* ==== SCHOOL LOGO ==== */
+.longLogo {
+    display: block;
+    width: 99vw;
+    min-width: 320px;
+    max-width: 100vw;
+    object-fit: contain;
+    margin: 0 auto;
+    height: 135px;
+    z-index: 3;
+    top: 0;
+    filter: none;
+    background: transparent;
+    pointer-events: none;
+    position: relative;
+}
+
+/* ==== HEADER ==== */
+.overview-header {
+    width: 100vw;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0;
+}
+
+/* ==== NAVIGATION TABS ==== */
+.overview-nav-bar {
+    position: relative;
+    width: 100vw;
+    background-color: transparent;
+    z-index: 20;
+    margin-bottom: 8px;
+    top: 0;
+    left: 0;
+    font-family: inherit;
+}
+.overview-nav-bar ul {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    list-style: none;
+    padding-left: 24px;
+    margin: 0;
+    gap: 0;
+}
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 15px 15px 0 0;
+    background-color: #757575;
+    border: 2px solid #181818;
+    border-bottom: none;
+    padding: 0 28px 0 18px;
+    font-size: 18px;
+    font-family: inherit;
+    font-weight: 400;
+    color: #191919;
+    cursor: pointer;
+    height: 44px;
+    min-width: 150px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.09), 0 1.5px 7px rgba(0,0,0,0.07);
+    margin-bottom: 0;
+    margin-right: 7px;
+    transition: background 0.17s, color 0.13s, font-weight 0.13s, box-shadow 0.17s;
+    position: relative;
+    outline: none;
+    top: 15px;
+    z-index: 14;
+    user-select: none;
+}
+.tab img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+    margin-bottom: 0;
+    filter: grayscale(1) brightness(0.08);
+}
+.tab span {
+    margin-left: 5px;
+    font-size: 1.08em;
+    color: #191919;
+    font-family: inherit;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+.currentTab {
+    background-color: #fff !important;
+    color: #e11f27 !important;
+    border-bottom: 2.5px solid #fff !important;
+    z-index: 25;
+    font-weight: 700 !important;
+    box-shadow: 0 6px 15px rgba(230,28,38,0.06);
+}
+.currentTab span {
+    color: #e11f27 !important;
+    font-weight: 700 !important;
+}
+
+/* ========== CONTENT CARD ========== */
+.overview-content-card {
+    background: #fff;
+    border-radius: 18px;
+    margin: 18px 2vw 35px 2vw;
+    padding: 20px 0 36px 0;
+    box-shadow: 0 2.2px 17px rgba(20,20,40,0.11);
+    min-height: 70vh;
+    position: relative;
+    z-index: 1;
+    border: 2.5px solid #bfc2c7;
+    font-family: inherit;
+}
+
+/* ========== DROPDOWN FILTERS ROW ========== */
+.overview-filters-row {
+    display: flex;
+    gap: 19px;
+    margin: 18px 0 16px 32px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: inherit;
+}
+/* BEAUTIFUL FILTER SELECTS, FLAT, BOLD, ROUNDED, BIGGER FONT, SHADOW, ARROW */
+.overview-filters-row select {
+    min-width: 150px;
+    max-width: 182px;
+    font-size: 1.17em;
+    height: 44px;
+    border-radius: 16px;
+    background: #ededed !important;
+    border: 2.2px solid #b8b8b8;
+    box-shadow: 0 1.8px 9px rgba(40,40,40,0.10);
+    padding: 0 34px 0 18px;
+    appearance: none;
+    outline: none;
+    font-weight: 600;
+    color: #232327;
+    cursor: pointer;
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 20 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4L10 10L16 4' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: 22px 13px;
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    transition: box-shadow 0.14s, background 0.13s, border 0.16s;
+    z-index: 11;
+    text-align: center;
+}
+.overview-filters-row select:focus,
+.overview-filters-row select:hover {
+    background: #e2e2e2 !important;
+    border: 2.7px solid #222;
+    box-shadow: 0 4px 13px rgba(0,0,0,0.09);
+    z-index: 24;
+}
+.overview-filters-row option {
+    font-size: 1.11em;
+    background: #fff !important;
+    color: #333a;
+    z-index: 10021!important;
+    text-align: center;
+}
+
+/* ====== VISUALIZATIONS IN ROWS/BOXES ====== */
+.overview-visuals {
+    padding: 0 26px;
+}
+.visual-row {
+    display: flex;
+    gap: 24px;
+    justify-content: flex-start;
+    margin-bottom: 27px;
+    flex-wrap: wrap;
+}
+.donut-chart-container {
+    flex: 1 1 260px;
+    min-width: 235px;
+    max-width: 330px;
+    background: #fff;
+    border-radius: 13px;
+    padding: 14px 20px 17px 20px;
+    box-shadow: 0 2.5px 15px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4px;
+    border: 1.5px solid #e1e3ef;
+}
+.chart-title {
+    font-size: 1.10em;
+    margin-bottom: 2px;
+    font-weight: 670;
+    color: #242e39;
+    letter-spacing: 0.01em;
+    font-family: inherit;
+}
+.donut-chart-container canvas {
+    width: 140px !important;
+    height: 140px !important;
+    margin-top: 4px;
+}
+.chart-percent {
+    font-size: 2.05em;
+    font-weight: 700;
+    margin: 5px 0 0 0;
+    color: #232323; /* dark, not blue! */
+    text-align: center;
+    letter-spacing: 0.02em;
+    font-family: inherit;
+}
+.legend-donut {
+    list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    width: 100%;
+    font-family: inherit;
+}
+.legend-donut li {
+    display: flex;
+    align-items: center;
+    font-size: 1.09em;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    gap: 6px;
+}
+.legend-dot {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    margin-right: 8px;
+    border: 1.2px solid #d4d4d4;
+}
+.legend-dot-blue { background: #0093ff; }
+.legend-dot-yellow { background: #ffcd03; }
+.legend-dot-red { background: #ef2722; }
+.legend-val {
+    margin-left: auto;
+    padding-left: 14px;
+    font-weight: bold;
+    color: #080d09;
+    font-size: 1.09em;
+}
+
+/* Students summary style */
+.students-summary {
+    min-width: 156px;
+    flex: 0 1 148px;
+    height: 185px;
+    margin-top: 17px;
+    margin-left: 12px;
+    margin-right: 4px;
+    border-radius: 14px;
+    background: #f5f8fb;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 7px rgba(70,70,90,0.09);
+    border: 1.4px solid #dcdfe2;
+    font-family: inherit;
+}
+.summary-title {
+    font-size: 1.09em;
+    color: #505050;
+    margin-bottom: 8px;
+    font-weight: 640;
+    font-family: inherit;
+}
+.summary-count {
+    font-size: 2.35em;
+    color: #131c37;
+    font-weight: 800;
+    font-family: inherit;
+    margin-top: 3px;
+}
+
+/* ========== BAR CHARTS ROW ========== */
+.visual-row-bars {
+    margin-top: 8px;
+}
+.bar-chart-container {
+    background: #fff;
+    border-radius: 13px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    flex: 1 1 220px;
+    min-width: 230px;
+    max-width: 410px;
+    padding: 12px 15px 10px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 235px;
+    border: 1.1px solid #e5e5ea;
+    font-family: inherit;
+}
+.bar-chart-container canvas {
+    width: 100% !important;
+    max-width: 370px;
+    height: 170px !important;
+}
+
+/* ===== RESPONSIVENESS ===== */
+@media (max-width: 1100px) {
+    .overview-content-card { margin: 0 2vw;}
+    .overview-nav-bar ul { gap: 5px; padding-left: 2vw;}
+    .tab { font-size: 15.8px; padding: 0 16px 0 8px; height: 37px; min-width: 102px;}
+    .longLogo {height: 81px;}
+    .donut-chart-container {padding: 10px 6px 15px 6px;}
+    .bar-chart-container {min-width: 181px; max-width: 380px;}
+    .students-summary {height: 140px;}
+}
+@media (max-width: 700px) {
+    .overview-header {padding-bottom: 0;}
+    .longLogo {height: 55px;}
+    .overview-content-card { margin: 0 1vw; border-radius: 10px;}
+    .overview-filters-row { flex-direction: column; gap: 7px; margin-left: 2vw;}
+    .tab {font-size: 14.5px; min-width: 80px; padding: 0 12px; height: 33px;}
+    .tab img {width: 16px; height: 16px;}
+    .donut-chart-container {padding: 12px 2px 9px 2px;}
+    .bar-chart-container {min-width: 123px; max-width: 240px;}
+    .students-summary {height: 70px;}
+}
