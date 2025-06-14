@@ -1,6 +1,10 @@
 imgIndex = 1;
 changing = false;
 
+console.log("\x1b[34m you really shouldnt be here!")
+console.log("\x1b[34m sneaky little developer!")
+console.log("\x1b[34m tsk tsk tsk!")
+
 //pop up///////////////////////////////////////////////////////////////
 async function ClosePopup() {
     var popup = document.getElementById("popup");
@@ -46,35 +50,16 @@ async function LoopImg() {
 }
 
 //sign in///////////////////////////////////////////////////////////////
-async function LogIn(e) {
-}
 document.querySelector('#loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
     console.log('iya~~ (*/ω＼*)'); //PLEASE PLEASE PLEASE REMOVE THIS PLEASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    LogIn(e);
 });
 
-function handleCredentialResponse(response) {
-    fetch("google_login.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ credential: response.credential })
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = "welcome.php";
-            } else {
-                document.getElementById("errorMessage").innerText = data.message || "Google login failed.";
-                document.getElementById("errorPopup").style.display = "block";
-            }
-        })
-        .catch(() => {
-            document.getElementById("errorMessage").innerText = "Network error.";
-            document.getElementById("errorPopup").style.display = "block";
-        });
-}
-
+window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    if (error) {
+        alert("Authentication failed: " + decodeURIComponent(error));
+    }
+};
 LoopImg();

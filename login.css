@@ -11,7 +11,25 @@ a {
     text-decoration: none;
 }
 
-.gallery > button {
+.vendor {
+    display: flex;
+    border: 1px solid gray;
+    color: black;
+    box-shadow: 2px 2px black;
+    font-size: 1.7em;
+    width: 90%;
+    border-radius: 10px;
+    transition: 0.2s;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+}
+
+.vendor:hover {
+    transform: translateY(2px);
+}
+
+.gallery>button {
     display: flex;
     background-color: transparent;
     border: none;
@@ -24,18 +42,22 @@ a {
     height: 40px;
     z-index: 1;
 }
-.gallery > button:hover {
+
+.gallery>button:hover {
     width: 60px;
     height: 60px;
     transition: 0.2s;
 }
+
 .prev {
     transform: rotate(225deg);
 }
+
 .next {
     transform: rotate(45deg);
 }
-.gallery > img {
+
+.gallery>img {
     position: absolute;
     object-fit: cover;
     height: 100%;
@@ -43,14 +65,17 @@ a {
     z-index: 0;
     animation: appear 1s linear;
 }
+
 @keyframes appear {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 /*panel section##############################################################*/
 
 .border {
@@ -79,7 +104,8 @@ a {
     justify-content: center;
     align-items: center;
 }
-.panel > img {
+
+.panel>img {
     max-width: 60%;
     max-height: 60%;
     height: auto;
@@ -88,7 +114,8 @@ a {
     display: block;
     object-fit: contain;
 }
-#loginForm > input {
+
+#loginForm>input {
     width: 100%;
     margin: 10px 0;
     padding-top: 10px;
@@ -97,7 +124,8 @@ a {
     border-bottom: 1px solid var(--grey);
     border-radius: 5px;
 }
-#loginForm > button {
+
+#loginForm>button {
     width: 100%;
     margin: 10px 0;
     padding: 13px;
@@ -109,6 +137,7 @@ a {
     color: var(--white);
     border: none;
 }
+
 .signInBtn:hover {
     background-color: var(--grey);
     transition-duration: 0.4s;
@@ -120,16 +149,19 @@ a {
     text-decoration: underline;
     color: var(--grey);
 }
+
 .terms:hover {
     background-color: transparent;
-    font-size: 1.7em;
+    transform: scale(1.1);
 }
+
 /*popup section##############################################################*/
-.popup > div {
+.popup>div {
     align-items: flex-start;
     flex-direction: column;
 }
-.popup > div > button {
+
+.popup>div>button {
     align-self: center;
     width: 90%;
     height: 2em;
@@ -147,10 +179,12 @@ a {
         flex-direction: column;
         height: 100%;
     }
-    .gallery > button {
+
+    .gallery>button {
         display: none;
     }
-    .gallery #school{
+
+    .gallery #school {
         border-radius: 0% 0% 100% 100%;
         width: 100%;
         height: 30%;
@@ -158,14 +192,15 @@ a {
         z-index: 2;
     }
 
-    .border{
+    .border {
         width: 100%;
     }
+
     .panel {
         width: 100%;
     }
-    
-    .panel > img {
+
+    .panel>img {
         margin-top: 150px;
         width: 40%;
     }
@@ -174,10 +209,11 @@ a {
         font-size: 2em;
     }
 
-    .panel > input{
+    .panel>input {
         width: 70%;
     }
-    .panel > button{
+
+    .panel>button {
         width: 70%;
     }
 
@@ -188,23 +224,13 @@ a {
         font-size: 1.2em;
     }
 
-    .panel > img {
+    .panel>img {
         margin-top: 100px;
         width: 70%;
     }
-    .panel > button{
+
+    .panel>button {
         width: 80%;
     }
 
-}
-
-/*Error Popups#####################################*/
-.error-message {
-    color: #d32f2f;
-    font-size: 0.9em;
-    margin-top: 4px;
-    margin-bottom: 10px;
-    font-family: 'Inter', sans-serif;
-    display: block;
-    min-height: 1em;
 }
