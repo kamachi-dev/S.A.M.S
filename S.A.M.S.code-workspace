@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../xampp/htdocs/SAMS"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "S.A.M.S"
+	}
+}
