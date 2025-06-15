@@ -71,6 +71,7 @@ function getRecepients() {
             leftContent.innerHTML = '';
 
             const parser = new DOMParser();
+            console.log(data);
 
             fetch('/assets/templates/profile.html')
                 .then(res => res.text())
