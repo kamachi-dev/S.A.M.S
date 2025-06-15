@@ -34,5 +34,5 @@ function getMessages(id) {
         })
 }
 
-getConvo(1);
+getMessages(1);
 
