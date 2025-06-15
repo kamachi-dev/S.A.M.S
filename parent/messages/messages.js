@@ -84,7 +84,7 @@ function getRecepients() {
                 .then(txt => parser.parseFromString(txt, 'text/html'))
                 .then(html => {
                     data.forEach(recipient => {
-                        html.querySelector('.profile-name').textContent = recipient['last_name'] + ', ' + recipient['first_name'];
+                        html.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                         html.querySelector('.profile-preview').textContent = recipient['message'];
                         html.querySelector('.profile-status').textContent = recipient['sent'];
                         html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient.id));
