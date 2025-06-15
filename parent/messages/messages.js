@@ -68,7 +68,7 @@ function getMessages(id) {
 function getRecepients() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('tkn');
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients?tkn=${token}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&tkn=${token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
