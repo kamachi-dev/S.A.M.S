@@ -165,9 +165,12 @@ img {
 
 .profile-contents {
     display: flex;
-    justify-content: space-between;
-    padding-top: 0;
-    padding-bottom: 0;
+    justify-content: space-between; /* horizontal alignment */
+    padding: 0 10%;
+    height: 60%;                   /* take full height of the parent */
+    box-sizing: border-box;         /* ensures padding doesn't add to height */
+    overflow: hidden;               /* prevents content from overflowing */
+    align-items: flex-start;
 }
 
 .left-contents, .right-contents {
@@ -209,7 +212,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 10px;
     margin: 0;
-    padding: 0 10px;
+    padding-right: 10px;
     background-color: #fff;
     box-sizing: border-box;
     width: 100%
@@ -217,13 +220,12 @@ input {
 
 .password-input {
     flex-grow: 1;
-    padding: 10px 0;
     border: none;
-    border-radius: 0;
     outline: none;
     margin: 0;
     background: none;
     font: inherit;
+    font-size: 18px;
 }
 
 .password-toggle {
@@ -248,12 +250,17 @@ input {
     display: block;
 }
 
+
+#confirmPass, label[for="confirmPass"]{
+    display: none;
+}
+
 .button-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
     height: auto;
-    margin-top: auto;
+    margin-top: 1.4em;
 }
 
 .button {
@@ -292,7 +299,49 @@ input {
     font-size: 18px;
 }
 
+.button-container2{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.button-container2{
+    display: none;
+}
+
+.email-group        { order: 0; }
+.phone-group        { order: 1; }
+.confirm-pass-group { order: 2; }
+.button-container   { order: 3; }
+.button-container2  { order: 4; }
+
 @media only screen and (max-width: 1000px) {
+    .confirm-pass-group { order: 0; }
+    .email-group        { order: 1; }
+    .phone-group        { order: 2; }
+    .button-container   { order: 3; }
+    .button-container2  { order: 4; }
+
+    .profile-contents {
+        display: flex;
+        justify-content: space-between;
+        padding: 0%;
+        height: auto;
+        padding: auto;
+        box-sizing: content-box;   /* default */
+        overflow: visible;         /* default */
+        align-items: stretch; 
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: auto;
+        margin-top: auto;
+    }
+
     .top-box,.bot-box {
         padding-top: 5px;
         padding-bottom: 5px;
@@ -318,7 +367,8 @@ input {
 
     .password-container {
         margin: 0 0 10px;
-        padding: 0 10px;
+        padding-left: 0;
+        padding-right: 10px;
     }
 
     .password-input {
