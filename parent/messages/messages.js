@@ -14,6 +14,35 @@ profiles.addEventListener('click', () => {
     }
 });
 
+function isToday(date) {
+    const today = new Date();
+    const givenDate = new Date(date);
+
+    return (
+        today.getFullYear() === givenDate.getFullYear() &&
+        today.getMonth() === givenDate.getMonth() &&
+        today.getDate() === givenDate.getDate()
+    );
+}
+
+function formatTimestamp(dateString) {
+    const date = new Date(dateString);
+    const isToday = new Date().toDateString() === date.toDateString();
+
+    if (isToday) {
+        // Show only time (e.g., "10:30 AM")
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else {
+        // Show date + time (e.g., "Jun 14, 10:30 AM")
+        return date.toLocaleString([], {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+}
+
 function getMessages(id) {
     const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&id=${id}`)
         .then(res => res.json())
@@ -28,7 +57,7 @@ function getMessages(id) {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = i++ % 2 == 0 ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
-                    <p>${message.sent}</p>`;
+                    <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
             });
         })
