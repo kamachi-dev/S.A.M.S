@@ -86,7 +86,7 @@ function getRecepients() {
                     data.forEach(recipient => {
                         html.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                         html.querySelector('.profile-preview').textContent = recipient['message'];
-                        html.querySelector('.profile-status').textContent = recipient['sent'];
+                        html.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
                         html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient.id));
                         leftContent.appendChild(html.querySelector('.profiles').cloneNode(true));
                     });
