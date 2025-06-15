@@ -87,7 +87,7 @@ function getRecepients() {
                         html.querySelector('.profile-name').textContent = recipient['last_name'] + ', ' + recipient['first_name'];
                         html.querySelector('.profile-preview').textContent = recipient['message'];
                         html.querySelector('.profile-status').textContent = recipient['sent'];
-                        recipientDiv.addEventListener('click', () => getMessages(recipient.id));
+                        html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient.id));
                         leftContent.appendChild(html);
                     });
                 });
