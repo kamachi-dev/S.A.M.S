@@ -44,7 +44,9 @@ function formatTimestamp(dateString) {
 }
 
 function getMessages(id) {
-    const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&id=${id}`)
+    const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&id=${id}`, {
+        credentials: 'include'
+    })
         .then(res => res.json())
         .then(data => {
             let i = 0;
@@ -64,7 +66,9 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    const recipients = fetch('https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients')
+    fetch('https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients', {
+        credentials: 'include'
+    })
         .then(res => res.json())
         .then(data => {
             const leftContent = document.querySelector('.left-content');
@@ -73,7 +77,9 @@ function getRecepients() {
             const parser = new DOMParser();
             console.log(data);
 
-            fetch('/assets/templates/profile.html')
+            fetch('/assets/templates/profile.html', {
+                credentials: 'include'
+            })
                 .then(res => res.text())
                 .then(txt => parser.parseFromString(txt, 'text/html'))
                 .then(html => {
