@@ -14,20 +14,23 @@ profiles.addEventListener('click', () => {
     }
 });
 
-/*for Sending Messages*/
-const sendBtn = document.getElementById('send-btn');
-const input = document.getElementById('message-input');
-const messageContainer = document.querySelector('.middle-part');
+function getConvo(id) {
+    const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getConvo&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            let i = 0;
+            const messageContainer = document.querySelector('.middle-part');
+            messageContainer.innerHTML = ''; // Clear previous messages
 
-sendBtn.addEventListener('click', () => {
-    const message = input.value.trim();
+            data.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = i % 2 == 0 ? 'reciever' : 'sender';
+                messageDiv.innerHTML = `${message.message}
+                    <p>${message.sent}</p>`;
+                messageContainer.appendChild(messageDiv);
+            });
+        })
+}
 
-    if (message !== "") {
-        const senderDiv = document.createElement('div');
-        senderDiv.className = 'reciever';
-        senderDiv.textContent = message;
-        messageContainer.appendChild(senderDiv);
-        input.value = "";
-    }
-});
+getConvo(1);
 
