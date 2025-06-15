@@ -88,7 +88,7 @@ function getRecepients() {
                         html.querySelector('.profile-preview').textContent = recipient['message'];
                         html.querySelector('.profile-status').textContent = recipient['sent'];
                         html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient.id));
-                        leftContent.appendChild(html);
+                        leftContent.appendChild(html.querySelector('.profiles').cloneNode(true));
                     });
                 });
         });
