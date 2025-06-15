@@ -257,8 +257,14 @@
 
 .sender>p,
 .reciever>p {
+    display: none;
     color: rgb(220, 220, 220);
     font-size: x-small;
+}
+
+.sender>p,
+.reciever>p {
+    display: block;
 }
 
 .bottom-part {

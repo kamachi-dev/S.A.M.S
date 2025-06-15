@@ -63,5 +63,29 @@ function getMessages(id) {
         })
 }
 
+function getRecepients() {
+    const recipients = fetch('https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients')
+        .then(res => res.json())
+        .then(data => {
+            const leftContent = document.querySelector('.left-content');
+            leftContent.innerHTML = '';
+
+            const parser = new DOMParser();
+
+            fetch('/assets/templates/profile.html')
+                .then(res => res.text())
+                .then(txt => parser.parseFromString(txt, 'text/html'))
+                .then(html => {
+                    data.forEach(recipient => {
+                        html.querySelector('.profile-name').textContent = recipient['last_name'] + ', ' + recipient['first_name'];
+                        html.querySelector('.profile-preview').textContent = recipient['message'];
+                        html.querySelector('.profile-status').textContent = recipient['sent'];
+                        recipientDiv.addEventListener('click', () => getMessages(recipient.id));
+                        leftContent.appendChild(html);
+                    });
+                });
+        });
+}
+
 getMessages(1);
 
