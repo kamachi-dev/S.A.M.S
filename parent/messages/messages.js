@@ -20,11 +20,13 @@ function getConvo(id) {
         .then(data => {
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
-            messageContainer.innerHTML = ''; // Clear previous messages
+            messageContainer.innerHTML = '';
+
+            console.log(data);
 
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = i % 2 == 0 ? 'reciever' : 'sender';
+                messageDiv.className = i++ % 2 == 0 ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${message.sent}</p>`;
                 messageContainer.appendChild(messageDiv);
