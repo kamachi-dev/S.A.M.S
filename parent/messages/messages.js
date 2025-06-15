@@ -66,7 +66,9 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    fetch('https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients', {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('tkn');
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients?tkn=${token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
@@ -77,9 +79,7 @@ function getRecepients() {
             const parser = new DOMParser();
             console.log(data);
 
-            fetch('/assets/templates/profile.html', {
-                credentials: 'include'
-            })
+            fetch('/assets/templates/profile.html')
                 .then(res => res.text())
                 .then(txt => parser.parseFromString(txt, 'text/html'))
                 .then(html => {
