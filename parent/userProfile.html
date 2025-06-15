@@ -45,11 +45,14 @@
                         </div>
                         <div class="profile-contents">
                             <div class="left-contents">
-                                <label for="yourName" class="form-label">Your Name</label>
-                                <input type="text" id="yourName" class="form-input" value="Cameron Williamson" readonly>
-
-                                <label for="userID" class="form-label">User ID</label>
-                                <input type="text" id="userID" class="form-input" value="202516498235" readonly>
+                                <div class="userfirst-group">
+                                    <label for="userfirst" class="form-label">First Name</label>
+                                    <input type="text" id="userfirst" class="form-input" value="Arvin Johson" readonly>
+                                </div>
+                                <div class="userlast-group">
+                                    <label for="userlast" class="form-label">Last Name</label>
+                                    <input type="text" id="userlast" class="form-input" value="Hirachi" readonly>
+                                </div>
 
                                 <label for="password" class="form-label">Password</label>
                                 <div class="password-container">
@@ -78,17 +81,32 @@
                                 </div>
                             </div>
                             <div class="right-contents">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" class="form-input" value="cameronwilliamson@mail.com"
-                                    readonly>
+                                <div class="confirm-pass-group">
+                                    <label for="confirmPass" class="form-label">Confirm Password</label>
+                                    <input type="password" id="confirmPass" class="form-input" placeholder="Re-Enter Password">
+                                </div>
 
-                                <label for="phoneNumber" class="form-label">Phone Number</label>
-                                <input type="tel" id="phoneNumber" class="form-input" value="(406) 555-0120" readonly>
+                                <div class="email-group">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" id="email" class="form-input" value="cameronwilliamson@mail.com" readonly>
+                                </div>
+
+                                <div class="phone-group">
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <input type="tel" id="phoneNumber" class="form-input" value="(406)f 555-0120" readonly>
+                                </div>
 
                                 <div class="button-container">
-                                    <button class="button manage-button">MANAGE</button>
-                                    <button class="button logout-button"
+                                    <button class="button manage-button" id="changePasswordBtn"
+                                        onclick="showConfirmPassword()">CHANGE PASSWORD</button>
+                                    <button class="button logout-button" id="logoutBtn"
                                         onclick="window.location.href='/index.html'">LOGOUT</button>
+                                </div>
+                                <div class="button-container2">
+                                    <button class="button manage-button" id="saveBtn"
+                                        onclick="saveNewPassword()">SAVE</button>
+                                    <button class="button logout-button" id="cancelBtn"
+                                        onclick="window.location.href='/parent/userProfile.html'">CANCEL</button>
                                 </div>
                             </div>
                         </div>
