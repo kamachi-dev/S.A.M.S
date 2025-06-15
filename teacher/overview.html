@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>SAMS : Teacher Overview</title>
-    <link rel="stylesheet" type="text/css" href="overview.css">
+    <link rel="stylesheet" type="text/css" href="/teacher/overview/overview.css">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
     <!-- Background image -->
-    <img src="../../../assets/School1.jpg" alt="background" class="background"/>
+    <img src="/assets/School1.jpg" alt="background" class="background" />
 
     <div class="overview-header">
-        <img src="../../../assets/MMCL_Logo_Horizontal.webp" alt="longLogo" class="longLogo"/>
+        <img src="/assets/MMCL_Logo_Horizontal.webp" alt="longLogo" class="longLogo" />
     </div>
 
     <nav class="overview-nav-bar">
         <ul>
             <!-- The current tab is Overview, so make it white -->
             <li class="tab ReportTab currentTab">
-                <img src="../../../assets/icons/View Report.png" alt="Overview"/>
+                <img src="/assets/icons/View Report.png" alt="Overview" />
                 <span>Overview</span>
             </li>
             <li class="tab ProfileTab">
-                <img src="../../../assets/icons/User Profile.png" alt="Student Info"/>
+                <img src="/assets/icons/User Profile.png" alt="Student Info" />
                 <span>Student Info</span>
             </li>
             <li class="tab MessageTab">
-                <img src="../../../assets/icons/message.png" alt="User Profile"/>
+                <img src="/assets/icons/message.png" alt="User Profile" />
                 <span>User Profile</span>
             </li>
         </ul>
@@ -67,9 +69,12 @@
                     <canvas id="dailyDonut"></canvas>
                     <div class="chart-percent">81.25%</div>
                     <ul class="legend-donut">
-                        <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">25</span></li>
-                        <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">1</span></li>
-                        <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">0</span></li>
+                        <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">25</span>
+                        </li>
+                        <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">1</span>
+                        </li>
+                        <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">0</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="donut-chart-container">
@@ -77,9 +82,12 @@
                     <canvas id="termDonut"></canvas>
                     <div class="chart-percent">76.5%</div>
                     <ul class="legend-donut">
-                        <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">204</span></li>
-                        <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">103</span></li>
-                        <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">27</span></li>
+                        <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">204</span>
+                        </li>
+                        <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">103</span>
+                        </li>
+                        <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">27</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="donut-chart-container">
@@ -87,9 +95,12 @@
                     <canvas id="semDonut"></canvas>
                     <div class="chart-percent">63.85%</div>
                     <ul class="legend-donut">
-                        <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">548</span></li>
-                        <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">236</span></li>
-                        <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">259</span></li>
+                        <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">548</span>
+                        </li>
+                        <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">236</span>
+                        </li>
+                        <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">259</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="students-summary">
@@ -110,6 +121,7 @@
             </div>
         </div>
     </div>
-    <script src="overview.js"></script>
+    <script src="/teacher/overview/overview.js"></script>
 </body>
+
 </html>
