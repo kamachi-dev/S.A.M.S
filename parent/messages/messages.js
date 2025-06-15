@@ -14,8 +14,8 @@ profiles.addEventListener('click', () => {
     }
 });
 
-function getConvo(id) {
-    const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getConvo&id=${id}`)
+function getMessages(id) {
+    const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&id=${id}`)
         .then(res => res.json())
         .then(data => {
             let i = 0;
