@@ -87,5 +87,7 @@ function getRecepients() {
         });
 }
 
+getRecepients();
+
 getMessages(1);
 
