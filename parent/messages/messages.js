@@ -76,8 +76,6 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('tkn');
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&tkn=${token}`, {
         credentials: 'include'
     })
@@ -99,8 +97,6 @@ function getRecepients() {
 }
 
 function addMessage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('tkn');
     msg = document.querySelector('#message-input').value;
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
         credentials: 'include'
@@ -120,6 +116,8 @@ function updateMessages() {
         getMessages(convo_id);
 }
 
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('tkn');
 const parser = new DOMParser();
 const email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${token}`, {
     credentials: 'include'
