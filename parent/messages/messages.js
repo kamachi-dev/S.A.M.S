@@ -103,14 +103,11 @@ function addMessage() {
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
         credentials: 'include'
     });
-    data.forEach(recipient => {
-        clone = profileHTML.querySelector('.profiles').cloneNode(true);
-        clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
-        clone.querySelector('.profile-preview').textContent = recipient['message'];
-        clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
-        clone.addEventListener('click', () => getMessages(recipient['conversation']));
-        leftContent.appendChild(clone);
-    });
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'sender';
+    messageDiv.innerHTML = `${msg}
+        <p>${formatTimestamp(new Date())}</p>`;
+    messageContainer.appendChild(messageDiv);
     document.getElementById(".middle-part").scrollTop = el.scrollHeight;
 }
 
