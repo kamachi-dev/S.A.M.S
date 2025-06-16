@@ -660,6 +660,10 @@
         flex: none;
         max-width: 60%;
     }
+
+    .calendar-day{
+        font-size: 18px;
+    }
 }
 
 @media only screen and (max-width: 750px) {
@@ -679,7 +683,11 @@
     
     .calendar-container {
         flex: none;
-        max-width: 100%;
+        max-width: 20%;
+    }
+
+    .calendar-day{
+        font-size: 18px;
     }
     
     .time-blocks {
