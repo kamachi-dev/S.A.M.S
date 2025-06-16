@@ -63,7 +63,7 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = data.find(m => m.email !== myEmail);
+            const recipient = data.find(m => m.email !== email);
             document.querySelector('.profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach(message => {
