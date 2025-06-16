@@ -43,8 +43,8 @@ function formatTimestamp(dateString) {
     }
 }
 
-function getMessages(id) {
-    console.log("fetching convo:", id)
+function getMessages(convo) {
+    console.log("fetching convo:", convo)
     const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${convo}`, {
         credentials: 'include'
     })
@@ -63,7 +63,7 @@ function getMessages(id) {
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
             });
-            convo_id = id;
+            convo_id = convo;
         })
 }
 
