@@ -43,6 +43,15 @@ function formatTimestamp(dateString) {
     }
 }
 
+function verifyToken(data) {
+    if (data.hasOwnProperty('credential_error')) {
+        console.log('session expired, redirecting to login');
+        window.location.href = "https://https://sams-mmcl.netlify.app?error=credintial_error";
+        return false;
+    }
+    return true;
+}
+
 function getMessages(id) {
     console.log("fetching convo:", id)
     const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}`, {
@@ -50,6 +59,7 @@ function getMessages(id) {
     })
         .then(res => res.json())
         .then(data => {
+            if (!verifyToken(data)) return;
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
@@ -75,6 +85,7 @@ function getRecepients() {
     })
         .then(res => res.json())
         .then(data => {
+            if (!verifyToken(data)) return;
             const leftContent = document.querySelector('.left-content');
             leftContent.innerHTML = '';
 
