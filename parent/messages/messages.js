@@ -54,7 +54,6 @@ function verifyToken(data) {
 }
 
 function getMessages(id) {
-    console.log("fetching convo:", id)
     const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}`, {
         credentials: 'include'
     })
@@ -65,11 +64,9 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            console.log(data);
-
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = i++ % 2 == 0 ? 'reciever' : 'sender';
+                messageDiv.className = $email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
@@ -124,12 +121,11 @@ function updateMessages() {
 }
 
 const parser = new DOMParser();
-fetch('/assets/templates/profile.html')
-    .then(res => res.text())
-    .then(txt => parser.parseFromString(txt, 'text/html'))
-    .then(html => {
-        profileHTML = html;
-    });
+const email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${token}`, {
+    credentials: 'include'
+})
+    .then(res => res.json())
+    .then(json => json['email']);
 
 setInterval(updateMessages, 2000);
 
