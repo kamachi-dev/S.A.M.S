@@ -73,7 +73,7 @@ function getMessages(id) {
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
             });
-            convo_id = convo;
+            convo_id = id;
         })
 }
 
