@@ -64,11 +64,10 @@ function getMessages(id) {
             messageContainer.innerHTML = '';
 
             const recipient = data.find(m => m.email !== email);
-            document.querySelector('.profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
+            document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
-                console.log(email, message.email);
                 messageDiv.className = email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
