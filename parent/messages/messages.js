@@ -65,7 +65,7 @@ function getMessages(id) {
 
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = $email == message.email ? 'reciever' : 'sender';
+                messageDiv.className = email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
@@ -115,6 +115,7 @@ function updateMessages() {
         getMessages(convo_id);
 }
 
+const convo_id = null;
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('tkn');
 const parser = new DOMParser();
