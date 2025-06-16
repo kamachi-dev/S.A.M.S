@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance Camera</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f0f0f0; }
+    video, canvas { border: 1px solid #333; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Smart Attendance</h2>
+  <video id="video" width="640" height="480" autoplay></video>
+  <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+  <p>Recognized: <span id="recognizedNames">None</span></p>
+  <button onclick="endSession()">End Attendance</button>
+
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const recognizedSet = new Set();
+
+    // Start webcam
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      video.srcObject = stream;
+    });
+
+    // Capture every 5 seconds
+    setInterval(() => {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const image = canvas.toDataURL("image/jpeg");
+
+      fetch("recognize.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: "temp", // placeholder ID, not used
+          image: image
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const newNames = data.map(p => p.name).filter(n => n !== "Unknown" && n !== "Error");
+        newNames.forEach(name => recognizedSet.add(name));
+        document.getElementById("recognizedNames").textContent = Array.from(recognizedSet).join(", ") || "None";
+      });
+    }, 5000);
+
+    function endSession() {
+      const recognized = Array.from(recognizedSet);
+      const now = new Date().toISOString();
+      fetch("end_session.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ names: recognized, timestamp: now })
+      }).then(() => alert("Attendance saved."));
+    }
+  </script>
+</body>
+</html>

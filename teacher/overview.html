@@ -39,27 +39,28 @@
     <div class="overview-content-card">
         <!-- Dropdown Filters Row -->
         <div class="overview-filters-row">
-            <select>
+            <select id="subjectSelect">
                 <option>Mathematics</option>
                 <option>Science</option>
                 <option>History</option>
                 <option>English</option>
             </select>
-            <select>
+            <select id="gradeSelect">
                 <option>Grade 10</option>
                 <option>Grade 11</option>
                 <option>Grade 12</option>
             </select>
-            <select>
+            <select id="sectionSelect">
                 <option>CIS12</option>
                 <option>CIS13</option>
                 <option>CIS14</option>
             </select>
-            <select>
+            <select id="termSelect">
                 <option>1st Term</option>
                 <option>2nd Term</option>
                 <option>3rd Term</option>
             </select>
+            <button onclick="startSession()", class="attendance-button">Start Attendance</button>
         </div>
         <!-- Visualizations Section -->
         <div class="overview-visuals">

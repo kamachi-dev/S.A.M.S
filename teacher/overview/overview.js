@@ -116,3 +116,35 @@ new Chart(document.getElementById('lateBar').getContext('2d'), {
     }
   }
 });
+
+// Popup Attendance
+
+function startSession() {
+    const subject = document.getElementById("subjectSelect").value;
+    const grade = document.getElementById("gradeSelect").value;
+    const section = document.getElementById("sectionSelect").value;
+
+    if (!subject || !grade || !section) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    const time = new Date().toISOString();
+
+    fetch("/api/start_session.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject, grade, section, time })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const sessionId = data.session_id;
+        const url = `/recognizer_page.php?session_id=${sessionId}`;
+        window.open(url, "_blank");
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Failed to start session.");
+    });
+}
+
