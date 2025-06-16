@@ -46,7 +46,7 @@ function formatTimestamp(dateString) {
 function verifyToken(data) {
     if (data.hasOwnProperty('credential_error')) {
         console.log('session expired, redirecting to login');
-        window.location.href = "https://https://sams-mmcl.netlify.app?error=credintial_error";
+        window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
         return false;
     }
     return true;
