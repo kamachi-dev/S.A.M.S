@@ -179,3 +179,36 @@ document.addEventListener('DOMContentLoaded', function() {
     drawDonutChart('currentChart', currentAttendanceData, chartColors);
     drawDonutChart('termChart', termAttendanceData, chartColors);
 });
+
+// Enable Swiping for profile contents
+const grid = document.querySelector('.students-grid');
+
+let isDragging = false;
+let startX = 0;
+let scrollLeft = 0;
+const scrollSpeed = 3; // 🔧 Increase this value for faster scroll
+
+grid.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    grid.classList.add('dragging');
+    startX = e.clientX;
+    scrollLeft = grid.scrollLeft;
+    e.preventDefault(); // prevent text/image drag
+});
+
+grid.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const x = e.clientX;
+    const walk = (x - startX) * scrollSpeed;
+    grid.scrollLeft = scrollLeft - walk;
+});
+
+grid.addEventListener('mouseup', () => {
+    isDragging = false;
+    grid.classList.remove('dragging');
+});
+
+grid.addEventListener('mouseleave', () => {
+    isDragging = false;
+    grid.classList.remove('dragging');
+});

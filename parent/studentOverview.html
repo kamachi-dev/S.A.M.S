@@ -36,7 +36,7 @@
         <div class="content-wrapper">
             <div class="content-border">
                 <div class="content">
-                    <div class="students-attendance-section">
+                    <div class="students-attendance-section-top">
                         <h2 class="section-title">Student's Attendance Record</h2>
 
                         <div class="students-grid">
@@ -90,8 +90,59 @@
                                         onclick="viewStudentProfile('joshua3')">PROFILE</button>
                                 </div>
                             </div>
-                        </div>
+                            <!-- Student 1 - Blue border (Present) -->
+                            <div class="student-card blue">
+                                <div class="student-avatar">
+                                    <img src="/assets/Sample.png" alt="Student Photo" />
+                                </div>
+                                <div class="student-details">
+                                    <div class="student-name">Joshua Simon S. Komachi</div>
+                                    <div class="student-id">20211535356</div>
+                                    <div class="attendance-indicator blue">
+                                        <span class="attendance-icon">🔵</span>
+                                        <span>Attendance</span>
+                                    </div>
+                                    <button class="profile-button blue"
+                                        onclick="viewStudentProfile('joshua')">PROFILE</button>
+                                </div>
+                            </div>
 
+                            <!-- Student 2 - Orange border (Late) -->
+                            <div class="student-card orange">
+                                <div class="student-avatar">
+                                    <img src="/assets/Sample.png" alt="Student Photo" />
+                                </div>
+                                <div class="student-details">
+                                    <div class="student-name">Joshua Simon S. Komachi</div>
+                                    <div class="student-id">20211535356</div>
+                                    <div class="attendance-indicator orange">
+                                        <span class="attendance-icon">🟠</span>
+                                        <span>Attendance</span>
+                                    </div>
+                                    <button class="profile-button orange"
+                                        onclick="viewStudentProfile('joshua2')">PROFILE</button>
+                                </div>
+                            </div>
+
+                            <!-- Student 3 - Red border (Absent) -->
+                            <div class="student-card red">
+                                <div class="student-avatar">
+                                    <img src="/assets/Sample.png" alt="Student Photo" />
+                                </div>
+                                <div class="student-details">
+                                    <div class="student-name">Joshua Simon S. Komachi</div>
+                                    <div class="student-id">20211535356</div>
+                                    <div class="attendance-indicator red">
+                                        <span class="attendance-icon">🔴</span>
+                                        <span>Attendance</span>
+                                    </div>
+                                    <button class="profile-button red"
+                                        onclick="viewStudentProfile('joshua3')">PROFILE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="students-attendance-section-bottom">
                         <div class="dashboard-bottom">
                             <div class="time-tracking-section">
                                 <div class="calendar-charts-section">
@@ -114,67 +165,69 @@
                                         </div>
                                     </div>
 
-                                    <!-- Attendance Charts -->
-                                    <div class="charts-container">
-                                        <div class="chart-section">
-                                            <h4>Student's Current Attendance</h4>
-                                            <div class="chart-wrapper">
-                                                <canvas id="currentChart" width="150px" height="150px"></canvas>
-                                                <div class="chart-legend">
-                                                    <div class="legend-item">
-                                                        <div class="legend-color present"></div>
-                                                        <span>Presents</span>
+                                    <div class="charts-top-bottom">
+                                        <!-- Attendance Charts -->
+                                        <div class="charts-container">
+                                            <div class="chart-section">
+                                                <h4>Student's Current Attendance</h4>
+                                                <div class="chart-wrapper">
+                                                    <canvas id="currentChart" width="150px" height="150px"></canvas>
+                                                    <div class="chart-legend">
+                                                        <div class="legend-item">
+                                                            <div class="legend-color present"></div>
+                                                            <span>Presents</span>
+                                                        </div>
+                                                        <div class="legend-item">
+                                                            <div class="legend-color late"></div>
+                                                            <span>Lates</span>
+                                                        </div>
+                                                        <div class="legend-item">
+                                                            <div class="legend-color absent"></div>
+                                                            <span>Absents</span>
+                                                        </div>
                                                     </div>
-                                                    <div class="legend-item">
-                                                        <div class="legend-color late"></div>
-                                                        <span>Lates</span>
-                                                    </div>
-                                                    <div class="legend-item">
-                                                        <div class="legend-color absent"></div>
-                                                        <span>Absents</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="chart-section">
+                                                <h4>Student's Term Attendance</h4>
+                                                <div class="chart-wrapper">
+                                                    <canvas id="termChart" width="150px" height="150px"></canvas>
+                                                    <div class="chart-legend">
+                                                        <div class="legend-item">
+                                                            <div class="legend-color present"></div>
+                                                            <span>Presents</span>
+                                                        </div>
+                                                        <div class="legend-item">
+                                                            <div class="legend-color late"></div>
+                                                            <span>Lates</span>
+                                                        </div>
+                                                        <div class="legend-item">
+                                                            <div class="legend-color absent"></div>
+                                                            <span>Absents</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="chart-section">
-                                            <h4>Student's Term Attendance</h4>
-                                            <div class="chart-wrapper">
-                                                <canvas id="termChart" width="150px" height="150px"></canvas>
-                                                <div class="chart-legend">
-                                                    <div class="legend-item">
-                                                        <div class="legend-color present"></div>
-                                                        <span>Presents</span>
-                                                    </div>
-                                                    <div class="legend-item">
-                                                        <div class="legend-color late"></div>
-                                                        <span>Lates</span>
-                                                    </div>
-                                                    <div class="legend-item">
-                                                        <div class="legend-color absent"></div>
-                                                        <span>Absents</span>
-                                                    </div>
-                                                </div>
+                                        <!-- Info Section -->
+                                        <div class="info-section">
+                                            <div class="info-text">
+                                                <p><strong>ℹ️</strong> This tracks which subjects the child attended based
+                                                    on the selected day on the schedule</p>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Info Section -->
-                                    <div class="info-section">
-                                        <div class="info-text">
-                                            <p><strong>ℹ️</strong> This tracks which subjects the child attended based
-                                                on the selected day on the schedule</p>
-                                        </div>
-                                        <div class="time-blocks">
-                                            <div class="time-block time-7">7:00</div>
-                                            <div class="time-block time-8">8:00</div>
-                                            <div class="time-block time-9">9:00</div>
-                                            <div class="time-block time-10">10:00</div>
-                                            <div class="time-block time-11">11:00 Lunch</div>
-                                            <div class="time-block time-12">12:00</div>
-                                            <div class="time-block time-1">1:00</div>
-                                            <div class="time-block time-2">2:00</div>
-                                            <div class="time-block time-3">3:00</div>
+                                            <div class="time-blocks">
+                                                <div class="time-block time-7">7:00</div>
+                                                <div class="time-block time-8">8:00</div>
+                                                <div class="time-block time-9">9:00</div>
+                                                <div class="time-block time-10">10:00</div>
+                                                <div class="time-block time-11">11:00 Lunch</div>
+                                                <div class="time-block time-12">12:00</div>
+                                                <div class="time-block time-1">1:00</div>
+                                                <div class="time-block time-2">2:00</div>
+                                                <div class="time-block time-3">3:00</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

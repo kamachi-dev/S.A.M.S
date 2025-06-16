@@ -13,6 +13,8 @@
     vertical-align: top;    
     background-color: white; */
 
+
+
 .ReportTab {
     background-color: white;
 }
@@ -22,8 +24,16 @@
 }
 
 /* Student Selection Page Styles */
-.students-attendance-section {
-    padding: 20px;
+.students-attendance-section-top,
+.students-attendance-section-bottom {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+}
+
+.students-attendance-section-bottom {
+    padding-top: 1px;
+    background-color: var(--white);
 }
 
 .section-title {
@@ -37,9 +47,28 @@
 .students-grid {
     display: flex;
     gap: 30px;
-    margin-bottom: 40px;
     justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    
+    /* Remove or replace padding-left */
+    padding-left: 0;
+
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+.students-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.students-grid.dragging {
+    cursor: grabbing;
+    user-select: none;
 }
 
 .student-card {
@@ -49,14 +78,9 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 3px solid transparent;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.3s ease;
     min-width: 280px;
     text-align: center;
-}
-
-.student-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .student-card.blue {
@@ -69,6 +93,21 @@
 
 .student-card.red {
     border-color: #e74c3c;
+}
+
+/* Blue card hover */
+.student-card.blue:hover {
+    background-color: #d0e7ff;
+}
+
+/* Orange card hover */
+.student-card.orange:hover {
+    background-color: #ffe0b3;
+}
+
+/* Red card hover */
+.student-card.red:hover {
+    background-color: #ffd6d6;
 }
 
 .student-avatar {
@@ -361,14 +400,16 @@
 }
 
 .calendar-container {
-    flex: 0 0 300px;
     background: #2c3e50;
     color: white;
     border-radius: 10px;
-    flex: 1;
-    max-width: 35%;
     box-sizing: border-box;
     padding: 20px;
+
+    /* Updated sizing */
+    flex: 2;              /* Grow 2x relative to siblings */
+    max-width: 50%;       /* Prevent it from exceeding half of the container */
+    min-width: 300px;     /* Ensure a reasonable minimum */
 }
 
 .calendar-header {
@@ -454,26 +495,31 @@
 }
 
 /* Charts Container */
+.charts-top-bottom{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+}
+
 .charts-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    flex: 1;
+    flex-direction: row; /* Stack the two .chart-section blocks vertically */
+    width: 100%;
     gap: 20px;
-    max-width: 66%;
-    height: auto;
     box-sizing: border-box;
-    gap: 1rem;
 }
 
 .chart-section {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     gap: 1rem;
     flex-wrap: wrap;
-    flex: 1;
+    
+    width: 100%;           /* Ensures full width */
+    box-sizing: border-box;
+    
     background: white;
     border-radius: 10px;
     padding: 20px;
@@ -533,9 +579,10 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+    margin: 20px auto 0 auto; 
+    width: fit-content; 
+    text-align: center;
 }
-
 .info-text {
     margin-bottom: 15px;
 }
@@ -595,15 +642,23 @@
     
     .calendar-charts-section {
         flex-direction: column;
+        align-items: center;
     }
     
-    .charts-container {
+    .calendar-charts-section {
+        display: flex;
         flex-direction: column;
-        max-width: 100%;
+        width: 100%;
     }
-    
-    .students-grid {
-        justify-content: center;
+
+    .calendar-charts-section > * {
+        width: 100%; /* All direct children will take full width */
+        box-sizing: border-box;
+    }
+
+    .calendar-container {
+        flex: none;
+        max-width: 60%;
     }
 }
 
@@ -637,13 +692,19 @@
     }
     
     .students-grid {
-        flex-direction: column;
-        align-items: center;
+        /* KEEP ROW LAYOUT FOR SWIPING */
+        flex-direction: row;
+        overflow-x: auto;
+        align-items: flex-start;
+        padding-left: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
-    
+
     .student-card {
         min-width: 250px;
-        max-width: 100%;
+        scroll-snap-align: start;
     }
 
     .menu {
