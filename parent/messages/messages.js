@@ -124,13 +124,15 @@ const email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=g
     .then(res => res.json())
     .then(json => json['email']);
 
-const profileHTML = fetch('/assets/templates/profile.html')
+let profileHTML;
+
+fetch('/assets/templates/profile.html')
     .then(res => res.text())
-    .then(txt => parser.parseFromString(txt, 'text/html'));
-
-console.log(profileHTML);
-
-setInterval(updateMessages, 2000);
-
-getRecepients();
+    .then(txt => parser.parseFromString(txt, 'text/html'))
+    .then(html => {
+        profileHTML = html;
+        console.log(profileHTML);
+        setInterval(updateMessages, 2000);
+        getRecepients();
+    });
 
