@@ -111,7 +111,7 @@ function getRecepients() {
 function addMessage() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('tkn');
-    msg = document.querySelector('#message-input').text;
+    msg = document.querySelector('#message-input').value;
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
         credentials: 'include'
     })
