@@ -104,7 +104,7 @@ function addMessage() {
         credentials: 'include'
     });
     const messageDiv = document.createElement('div');
-    messageDiv.className = 'sender';
+    messageDiv.className = 'reciever';
     messageDiv.innerHTML = `${msg}
         <p>${formatTimestamp(new Date())}</p>`;
     document.querySelector('.middle-part').appendChild(messageDiv);
