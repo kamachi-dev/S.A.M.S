@@ -63,6 +63,9 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
+            const recipient = messages.find(m => m.email !== myEmail);
+            document.querySelector('.profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
+
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
                 console.log(email, message.email);
@@ -136,7 +139,7 @@ fetch('/assets/templates/profile.html')
     .then(html => {
         profileHTML = html;
         console.log(profileHTML);
-        setInterval(updateMessages, 2000);
+        setInterval(updateMessages, 10000);
         getRecepients();
     });
 
