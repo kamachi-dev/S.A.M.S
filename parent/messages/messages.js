@@ -115,7 +115,7 @@ function updateMessages() {
         getMessages(convo_id);
 }
 
-const convo_id = null;
+let convo_id = null;
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('tkn');
 const parser = new DOMParser();
