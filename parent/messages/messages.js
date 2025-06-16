@@ -87,7 +87,7 @@ function getRecepients() {
                         html.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                         html.querySelector('.profile-preview').textContent = recipient['message'];
                         html.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
-                        html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient.id));
+                        html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient['conversation']));
                         leftContent.appendChild(html.querySelector('.profiles').cloneNode(true));
                     });
                 });
@@ -95,6 +95,4 @@ function getRecepients() {
 }
 
 getRecepients();
-
-getMessages(1);
 
