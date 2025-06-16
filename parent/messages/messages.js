@@ -120,11 +120,13 @@ let convo_id = null;
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('tkn');
 const parser = new DOMParser();
-const email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${token}`, {
+let email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${token}`, {
     credentials: 'include'
 })
     .then(res => res.json())
-    .then(json => json['email']);
+    .then(json => {
+        email = json['email']
+    });
 
 let profileHTML;
 
