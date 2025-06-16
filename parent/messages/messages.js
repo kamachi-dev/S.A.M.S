@@ -131,7 +131,7 @@ fetch('/assets/templates/profile.html')
         profileHTML = html;
     });
 
-setInterval(myFunction, 2000);
+setInterval(updateMessages, 2000);
 
 getRecepients();
 
