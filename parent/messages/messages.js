@@ -102,7 +102,7 @@ function addMessage() {
     const token = urlParams.get('tkn');
     msg = document.querySelector('#message-input').text;
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
-        credentials: true
+        credentials: 'include'
     })
 }
 
