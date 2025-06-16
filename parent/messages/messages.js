@@ -44,6 +44,7 @@ function formatTimestamp(dateString) {
 }
 
 function getMessages(id) {
+    console.log("fetching convo:")
     const convo = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&id=${id}`, {
         credentials: 'include'
     })
