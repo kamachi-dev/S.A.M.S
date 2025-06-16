@@ -82,14 +82,14 @@ function getRecepients() {
 
             fetch('/assets/templates/profile.html')
                 .then(res => res.text())
-                .then(txt => parser.parseFromString(txt, 'text/html'))
+                .then(txt => parser.parseFromString(txt, 'text/html').cloneNode(true))
                 .then(html => {
                     data.forEach(recipient => {
                         html.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                         html.querySelector('.profile-preview').textContent = recipient['message'];
                         html.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
                         html.querySelector('.profiles').addEventListener('click', () => getMessages(recipient['conversation']));
-                        leftContent.appendChild(html.querySelector('.profiles').cloneNode(true));
+                        leftContent.appendChild(html.querySelector('.profiles'));
                     });
                 });
         });
