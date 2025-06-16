@@ -6,7 +6,6 @@ function TogglePopup() {
 /* Hides right content when left content is clicked */
 const profiles = document.querySelector('.left-content');
 const rightContent = document.querySelector('.right-content');
-let profileHTML = '';
 
 profiles.addEventListener('click', () => {
     if (window.matchMedia("(max-width: 750px)").matches) {
@@ -124,6 +123,10 @@ const email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=g
 })
     .then(res => res.json())
     .then(json => json['email']);
+
+const profileHTML = fetch('/assets/templates/profile.html')
+    .then(res => res.text())
+    .then(txt => parser.parseFromString(txt, 'text/html'));
 
 setInterval(updateMessages, 2000);
 
