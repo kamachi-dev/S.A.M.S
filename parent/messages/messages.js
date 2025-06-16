@@ -63,6 +63,7 @@ function getMessages(id) {
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
             });
+            convo_id = id;
         })
 }
 
@@ -94,6 +95,13 @@ function getRecepients() {
                     });
                 });
         });
+}
+
+function addMessage() {
+    msg = document.querySelector('#message-input').text;
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}`, {
+        credentials: true
+    })
 }
 
 getRecepients();
