@@ -111,6 +111,7 @@ function addMessage() {
         clone.addEventListener('click', () => getMessages(recipient['conversation']));
         leftContent.appendChild(clone);
     });
+    document.getElementById(".middle-part").scrollTop = el.scrollHeight;
 }
 
 function updateMessages() {
