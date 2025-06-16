@@ -6,6 +6,7 @@ function TogglePopup() {
 /* Hides right content when left content is clicked */
 const profiles = document.querySelector('.left-content');
 const rightContent = document.querySelector('.right-content');
+let profileHTML = '';
 
 profiles.addEventListener('click', () => {
     if (window.matchMedia("(max-width: 750px)").matches) {
@@ -89,22 +90,14 @@ function getRecepients() {
             const leftContent = document.querySelector('.left-content');
             leftContent.innerHTML = '';
 
-            const parser = new DOMParser();
-            console.log(data);
-
-            fetch('/assets/templates/profile.html')
-                .then(res => res.text())
-                .then(txt => parser.parseFromString(txt, 'text/html'))
-                .then(html => {
-                    data.forEach(recipient => {
-                        clone = html.querySelector('.profiles').cloneNode(true);
-                        clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
-                        clone.querySelector('.profile-preview').textContent = recipient['message'];
-                        clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
-                        clone.addEventListener('click', () => getMessages(recipient['conversation']));
-                        leftContent.appendChild(clone);
-                    });
-                });
+            data.forEach(recipient => {
+                clone = profileHTML.querySelector('.profiles').cloneNode(true);
+                clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
+                clone.querySelector('.profile-preview').textContent = recipient['message'];
+                clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
+                clone.addEventListener('click', () => getMessages(recipient['conversation']));
+                leftContent.appendChild(clone);
+            });
         });
 }
 
@@ -114,8 +107,31 @@ function addMessage() {
     msg = document.querySelector('#message-input').value;
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
         credentials: 'include'
-    })
+    });
+    data.forEach(recipient => {
+        clone = profileHTML.querySelector('.profiles').cloneNode(true);
+        clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
+        clone.querySelector('.profile-preview').textContent = recipient['message'];
+        clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
+        clone.addEventListener('click', () => getMessages(recipient['conversation']));
+        leftContent.appendChild(clone);
+    });
 }
+
+function updateMessages() {
+    if (convo_id)
+        getMessages(convo_id);
+}
+
+const parser = new DOMParser();
+fetch('/assets/templates/profile.html')
+    .then(res => res.text())
+    .then(txt => parser.parseFromString(txt, 'text/html'))
+    .then(html => {
+        profileHTML = html;
+    });
+
+setInterval(myFunction, 2000);
 
 getRecepients();
 
