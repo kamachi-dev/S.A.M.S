@@ -108,7 +108,7 @@ function addMessage() {
     messageDiv.innerHTML = `${msg}
         <p>${formatTimestamp(new Date())}</p>`;
     document.querySelector('.middle-part').appendChild(messageDiv);
-    el = document.getElementById(".middle-part");
+    el = document.querySelector(".middle-part");
     el.scrollTop = el.scrollHeight;
 }
 
