@@ -89,7 +89,7 @@ function getRecepients() {
                         clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                         clone.querySelector('.profile-preview').textContent = recipient['message'];
                         clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
-                        clone.querySelector('.profiles').addEventListener('click', () => getMessages(recipient['conversation']));
+                        clone.addEventListener('click', () => getMessages(recipient['conversation']));
                         leftContent.appendChild(clone.querySelector('.profiles'));
                     });
                 });
