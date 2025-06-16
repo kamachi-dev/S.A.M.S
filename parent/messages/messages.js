@@ -85,7 +85,7 @@ function getRecepients() {
                 .then(txt => parser.parseFromString(txt, 'text/html'))
                 .then(html => {
                     data.forEach(recipient => {
-                        clone = html.querySelector('.profiles').cloneNode(true;)
+                        clone = html.querySelector('.profiles').cloneNode(true);
                         clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                         clone.querySelector('.profile-preview').textContent = recipient['message'];
                         clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
