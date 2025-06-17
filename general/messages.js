@@ -61,7 +61,7 @@ function getMessages(id) {
             document.querySelector('#recipient-pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
-            data.forEach(message, i => {
+            data.forEach((message, i) => {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = window.email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
