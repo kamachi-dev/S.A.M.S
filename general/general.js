@@ -30,6 +30,10 @@ if (!cookieExists('username') || !cookieExists('username')) {
 window.verifyToken = verifyToken;
 window.token = getCookie('tkn');
 window.provider = getCookie('provider');
+
+console.log('token:', window.token);
+console.log('provider:', window.provider);
+
 fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&provider=${window.provider}&tkn=${window.token}`, {
     credentials: 'include'
 })
