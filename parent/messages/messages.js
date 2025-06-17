@@ -65,6 +65,8 @@ function getMessages(id) {
                 messageContainer.appendChild(messageDiv);
             });
             convo_id = id;
+            el = document.querySelector(".middle-part");
+            el.scrollTop = el.scrollHeight;
         })
 }
 
@@ -89,24 +91,27 @@ function getRecepients() {
         });
 }
 
-function addMessage() {
-    msg = document.querySelector('#message-input').value;
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&provider=${window.provider}&tkn=${window.token}`, {
-        credentials: 'include'
-    });
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'reciever';
-    messageDiv.innerHTML = `${msg}
-        <p>${formatTimestamp(new Date())}</p>`;
-    document.querySelector('.middle-part').appendChild(messageDiv);
-    el = document.querySelector(".middle-part");
-    el.scrollTop = el.scrollHeight;
-}
-
 function updateMessages() {
     if (convo_id)
         getMessages(convo_id);
 }
+
+document.getElementById("myInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        console.log("Enter pressed! Value:", this.value);
+        msg = document.querySelector('#message-input').value;
+        fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&provider=${window.provider}&tkn=${window.token}`, {
+            credentials: 'include'
+        });
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'reciever';
+        messageDiv.innerHTML = `${msg}
+        <p>${formatTimestamp(new Date())}</p>`;
+        document.querySelector('.middle-part').appendChild(messageDiv);
+        el = document.querySelector(".middle-part");
+        el.scrollTop = el.scrollHeight;
+    }
+});
 
 let convo_id = null;
 const parser = new DOMParser();
