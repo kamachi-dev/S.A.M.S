@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Setup</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: rgb(211, 210, 210);
+        }
+        body {
+            font-family: Arial;
+            text-align: center;
+            padding: 2rem;
+        }
+        .form-container, .camera-container {
+            max-width: 700px;
+            margin: auto;
+        }
+        select, input[type="time"], input[type="date"], button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1rem;
+            width: 250px;
+        }
+        .camera-container {
+            display: none;
+            max-width: 100%;
+            margin-top: 2rem;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .camera-container video {
+            width: 1440px;
+            height: 810px;
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            border: 3px solid #333;
+            border-radius: 12px;
+            /* box-shadow: 0 0 20px rgba(0,0,0,0.2); */
+        }
+        #endButton {
+            margin-top: 2rem;
+            padding: 12px 24px;
+            font-size: 1rem;
+            background-color: #ef2722;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+            #endButton:hover {
+            background-color: #c51f1f;
+        }
+    </style>
+</head>
+<body>
+    <!-- 🔽 This container will be hidden after submission -->
+    <div class="form-container" id="setupForm">
+        <h2>Set Up Class Attendance</h2>
+        <div>
+        <label>Subject:</label><br>
+        <select id="subject">
+            <option value="">-- Select Subject --</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+            <option value="English">English</option>
+        </select>
+        </div>
+
+        <div>
+        <label>Section:</label><br>
+        <select id="section">
+            <option value="">-- Select Section --</option>
+            <option value="CIS12">CIS12</option>
+            <option value="CIS13">CIS13</option>
+            <option value="CIS14">CIS14</option>
+        </select>
+        </div>
+
+        <div>
+        <label>Start Time:</label><br>
+        <input type="time" id="startTime">
+        </div>
+
+        <div>
+        <label>Date:</label><br>
+        <input type="date" id="meetingDate">
+        </div>
+
+        <button onclick="startAttendance()">Start Attendance</button>
+    </div>
+
+    <!-- 🎥 Camera view section -->
+    <div class="camera-container" id="cameraContainer">
+        <!-- <h3>Camera is Live</h3> -->
+        <video id="video" autoplay playsinline></video>
+        <button id="endButton" onclick="endSession()">End Attendance</button>
+    </div>
+
+    <form method="POST" action="https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel" enctype="multipart/form-data">
+        <label>Course Name:
+            <input type="text" name="course_name" required />
+        </label><br />
+        <label>Upload Model:
+            <input type="file" name="model" accept=".joblib" required />
+        </label><br />
+        <button type="submit">Upload</button>
+    </form>
+
+    <script>
+        function startAttendance() {
+            const subject = document.getElementById("subject").value;
+            const section = document.getElementById("section").value;
+            const time = document.getElementById("startTime").value;
+            const date = document.getElementById("meetingDate").value;
+
+            if (!subject || !section || !time || !date) {
+                alert("Please fill out all fields to start the session.");
+                return;
+            }
+
+            // 🔽 Call PHP to prepare the right model
+            fetch("https://sams-backend-u79d.onrender.com/getData.php?action=prepareModel", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ subject, grade: "10", section }) // pass actual grade if known
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    startCamera(); // your camera feed setup here
+                } else {
+                    alert("Model error: " + (data.error || "Unknown error"));
+                }
+            })
+            .catch(err => {
+                alert("Model setup failed.");
+                console.error(err);
+            });
+        }
+
+    function endSession() {
+        // Stop the camera stream
+        const video = document.getElementById("video");
+        const stream = video.srcObject;
+        if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        }
+
+        // Close this tab (only works if this tab was opened via `window.open()`)
+        window.close();
+
+        // If tab can't be closed (browser blocked), show fallback
+        alert("You can now return to the Overview tab.");
+    }
+  </script>
+</body>
+</html>
