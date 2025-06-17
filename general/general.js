@@ -21,15 +21,15 @@ function verifyToken(data) {
     return true;
 }
 
-
-
 if (urlParams.has('tkn')/* && urlParams.has('provider')*/) {
     document.cookie = `tkn=${urlParams.get('tkn')}; path=/; max-age=10800`;
     document.cookie = `provider=${urlParams.get('provider')}; path=/; max-age=10800`;
 }
 if (!cookieExists('username') || !cookieExists('username')) {
     console.log('cookies missing, redirecting to login');
-    window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
+    console.log(' token:', getCookie('tkn'));
+    console.log(' provider:', getCookie('provider'));
+    //window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
 }
 window.verifyToken = verifyToken;
 window.token = getCookie('tkn');
