@@ -40,7 +40,8 @@ fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&
 })
     .then(res => res.json())
     .then(json => {
-        window.email = json['email']
+        window.email = json['email'];
+        window.pfp = json['pfp'];
     });
 
 const url = new URL(window.location);

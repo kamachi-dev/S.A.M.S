@@ -82,6 +82,7 @@ function getRecepients() {
 
             data.forEach(recipient => {
                 clone = profileHTML.querySelector('.profiles').cloneNode(true);
+                clone.querySelector('.profile-pic').src = recipient['pfp'] || 'https://sams-mmcl.netlify.app/assets/images/default_pfp.png';
                 clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                 clone.querySelector('.profile-preview').textContent = recipient['message'];
                 clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
