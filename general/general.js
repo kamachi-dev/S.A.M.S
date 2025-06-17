@@ -27,7 +27,6 @@ if (urlParams.has('tkn')/* && urlParams.has('provider')*/) {
 if (!cookieExists('username') || !cookieExists('username')) {
     console.log('cookies missing, redirecting to login');
     window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
-    return false;
 }
 window.verifyToken = verifyToken;
 window.token = getCookie('tkn');
