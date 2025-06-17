@@ -83,7 +83,7 @@ function getRecepients() {
 
             data.forEach(recipient => {
                 clone = profileHTML.querySelector('.profiles').cloneNode(true);
-                clone.querySelector('.profiles').id = `recipient-${recipient['conversation']}`;
+                clone.id = `recipient-${recipient['conversation']}`;
                 clone.querySelector('#pfp').src = recipient['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : recipient['pfp'];
                 clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                 clone.querySelector('.profile-preview').textContent = recipient['message'];
