@@ -10,7 +10,8 @@ document.querySelectorAll('a').forEach(link => {
 
 const urlParams = new URLSearchParams(window.location.search);
 window.token = urlParams.get('tkn');
-fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${window.token}`, {
+window.provider = urlParams.get('provider');
+fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&provider=${window.provider}&tkn=${window.token}`, {
     credentials: 'include'
 })
     .then(res => res.json())

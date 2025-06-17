@@ -53,7 +53,7 @@ function verifyToken(data) {
 }
 
 function getMessages(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}&provider=${window.provider}&tkn=${window.token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
@@ -78,7 +78,7 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&tkn=${window.token}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&provider=${window.provider}&tkn=${window.token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
@@ -100,7 +100,7 @@ function getRecepients() {
 
 function addMessage() {
     msg = document.querySelector('#message-input').value;
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${window.token}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&provider=${window.provider}&tkn=${window.token}`, {
         credentials: 'include'
     });
     const messageDiv = document.createElement('div');
