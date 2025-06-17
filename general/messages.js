@@ -50,9 +50,8 @@ function getMessages(id) {
         .then(res => res.json())
         .then(data => {
             if (!window.verifyToken(data)) return;
-            if (data == prevConvo) return;
+            if (JSON.stringify(data) === JSON.stringify(prevConvo)) return;
             prevConvo = data;
-            console.log(data, prevConvo);
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
