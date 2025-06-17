@@ -61,6 +61,8 @@
     /* Firefox */
     -ms-overflow-style: none;
     /* Internet Explorer 10+ */
+
+    text-align: center;
 }
 
 .left-content::-webkit-scrollbar {
@@ -222,6 +224,7 @@
     margin: 10px;
     justify-content: flex-start;
     overflow-y: scroll;
+    text-align: center;
 
     /*Hide Scrollbar*/
     scrollbar-width: none;
@@ -253,6 +256,7 @@
     padding: 10px 15px;
     border-radius: 12px;
     max-width: 60%;
+    text-align: default;
 }
 
 .sender>p,

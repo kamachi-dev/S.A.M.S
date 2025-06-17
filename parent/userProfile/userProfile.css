@@ -429,7 +429,7 @@ input {
         display: none;                  /* Chrome, Safari */
     }
 
- .popup.show{
+    .popup.show{
         height: 50px;
         width: 300px;
         background: #007acc;

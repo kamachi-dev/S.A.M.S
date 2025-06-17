@@ -43,52 +43,51 @@ function formatTimestamp(dateString) {
     }
 }
 
-function verifyToken(data) {
-    if (data.hasOwnProperty('credential_error')) {
-        console.log('session expired, redirecting to login');
-        window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
-        return false;
-    }
-    return true;
-}
-
 function getMessages(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}&provider=${window.provider}&tkn=${window.token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
         .then(data => {
-            if (!verifyToken(data)) return;
+            if (!window.verifyToken(data)) return;
+            if (JSON.stringify(data) === JSON.stringify(prevConvo)) return;
+            prevConvo = data;
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = data.find(m => m.email !== email);
+            const recipient = data.find(m => m.email !== window.email);
+            const recipient_pfp = document.querySelector(`#recipient-${id}`).querySelector('#pfp').src;
+            document.querySelector('#recipient-pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = email == message.email ? 'reciever' : 'sender';
+                messageDiv.className = window.email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
             });
             convo_id = id;
+            el = document.querySelector(".middle-part");
+            el.scrollTop = el.scrollHeight;
         })
 }
 
 function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&tkn=${token}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&provider=${window.provider}&tkn=${window.token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
         .then(data => {
-            if (!verifyToken(data)) return;
+            if (!window.verifyToken(data)) return;
             const leftContent = document.querySelector('.left-content');
             leftContent.innerHTML = '';
 
             data.forEach(recipient => {
                 clone = profileHTML.querySelector('.profiles').cloneNode(true);
+                clone.id = `recipient-${recipient['conversation']}`;
+                clone.querySelector('#pfp').src = recipient['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : recipient['pfp'];
                 clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                 clone.querySelector('.profile-preview').textContent = recipient['message'];
                 clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
@@ -98,36 +97,31 @@ function getRecepients() {
         });
 }
 
-function addMessage() {
-    msg = document.querySelector('#message-input').value;
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
-        credentials: 'include'
-    });
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'reciever';
-    messageDiv.innerHTML = `${msg}
-        <p>${formatTimestamp(new Date())}</p>`;
-    document.querySelector('.middle-part').appendChild(messageDiv);
-    el = document.querySelector(".middle-part");
-    el.scrollTop = el.scrollHeight;
-}
-
 function updateMessages() {
     if (convo_id)
         getMessages(convo_id);
 }
 
+document.querySelector("#message-input").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        console.log("Enter pressed! Value:", this.value);
+        msg = document.querySelector('#message-input').value;
+        fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&provider=${window.provider}&tkn=${window.token}`, {
+            credentials: 'include'
+        });
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'reciever';
+        messageDiv.innerHTML = `${msg}
+        <p>${formatTimestamp(new Date())}</p>`;
+        document.querySelector('.middle-part').appendChild(messageDiv);
+        el = document.querySelector(".middle-part");
+        el.scrollTop = el.scrollHeight;
+    }
+});
+
+let prevConvo = null;
 let convo_id = null;
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('tkn');
 const parser = new DOMParser();
-let email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${token}`, {
-    credentials: 'include'
-})
-    .then(res => res.json())
-    .then(json => {
-        email = json['email']
-    });
 
 let profileHTML;
 
@@ -137,7 +131,7 @@ fetch('/assets/templates/profile.html')
     .then(html => {
         profileHTML = html;
         console.log(profileHTML);
-        setInterval(updateMessages, 10000);
+        setInterval(updateMessages, 1000);
         getRecepients();
     });
 
