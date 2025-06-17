@@ -242,14 +242,14 @@
     align-self: flex-start;
     /*left*/
     background-color: #333;
-    text-align: flex-start;
+    text-align: left;
 }
 
 .reciever {
     align-self: flex-end;
     /*right*/
     background-color: #007bff;
-    text-align: flex-end;
+    text-align: right;
 }
 
 .sender,
