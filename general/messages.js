@@ -61,12 +61,22 @@ function getMessages(id) {
             document.querySelector('#recipient-pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
-            data.forEach(message => {
+            data.forEach(message, i => {
                 const messageDiv = document.createElement('div');
                 messageDiv.className = window.email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
+                if (i > 0) {
+                    const prevMsg = data[i - 1];
+                    const prevTime = new Date(prevMsg.sent).getTime();
+                    const currTime = new Date(message.sent).getTime();
+                    const diffHours = Math.abs(currTime - prevTime) / 3600000;
+                    if (diffHours >= 1) {
+                        const p = messageDiv.querySelector('p');
+                        if (p) p.remove();
+                    }
+                }
             });
             convo_id = id;
             el = document.querySelector(".middle-part");
