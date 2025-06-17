@@ -222,6 +222,7 @@
     margin: 10px;
     justify-content: flex-start;
     overflow-y: scroll;
+    text-align: center;
 
     /*Hide Scrollbar*/
     scrollbar-width: none;
@@ -282,7 +283,6 @@
     font-size: 20px;
     display: flex;
     flex-direction: row;
-    text-align: center;
 }
 
 .bottom-inner input {
