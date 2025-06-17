@@ -54,7 +54,8 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = data.find(m => m.email !== window.email);
+            const recipient = document.querySelector(`#recipient-${recipient['conversation']}`).querySelector('#pfp').src;
+            document.querySelector('#profile-pic').src = recipient.pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient.pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach(message => {
@@ -82,6 +83,7 @@ function getRecepients() {
 
             data.forEach(recipient => {
                 clone = profileHTML.querySelector('.profiles').cloneNode(true);
+                clone.querySelector('.profile').id = `recipient-${recipient['conversation']}`;
                 clone.querySelector('#pfp').src = recipient['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : recipient['pfp'];
                 clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                 clone.querySelector('.profile-preview').textContent = recipient['message'];
