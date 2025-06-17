@@ -8,6 +8,9 @@ function getCookie(name) {
         .find(row => row.startsWith(name + '='))
         ?.split('=')[1];
 }
+function cookieExists(name) {
+    return document.cookie.split('; ').some(cookie => cookie.startsWith(name + '='));
+}
 
 function verifyToken(data) {
     if (data.hasOwnProperty('credential_error')) {
