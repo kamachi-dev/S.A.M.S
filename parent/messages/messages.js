@@ -63,12 +63,12 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = data.find(m => m.email !== email);
+            const recipient = data.find(m => m.email !== window.email);
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach(message => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = email == message.email ? 'reciever' : 'sender';
+                messageDiv.className = window.email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 messageContainer.appendChild(messageDiv);
@@ -78,7 +78,7 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&tkn=${token}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&tkn=${window.token}`, {
         credentials: 'include'
     })
         .then(res => res.json())
@@ -100,7 +100,7 @@ function getRecepients() {
 
 function addMessage() {
     msg = document.querySelector('#message-input').value;
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${token}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&tkn=${window.token}`, {
         credentials: 'include'
     });
     const messageDiv = document.createElement('div');
@@ -118,16 +118,7 @@ function updateMessages() {
 }
 
 let convo_id = null;
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('tkn');
 const parser = new DOMParser();
-let email = fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&tkn=${token}`, {
-    credentials: 'include'
-})
-    .then(res => res.json())
-    .then(json => {
-        email = json['email']
-    });
 
 let profileHTML;
 
