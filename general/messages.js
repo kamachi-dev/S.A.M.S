@@ -50,6 +50,8 @@ function getMessages(id) {
         .then(res => res.json())
         .then(data => {
             if (!window.verifyToken(data)) return;
+            if (data == prevConvo) return;
+            prevConvo = data;
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
@@ -117,6 +119,7 @@ document.querySelector("#message-input").addEventListener("keydown", function (e
     }
 });
 
+let prevConvo = null;
 let convo_id = null;
 const parser = new DOMParser();
 
