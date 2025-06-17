@@ -82,7 +82,7 @@ function getRecepients() {
 
             data.forEach(recipient => {
                 clone = profileHTML.querySelector('.profiles').cloneNode(true);
-                clone.querySelector('#pfp').src = recipient['pfp'];
+                clone.querySelector('#pfp').src = recipient['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : recipient['pfp'];
                 clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                 clone.querySelector('.profile-preview').textContent = recipient['message'];
                 clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
