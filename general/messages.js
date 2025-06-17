@@ -96,7 +96,7 @@ function updateMessages() {
         getMessages(convo_id);
 }
 
-document.getElementById("#message-input").addEventListener("keydown", function (e) {
+document.querySelector("#message-input").addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
         console.log("Enter pressed! Value:", this.value);
         msg = document.querySelector('#message-input').value;
