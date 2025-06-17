@@ -66,17 +66,17 @@ function getMessages(id) {
                 messageDiv.className = window.email == message.email ? 'reciever' : 'sender';
                 messageDiv.innerHTML = `${message.message}
                     <p>${formatTimestamp(message.sent)}</p>`;
-                messageContainer.appendChild(messageDiv);
                 if (i > 0) {
                     const prevMsg = data[i - 1];
                     const prevTime = new Date(prevMsg.sent).getTime();
                     const currTime = new Date(message.sent).getTime();
-                    const diffHours = Math.abs(currTime - prevTime) / 3600000;
+                    const diffHours = Math.abs(currTime - prevTime) / 60000;
                     if (diffHours >= 1) {
                         const p = messageDiv.querySelector('p');
                         if (p) p.remove();
                     }
                 }
+                messageContainer.appendChild(messageDiv);
             });
             convo_id = id;
             el = document.querySelector(".middle-part");
