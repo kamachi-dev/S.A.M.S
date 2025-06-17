@@ -52,7 +52,7 @@ function getMessages(id) {
             if (!window.verifyToken(data)) return;
             if (data == prevConvo) return;
             prevConvo = data;
-            print(data, prevConvo);
+            console.log(data, prevConvo);
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
