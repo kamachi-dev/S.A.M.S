@@ -119,7 +119,7 @@ fetch('/assets/templates/profile.html')
     .then(html => {
         profileHTML = html;
         console.log(profileHTML);
-        setInterval(updateMessages, 10000);
+        setInterval(updateMessages, 1000);
         getRecepients();
     });
 
