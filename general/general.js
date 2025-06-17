@@ -18,7 +18,9 @@ function verifyToken(data) {
     return true;
 }
 
-if (urlParams.has('tkn') && urlParams.has('provider')) {
+
+
+if (urlParams.has('tkn')/* && urlParams.has('provider')*/) {
     document.cookie = `tkn=${urlParams.get('tkn')}; path=/; max-age=10800`;
     document.cookie = `provider=${urlParams.get('provider')}; path=/; max-age=10800`;
 }

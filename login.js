@@ -50,10 +50,6 @@ async function LoopImg() {
 }
 
 //sign in///////////////////////////////////////////////////////////////
-document.querySelector('#loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    console.log('iya~~ (*/ω＼*)'); //PLEASE PLEASE PLEASE REMOVE THIS PLEASEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-});
 
 window.onload = function () {
     const params = new URLSearchParams(window.location.search);
