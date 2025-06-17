@@ -54,7 +54,7 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = document.querySelector(`#recipient-${recipient['conversation']}`).querySelector('#pfp').src;
+            const recipient = document.querySelector(`#recipient-${id}`).querySelector('#pfp').src;
             document.querySelector('#profile-pic').src = recipient.pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient.pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
