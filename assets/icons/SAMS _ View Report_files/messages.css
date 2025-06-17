@@ -242,14 +242,12 @@
     align-self: flex-start;
     /*left*/
     background-color: #333;
-    text-align: flex-start;
 }
 
 .reciever {
     align-self: flex-end;
     /*right*/
     background-color: #007bff;
-    text-align: flex-end;
 }
 
 .sender,
@@ -258,6 +256,7 @@
     padding: 10px 15px;
     border-radius: 12px;
     max-width: 60%;
+    text-align: default;
 }
 
 .sender>p,
