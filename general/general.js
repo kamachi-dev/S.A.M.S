@@ -1,16 +1,35 @@
 const params = window.location.search;
-document.querySelectorAll('a').forEach(link => {
-    if (link.href.includes('#') || link.href.startsWith('mailto:') || link.target === '_blank') return;
-    if (!link.href.includes('?')) {
-        link.href += params;
-    } else {
-        link.href += '&' + params.slice(1);
-    }
-});
 
 const urlParams = new URLSearchParams(window.location.search);
-window.token = urlParams.get('tkn');
-window.provider = urlParams.get('provider');
+
+function getCookie(name) {
+    return document.cookie
+        .split('; ')
+        .find(row => row.startsWith(name + '='))
+        ?.split('=')[1];
+}
+
+function verifyToken(data) {
+    if (data.hasOwnProperty('credential_error')) {
+        console.log('session expired, redirecting to login');
+        window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
+        return false;
+    }
+    return true;
+}
+
+if (urlParams.has('tkn') && urlParams.has('provider')) {
+    document.cookie = `tkn=${urlParams.get('tkn')}; path=/; max-age=10800`;
+    document.cookie = `provider=${urlParams.get('provider')}; path=/; max-age=10800`;
+}
+if (!cookieExists('username') || !cookieExists('username')) {
+    console.log('cookies missing, redirecting to login');
+    window.location.href = "https://sams-mmcl.netlify.app?error=credential_error";
+    return false;
+}
+window.verifyToken = verifyToken;
+window.token = getCookie('tkn');
+window.provider = getCookie('provider');
 fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&provider=${window.provider}&tkn=${window.token}`, {
     credentials: 'include'
 })
