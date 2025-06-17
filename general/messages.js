@@ -54,8 +54,9 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = document.querySelector(`#recipient-${id}`).querySelector('#pfp').src;
-            document.querySelector('#pfp').src = recipient.pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient.pfp;
+            const recipient = data.find(m => m.email !== window.email);
+            const recipient_pfp = document.querySelector(`#recipient-${id}`).querySelector('#pfp').src;
+            document.querySelector('#pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach(message => {
