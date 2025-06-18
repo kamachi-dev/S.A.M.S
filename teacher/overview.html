@@ -62,6 +62,22 @@
             </select>
             <button onclick="openAttendanceSetup()" class="attendance-button">Start Attendance</button>
         </div>
+        <div style="margin-top: 30px;">
+            <h3>Upload Face Recognition Model</h3>
+            <form id="uploadForm" method="POST" action="https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel" enctype="multipart/form-data" target="_blank">
+                <label>
+                    Course Name:
+                    <input type="text" name="course_name" required />
+                </label><br><br>
+                <label>
+                    Upload Model (.joblib):
+                    <input type="file" name="model" accept=".joblib" required />
+                </label><br><br>
+                <input type="hidden" name="tkn" id="tokenInput">
+                <input type="hidden" name="provider" id="providerInput">
+                <button type="submit">Upload Model</button>
+            </form>
+        </div>
         <!-- Visualizations Section -->
         <div class="overview-visuals">
             <div class="visual-row">
