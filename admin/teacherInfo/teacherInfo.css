@@ -1,0 +1,470 @@
+/* Use the same base styling as teacher/studentInfo but adapted for teachers */
+.ProfileTab {
+    background-color: white;
+}
+
+.ReportTab {
+    background-color: #757575;
+}
+
+.MessageTab {
+    background-color: #757575;
+}
+
+.content {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Filter Section */
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+.search-container {
+    flex: 1;
+    max-width: 300px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #4A90E2;
+}
+
+.filter-dropdowns {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-select {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    outline: none;
+    min-width: 150px;
+}
+
+.filter-select:focus {
+    border-color: #4A90E2;
+}
+
+.teacher-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+}
+
+.teacher-count span:first-child {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.count-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Subject Sections */
+.subject-section {
+    margin-bottom: 40px;
+}
+
+.subject-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Teachers Grid */
+.teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.teacher-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.teacher-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.teacher-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #e9ecef;
+}
+
+.teacher-info {
+    flex: 1;
+}
+
+.teacher-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.teacher-id {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Contact Info Container */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+/* Subject-specific color schemes for badges */
+.phone-badge {
+    color: white;
+    padding: 10px 16px;
+    border-radius: 18px;
+    font-weight: bold;
+    font-size: 13px;
+    min-width: 110px;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.email-badge {
+    color: white;
+    padding: 8px 14px;
+    border-radius: 16px;
+    font-weight: 500;
+    font-size: 11px;
+    min-width: 110px;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+/* Mathematics - Blue */
+.phone-badge.mathematics {
+    background: #2563EB;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
+.phone-badge.mathematics:hover {
+    background: #1D4ED8;
+}
+
+.email-badge.mathematics {
+    background: #1E40AF;
+    box-shadow: 0 2px 6px rgba(30, 64, 175, 0.3);
+}
+
+.email-badge.mathematics:hover {
+    background: #1E3A8A;
+}
+
+/* Science - Green */
+.phone-badge.science {
+    background: #059669;
+    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+}
+
+.phone-badge.science:hover {
+    background: #047857;
+}
+
+.email-badge.science {
+    background: #047857;
+    box-shadow: 0 2px 6px rgba(4, 120, 87, 0.3);
+}
+
+.email-badge.science:hover {
+    background: #065F46;
+}
+
+/* English - Purple */
+.phone-badge.english {
+    background: #7C3AED;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+}
+
+.phone-badge.english:hover {
+    background: #6D28D9;
+}
+
+.email-badge.english {
+    background: #6D28D9;
+    box-shadow: 0 2px 6px rgba(109, 40, 217, 0.3);
+}
+
+.email-badge.english:hover {
+    background: #5B21B6;
+}
+
+/* History - Brown */
+.phone-badge.history {
+    background: #92400E;
+    box-shadow: 0 2px 6px rgba(146, 64, 14, 0.3);
+}
+
+.phone-badge.history:hover {
+    background: #78350F;
+}
+
+.email-badge.history {
+    background: #78350F;
+    box-shadow: 0 2px 6px rgba(120, 53, 15, 0.3);
+}
+
+.email-badge.history:hover {
+    background: #451A03;
+}
+
+/* Filipino - Red */
+.phone-badge.filipino {
+    background: #DC2626;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+}
+
+.phone-badge.filipino:hover {
+    background: #B91C1C;
+}
+
+.email-badge.filipino {
+    background: #B91C1C;
+    box-shadow: 0 2px 6px rgba(185, 28, 28, 0.3);
+}
+
+.email-badge.filipino:hover {
+    background: #991B1B;
+}
+
+/* Arts - Pink */
+.phone-badge.arts {
+    background: #DB2777;
+    box-shadow: 0 2px 6px rgba(219, 39, 119, 0.3);
+}
+
+.phone-badge.arts:hover {
+    background: #BE185D;
+}
+
+.email-badge.arts {
+    background: #BE185D;
+    box-shadow: 0 2px 6px rgba(190, 24, 93, 0.3);
+}
+
+.email-badge.arts:hover {
+    background: #9D174D;
+}
+
+/* Economics - Orange */
+.phone-badge.economics {
+    background: #EA580C;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
+}
+
+.phone-badge.economics:hover {
+    background: #C2410C;
+}
+
+.email-badge.economics {
+    background: #C2410C;
+    box-shadow: 0 2px 6px rgba(194, 65, 12, 0.3);
+}
+
+.email-badge.economics:hover {
+    background: #9A3412;
+}
+
+/* Physical Education - Teal */
+.phone-badge.physical-education {
+    background: #0891B2;
+    box-shadow: 0 2px 6px rgba(8, 145, 178, 0.3);
+}
+
+.phone-badge.physical-education:hover {
+    background: #0E7490;
+}
+
+.email-badge.physical-education {
+    background: #0E7490;
+    box-shadow: 0 2px 6px rgba(14, 116, 144, 0.3);
+}
+
+.email-badge.physical-education:hover {
+    background: #155E75;
+}
+
+.phone-number {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.email-address {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Hidden state for filtering */
+.subject-section.hidden {
+    display: none;
+}
+
+.teacher-card.hidden {
+    display: none;
+}
+
+/* Mobile Responsiveness */
+@media only screen and (max-width: 1200px) {
+    .teachers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .filter-section {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .filter-dropdowns {
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .teachers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-card {
+        padding: 12px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .teacher-photo {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .teacher-info {
+        margin-bottom: 10px;
+    }
+
+    .contact-info {
+        align-items: center;
+        width: 100%;
+    }
+
+    .phone-badge, .email-badge {
+        min-width: 140px;
+        font-size: 12px;
+    }
+
+    .menu {
+        position: fixed;
+        width: 1.9em;
+        aspect-ratio: 1 / 1;
+        top: calc(100vh - 2.8em);
+        left: 1em;
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .hiddenMenu {
+        position: fixed;
+        top: calc(100vh - 6.1em);
+        margin-left: 60px;
+        left: 2.2em;
+        z-index: 999;
+    }
+    
+    .popup {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18em;
+        height: 200px;
+        background: white;
+        border-radius: 0.5em;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        overflow-y: scroll;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .popup::-webkit-scrollbar {
+        display: none;
+    }
+
+    .popup.show{
+        height: 50px;
+        width: 300px;
+        background: #007acc;
+    }
+    
+    .menuNav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        overflow-y: scroll;
+        -ms-overflow-style: none;
+        scrollbar-width: none; 
+    }
+
+    .menuNav a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .menuNav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .messageMenu,
+    .viewMenu,
+    .profileMenu {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+}
