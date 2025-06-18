@@ -118,6 +118,20 @@ new Chart(document.getElementById('lateBar').getContext('2d'), {
 });
 
 // Popup Attendance
+document.getElementById("uploadForm").addEventListener("submit", function (e) {
+    const token = sessionStorage.getItem("access_token");
+    const provider = sessionStorage.getItem("provider");
+
+    if (!token || !provider) {
+        alert("Missing authentication token or provider.");
+        e.preventDefault();
+        return;
+    }
+
+    document.getElementById("tokenInput").value = token;
+    document.getElementById("providerInput").value = provider;
+});
+
 function openAttendanceSetup() {
     const token = sessionStorage.getItem("access_token");
     const provider = sessionStorage.getItem("provider");
