@@ -165,5 +165,5 @@ function startCamera() {
         });
 }
 function openAttendanceSetup() {
-    window.open("attendance_setup.html", "_blank");
+    window.open("teacher/attendance_setup.html", "_blank");
 }
