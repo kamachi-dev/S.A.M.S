@@ -103,7 +103,7 @@
         <button id="endButton" onclick="endSession()">End Attendance</button>
     </div>
 
-    <form method="POST" action="https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel" enctype="multipart/form-data">
+    <form id="uploadForm" method="POST" action="https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel" enctype="multipart/form-data" target="_blank">
         <label>Course Name:
             <input type="text" name="course_name" required />
         </label><br />
