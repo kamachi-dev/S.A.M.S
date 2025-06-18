@@ -231,6 +231,7 @@
     gap: 20px;
     padding: 20px;
     min-height: 100vh;
+    flex-direction: column;
 }
 
 /* Student Profile Section */
@@ -244,6 +245,7 @@
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border: 1px solid #e0e0e0;
+    margin-right: 10px;
 }
 
 .student-photo {
@@ -294,6 +296,9 @@
     cursor: pointer;
     font-size: 14px;
     transition: background 0.2s ease, transform 0.1s ease;
+
+    display: block;
+    margin: 0 auto;
 }
 
 .back-button:hover {
@@ -309,11 +314,19 @@
     gap: 20px;
 }
 
+.top-profile-schedule{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .weekly-schedule {
     background: white;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
 }
 
 .schedule-table {
@@ -406,6 +419,9 @@
 .calendar-charts-section {
     display: flex;
     gap: 20px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .calendar-container {
@@ -594,7 +610,6 @@
     background: white;
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin: 20px auto 0 auto; 
     width: fit-content; 
     text-align: center;
@@ -646,6 +661,9 @@
 .time-block.time-2 { background: #3498db; }
 .time-block.time-3 { background: #3498db; }
 /* 
+
+
+
 /* Responsive Design */
 
 @media only screen and (max-width: 1500px) {
@@ -683,7 +701,6 @@
     }
 
     .calendar-container {
-        flex: none;
         max-width: 100%;
     }
 
@@ -692,6 +709,15 @@
         aspect-ratio: 2.5 / 1;
         font-weight: 500;
         font-size: clamp(10px, 2.5vw, 20px);
+    }
+
+    
+    .top-profile-schedule{
+        flex-direction: column;
+    }
+    .student-profile-card{
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 } 
 
@@ -712,6 +738,7 @@
     
     .calendar-container {
         display: flex;
+        max-width: 100%;
     }
 
     .calendar-day{
