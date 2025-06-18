@@ -673,6 +673,10 @@
     .calendar-day{
         font-size: clamp(10px, 1.5vw, 16px);
     }
+
+    .calendar-charts-section {
+        padding: 0;
+    }
 }
 
 @media only screen and (max-width: 1050px) {
@@ -687,6 +691,7 @@
     .calendar-charts-section {
         flex-direction: column;
         align-items: center;
+        background-color: transparent;
     }
     
     .calendar-charts-section {
@@ -710,7 +715,6 @@
         font-weight: 500;
         font-size: clamp(10px, 2.5vw, 20px);
     }
-
     
     .top-profile-schedule{
         flex-direction: column;
