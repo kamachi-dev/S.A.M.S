@@ -119,8 +119,8 @@ new Chart(document.getElementById('lateBar').getContext('2d'), {
 
 // Popup Attendance
 document.getElementById("uploadForm").addEventListener("submit", function (e) {
-    const token = sessionStorage.getItem("access_token");
-    const provider = sessionStorage.getItem("provider");
+    const token = getCookie("tkn");
+    const provider = getCookie("provider");
 
     if (!token || !provider) {
         alert("Missing authentication token or provider.");
