@@ -115,60 +115,45 @@
                 return;
             }
 
-            // //  Call PHP to prepare the right model
-            // fetch("https://sams-backend-u79d.onrender.com/getData.php?action=prepareModel", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ subject, grade: "10", section }) // pass actual grade if known
-            // })
-            // .then(res => res.json())
-            // .then(data => {
-            //     if (data.success) {
-            //         startCamera(); // your camera feed setup here
-            //     } else {
-            //         alert("Model error: " + (data.error || "Unknown error"));
-            //     }
-            // })
-            // .catch(err => {
-            //     alert("Model setup failed.");
-            //     console.error(err);
-            // });
-
              startCamera(); 
         }
 
-    function endSession() {
-        // Stop the camera stream
-        const video = document.getElementById("video");
-        const stream = video.srcObject;
-        if (stream) {
-        stream.getTracks().forEach(track => track.stop());
+        function endSession() {
+            // Stop the camera stream
+            const video = document.getElementById("video");
+            const stream = video.srcObject;
+            if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            }
+
+            // Close this tab (only works if this tab was opened via `window.open()`)
+            window.close();
+
+            // If tab can't be closed (browser blocked), show fallback
+            alert("You can now return to the Overview tab.");
         }
+        function startCamera() {
+            const setupForm = document.getElementById("setupForm");
+            const cameraContainer = document.getElementById("cameraContainer");
+            const video = document.getElementById("video");
 
-        // Close this tab (only works if this tab was opened via `window.open()`)
-        window.close();
+            // Hide form, show camera
+            setupForm.style.display = "none";
+            cameraContainer.style.display = "block";
 
-        // If tab can't be closed (browser blocked), show fallback
-        alert("You can now return to the Overview tab.");
-    }
-
-    function startCamera() {
-        const cameraContainer = document.getElementById("cameraContainer");
-        const video = document.getElementById("video");
-
-        // Show the camera container
-        cameraContainer.style.display = "block";
-
-        // Access webcam
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(error => {
-                console.error("Camera error:", error);
-                alert("Unable to access the camera.");
-            });
-    }
+            // Access the webcam
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error("Camera access denied:", err);
+                    alert("Unable to access the camera.");
+                    // Optional: Show the form again if access is denied
+                    setupForm.style.display = "block";
+                    cameraContainer.style.display = "none";
+                });
+        }
   </script>
 </body>
 </html>

@@ -122,10 +122,7 @@ function uploadModelJS() {
     const form = document.getElementById("uploadForm");
     const formData = new FormData(form);
 
-    const token = window.token;
-    const provider = window.provider;
-
-    if (!token || !provider) {
+    if (!window.token || !window.provider) {
         alert("Missing token or provider.");
         return;
     }
@@ -152,6 +149,21 @@ function uploadModelJS() {
     });
 }
 
+function startCamera() {
+    const cameraContainer = document.getElementById("cameraContainer");
+    const video = document.getElementById("video");
+
+    cameraContainer.style.display = "block"; // Reveal the video container
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => {
+            console.error("Camera access denied:", err);
+            alert("Unable to access the camera.");
+        });
+}
 function openAttendanceSetup() {
     window.open("attendance_setup.html", "_blank");
 }
