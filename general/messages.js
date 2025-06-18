@@ -12,7 +12,8 @@ profiles.addEventListener('click', () => {
     if (window.matchMedia("(max-width: 750px)").matches) {
         profiles.style.display = 'none';
         rightContent.style.display = 'block';
-        filterContent.style.display = 'none';
+        filterContent.style.display = 'none'; 
+        rightContent.style.flex = '1';
     }
 });
 
