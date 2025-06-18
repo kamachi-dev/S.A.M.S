@@ -267,18 +267,20 @@
     padding: 10px 15px;
     border-radius: 12px;
     max-width: 60%;
+    font-size: 18px;
+    word-wrap: break-word;   /* Break long words */
+    overflow-wrap: break-word; /* Modern alternative */
+    white-space: normal;     /* Ensure wrapping is allowed */
 }
 
-.sender>p,
-.reciever>p {
-    display: none;
+.sender > p,
+.reciever > p {
     color: rgb(220, 220, 220);
     font-size: x-small;
-}
-
-.sender>p,
-.reciever>p {
     display: block;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .bottom-part {
