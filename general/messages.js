@@ -6,11 +6,13 @@ function TogglePopup() {
 /* Hides right content when left content is clicked */
 const profiles = document.querySelector('.left-content');
 const rightContent = document.querySelector('.right-content');
+const filterContent = document.querySelector('.filter-content');
 
 profiles.addEventListener('click', () => {
     if (window.matchMedia("(max-width: 750px)").matches) {
         profiles.style.display = 'none';
         rightContent.style.display = 'block';
+        filterContent.style.display = 'none';
     }
 });
 
