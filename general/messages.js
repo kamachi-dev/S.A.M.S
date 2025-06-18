@@ -71,7 +71,7 @@ function getMessages(id) {
                     const prevTime = new Date(prevMsg.sent).getTime();
                     const currTime = new Date(message.sent).getTime();
                     const diffHours = Math.abs(currTime - prevTime) / 60000;
-                    if (diffHours >= 1) {
+                    if (diffHours <= 1) {
                         const p = messageDiv.querySelector('p');
                         if (p) p.remove();
                     }
