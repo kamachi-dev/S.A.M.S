@@ -22,7 +22,7 @@ const donutData = [
 
 // Draw donut charts
 donutData.forEach(donut => {
-    const ctx = document.querySelector(`#${donut.ctxId}`).getContext('2d');
+    const ctx = document.getElementById(donut.ctxId).getContext('2d');
     new Chart(ctx, {
         type: 'doughnut',
         data: {
