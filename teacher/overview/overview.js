@@ -129,6 +129,9 @@ function uploadModelJS() {
         alert("Missing token or provider.");
         return;
     }
+    else{
+      alert("Pass")
+    }
 
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel&tkn=${window.token}&provider=${window.provider}`, {
         method: 'POST',
