@@ -38,6 +38,7 @@
 .filter-content select {
     text-align-last: center;
     width: auto;
+    display: none;
 }
 
 
