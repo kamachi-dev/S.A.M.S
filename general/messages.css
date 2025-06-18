@@ -260,13 +260,14 @@
     padding: 10px 15px;
     border-radius: 12px;
     max-width: 60%;
+    font-size: 15px;
 }
 
 .sender>p,
 .reciever>p {
     display: none;
     color: rgb(220, 220, 220);
-    font-size: x-small;
+    font-size: 7px;
 }
 
 .sender>p,
