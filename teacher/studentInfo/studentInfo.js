@@ -16,10 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const studentName = card.querySelector('.student-name').textContent.toLowerCase();
                 const studentId = card.querySelector('.student-id').textContent.toLowerCase();
                 const phoneNumber = card.querySelector('.phone-number').textContent.toLowerCase();
+                const emailAddress = card.querySelector('.email-address').textContent.toLowerCase();
                 
                 if (studentName.includes(searchTerm) || 
                     studentId.includes(searchTerm) || 
-                    phoneNumber.includes(searchTerm)) {
+                    phoneNumber.includes(searchTerm) ||
+                    emailAddress.includes(searchTerm)) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
