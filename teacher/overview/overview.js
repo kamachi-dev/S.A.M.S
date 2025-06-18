@@ -164,6 +164,14 @@ function startCamera() {
             alert("Unable to access the camera.");
         });
 }
+
 function openAttendanceSetup() {
-    window.open("teacher/attendance_setup.html", "_blank");
+  const token = window.token;
+  const provider = window.provider;
+  const url = `attendance_setup.html?tkn=${encodeURIComponent(token)}&provider=${encodeURIComponent(provider)}`;
+  const newTab = window.open(url, "_blank");
+
+  if (!newTab) {
+    alert("Pop-up blocked! Please allow pop-ups for this site.");
+  }
 }
