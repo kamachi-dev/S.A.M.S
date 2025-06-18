@@ -118,19 +118,36 @@ new Chart(document.getElementById('lateBar').getContext('2d'), {
 });
 
 // Popup Attendance
-document.getElementById("uploadForm").addEventListener("submit", function (e) {
-    const token = getCookie("tkn");
-    const provider = getCookie("provider");
+function uploadModelJS() {
+    const form = document.getElementById("uploadForm");
+    const formData = new FormData(form);
+
+    const token = window.token;
+    const provider = window.provider;
 
     if (!token || !provider) {
-        alert("Missing authentication token or provider.");
-        e.preventDefault();
+        alert("Missing token or provider.");
         return;
     }
 
-    document.getElementById("tokenInput").value = token;
-    document.getElementById("providerInput").value = provider;
-});
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel&tkn=${window.token}&provider=${window.provider}`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Upload response:", data);
+        if (data.success) {
+            alert("Model uploaded successfully!");
+        } else {
+            alert("Upload failed: " + data.error);
+        }
+    })
+    .catch(err => {
+        console.error("Upload error:", err);
+    });
+}
 
 function openAttendanceSetup() {
     const token = sessionStorage.getItem("access_token");
