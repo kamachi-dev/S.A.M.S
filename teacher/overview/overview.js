@@ -153,14 +153,5 @@ function uploadModelJS() {
 }
 
 function openAttendanceSetup() {
-    const token = sessionStorage.getItem("access_token");
-    const provider = sessionStorage.getItem("provider");
-
-    if (!token || !provider) {
-        alert("Missing authentication token or provider.");
-        return;
-    }
-
-    const url = `attendance_setup.html?tkn=${encodeURIComponent(token)}&provider=${encodeURIComponent(provider)}`;
-    window.open(url, "_blank");
+    window.open("attendance_setup.html", "_blank");
 }
