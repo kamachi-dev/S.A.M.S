@@ -114,6 +114,19 @@
     </form>
 
     <script>
+        document.getElementById("uploadForm").addEventListener("submit", function (e) {
+            const token = sessionStorage.getItem("access_token");
+            const provider = sessionStorage.getItem("provider");
+
+            if (!token || !provider) {
+                alert("Missing authentication token or provider.");
+                e.preventDefault();
+                return;
+            }
+
+            this.action = `https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel&tkn=${token}&provider=${provider}`;
+        })
+
         function startAttendance() {
             const subject = document.getElementById("subject").value;
             const section = document.getElementById("section").value;
