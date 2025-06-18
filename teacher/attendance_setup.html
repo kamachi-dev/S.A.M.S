@@ -119,13 +119,14 @@
             const provider = sessionStorage.getItem("provider");
 
             if (!token || !provider) {
-                alert("Missing authentication token or provider.");
-                e.preventDefault();
-                return;
+            alert("Missing authentication token or provider.");
+            e.preventDefault(); // prevent form from submitting
+            return;
             }
 
-            this.action = `https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel&tkn=${token}&provider=${provider}`;
-        })
+            document.getElementById("tokenInput").value = token;
+            document.getElementById("providerInput").value = provider;
+        });
 
         function startAttendance() {
             const subject = document.getElementById("subject").value;
