@@ -118,8 +118,15 @@ new Chart(document.getElementById('lateBar').getContext('2d'), {
 });
 
 // Popup Attendance
-
 function openAttendanceSetup() {
-    window.open("attendance_setup.html", "_blank");
-}
+    const token = sessionStorage.getItem("access_token");
+    const provider = sessionStorage.getItem("provider");
 
+    if (!token || !provider) {
+        alert("Missing authentication token or provider.");
+        return;
+    }
+
+    const url = `attendance_setup.html?tkn=${encodeURIComponent(token)}&provider=${encodeURIComponent(provider)}`;
+    window.open(url, "_blank");
+}

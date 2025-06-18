@@ -116,6 +116,15 @@
     </form>
 
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get("tkn");
+        const provider = urlParams.get("provider");
+
+        if (token && provider) {
+            sessionStorage.setItem("access_token", token);
+            sessionStorage.setItem("provider", provider);
+        }
+
         document.getElementById("uploadForm").addEventListener("submit", function (e) {
             const token = sessionStorage.getItem("access_token");
             const provider = sessionStorage.getItem("provider");
@@ -130,36 +139,36 @@
             document.getElementById("providerInput").value = provider;
         });
 
-        function startAttendance() {
-            const subject = document.getElementById("subject").value;
-            const section = document.getElementById("section").value;
-            const time = document.getElementById("startTime").value;
-            const date = document.getElementById("meetingDate").value;
+    function startAttendance() {
+        const subject = document.getElementById("subjectSelect").value;
+        const grade = document.getElementById("gradeSelect").value;
+        const section = document.getElementById("sectionSelect").value;
+        const token = sessionStorage.getItem("access_token");
+        const provider = sessionStorage.getItem("provider");
 
-            if (!subject || !section || !time || !date) {
-                alert("Please fill out all fields to start the session.");
-                return;
-            }
-
-            // 🔽 Call PHP to prepare the right model
-            fetch("https://sams-backend-u79d.onrender.com/getData.php?action=prepareModel", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ subject, grade: "10", section }) // pass actual grade if known
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    startCamera(); // your camera feed setup here
-                } else {
-                    alert("Model error: " + (data.error || "Unknown error"));
-                }
-            })
-            .catch(err => {
-                alert("Model setup failed.");
-                console.error(err);
-            });
+        if (!subject || !grade || !section || !token || !provider) {
+            alert("Missing input or auth token.");
+            return;
         }
+
+        const time = new Date().toISOString();
+
+        fetch("https://sams-backend-u79d.onrender.com/getData.php?action=startAttendance", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ subject, grade, section, time })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const sessionId = data.session_id;
+            const url = `/attendance.html?session_id=${sessionId}&tkn=${token}&provider=${provider}`;
+            window.open(url, "_blank");
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Failed to start session.");
+        });
+    }
 
     function endSession() {
         // Stop the camera stream
