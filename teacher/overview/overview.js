@@ -126,28 +126,36 @@ function uploadModelJS() {
         alert("Missing token or provider.");
         return;
     }
-    else {
-        alert("Pass")
-    }
 
     fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel&tkn=${window.token}&provider=${window.provider}`, {
         method: 'POST',
         body: formData,
         credentials: 'include'
     })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Upload response:", data);
-            if (data.success) {
-                alert("Model uploaded successfully!");
-            } else {
-                alert("Upload failed: " + data.error);
-            }
-        })
-        .catch(err => {
-            console.error("Upload error:", err);
-        });
+    .then(res => res.json())
+    .then(data => {
+        console.log("Upload response:", data);
+
+        // Debug output
+        if (data.courses_found) {
+            console.log("🔍 Available Courses:");
+            data.courses_found.forEach(course => {
+                console.log(`- ${course.name} (${course.id}) | Model uploaded: ${course.has_model}`);
+            });
+        }
+
+        if (data.success) {
+            alert("✅ Model uploaded successfully!");
+        } else {
+            alert("❌ Upload failed: " + data.error);
+            console.warn("Debug info:", data.received || data.debug || data);
+        }
+    })
+    .catch(err => {
+        console.error("🚨 Upload error:", err);
+    });
 }
+
 
 function startCamera() {
     const cameraContainer = document.getElementById("cameraContainer");
