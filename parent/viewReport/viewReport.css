@@ -13,7 +13,14 @@
     vertical-align: top;    
     background-color: white; */
 
+.content{
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
 
+.content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
 
 .ReportTab {
     background-color: white;
@@ -34,14 +41,16 @@
 .students-attendance-section-bottom {
     padding-top: 1px;
     background-color: var(--white);
+    padding-bottom: 20px;
 }
 
 .section-title {
     font-size: 24px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 30px;
     text-align: left;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .students-grid {
@@ -74,7 +83,7 @@
 .student-card {
     background: white;
     border-radius: 15px;
-    padding: 25px;
+    padding: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 3px solid transparent;
     cursor: pointer;
@@ -405,11 +414,16 @@
     border-radius: 10px;
     box-sizing: border-box;
     padding: 20px;
-
-    /* Updated sizing */
-    flex: 2;              /* Grow 2x relative to siblings */
-    max-width: 50%;       /* Prevent it from exceeding half of the container */
-    min-width: 300px;     /* Ensure a reasonable minimum */
+    width: 100%;
+    max-width: 30%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* Center vertically */
+    align-items: center;      /* Center horizontally */
+    height: auto;             /* Allow container to grow with content */
+    overflow: hidden;
+    font-size: clamp(0.8rem, 2vw, 2rem); /* Increased max font size */
 }
 
 .calendar-header {
@@ -419,7 +433,6 @@
     white-space: nowrap;
     margin-bottom: 20px;
 }
-
 #monthYear {
     flex-grow: 1;
     text-align: center;
@@ -445,8 +458,10 @@
 
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr); /* 7 columns, equal width */
     gap: 5px;
+    width: 100%;                    /* ← ensures it fills the container */
+    justify-items: stretch;         /* stretches items within their grid cell */
 }
 
 .calendar-grid .day-header {
@@ -500,6 +515,7 @@
     flex-direction: column;
     width: 70%;
     align-items: center;
+    justify-content: space-evenly;
 }
 
 .charts-container {
@@ -629,9 +645,19 @@
 .time-block.time-1 { background: #3498db; }
 .time-block.time-2 { background: #3498db; }
 .time-block.time-3 { background: #3498db; }
-
+/* 
 /* Responsive Design */
-@media only screen and (max-width: 1200px) {
+
+@media only screen and (max-width: 1500px) {
+    .calendar-container{
+        max-width: 40%;
+    }
+    .calendar-day{
+        font-size: clamp(10px, 1.5vw, 16px);
+    }
+}
+
+@media only screen and (max-width: 1050px) {
     .dashboard-container {
         flex-direction: column;
     }
@@ -658,13 +684,16 @@
 
     .calendar-container {
         flex: none;
-        max-width: 60%;
+        max-width: 100%;
     }
 
     .calendar-day{
         font-size: 18px;
+        aspect-ratio: 2.5 / 1;
+        font-weight: 500;
+        font-size: clamp(10px, 2.5vw, 20px);
     }
-}
+} 
 
 @media only screen and (max-width: 750px) {
     .dashboard-container {
@@ -682,8 +711,7 @@
     }
     
     .calendar-container {
-        flex: none;
-        max-width: 20%;
+        display: flex;
     }
 
     .calendar-day{

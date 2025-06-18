@@ -11,24 +11,6 @@ a {
     text-decoration: none;
 }
 
-.vendor {
-    display: flex;
-    border: 1px solid gray;
-    color: black;
-    box-shadow: 2px 2px black;
-    font-size: 1.7em;
-    width: 90%;
-    border-radius: 10px;
-    transition: 0.2s;
-    justify-content: center;
-    align-items: center;
-    margin: 2px;
-}
-
-.vendor:hover {
-    transform: translateY(2px);
-}
-
 .gallery>button {
     display: flex;
     background-color: transparent;
@@ -115,6 +97,41 @@ a {
     object-fit: contain;
 }
 
+/* Google Buytton */
+.google-btn {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 20px;
+    width: fit-content;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.google-btn:hover {
+    background-color: #f7f7f7;
+}
+
+.google-btn img {
+    width: 25px;
+    height: 25px;
+}
+
+.google-btn .vendor {
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    color: #444;
+    border: none;
+    white-space: nowrap;
+}
+
+
 #loginForm>input {
     width: 100%;
     margin: 10px 0;
@@ -145,9 +162,11 @@ a {
 
 
 .terms {
+    margin-top: 15px;
     background-color: transparent;
     text-decoration: underline;
     color: var(--grey);
+    font-size: 15px;
 }
 
 .terms:hover {
@@ -171,6 +190,10 @@ a {
 @media only screen and (max-width: 1500px) {
     .title {
         font-size: 1.5em;
+    }
+
+    .google-btn {
+        margin-top: 0;
     }
 }
 
@@ -217,6 +240,10 @@ a {
         width: 70%;
     }
 
+    .google-btn {
+        margin-top: 20px;
+    }
+
 }
 
 @media only screen and (max-width: 700px) {
@@ -231,6 +258,10 @@ a {
 
     .panel>button {
         width: 80%;
+    }
+
+    .google-btn {
+        margin-top: 50px;
     }
 
 }
