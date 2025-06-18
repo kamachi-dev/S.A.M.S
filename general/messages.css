@@ -263,18 +263,17 @@
 
 .sender,
 .reciever {
-    color: rgb(255, 255, 255);
+    color: white;
     padding: 10px 15px;
     border-radius: 12px;
     max-width: 60%;
-    font-size: 15px;
 }
 
 .sender>p,
 .reciever>p {
     display: none;
     color: rgb(220, 220, 220);
-    font-size: 7px;
+    font-size: x-small;
 }
 
 .sender>p,
