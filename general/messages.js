@@ -46,14 +46,14 @@ function formatTimestamp(dateString) {
 }
 
 function getMessages(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getMessages?convo=${id}`, {
         credentials: 'include',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'provider': window.provider,
             'token': window.token,
-        },
+        }
     })
         .then(res => res.json())
         .then(data => {
@@ -93,14 +93,14 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipient`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getRecipient.php`, {
         credentials: 'include',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'provider': window.provider,
             'token': window.token,
-        },
+        }
     })
         .then(res => res.json())
         .then(data => {
@@ -128,9 +128,8 @@ function updateMessages() {
 
 document.querySelector("#message-input").addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
-        console.log("Enter pressed! Value:", this.value);
         msg = document.querySelector('#message-input').value;
-        fetch(`https://sams-backend-u79d.onrender.com/getData.php`, {
+        fetch(`https://sams-backend-u79d.onrender.com/api/postMessage.php`, {
             credentials: 'include',
             method: 'POST',
             headers: {
@@ -139,7 +138,8 @@ document.querySelector("#message-input").addEventListener("keydown", function (e
                 'token': window.token,
             },
             body: JSON.stringify({
-                action: 'addMessage'
+                convo: convo_id,
+                msg: msg
             })
         });
         const messageDiv = document.createElement('div');

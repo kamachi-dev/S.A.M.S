@@ -127,33 +127,38 @@ function uploadModelJS() {
         return;
     }
 
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=uploadModel&tkn=${window.token}&provider=${window.provider}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/uploadModel.php`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'provider': window.provider,
+            'token': window.token,
+        },
         body: formData,
         credentials: 'include'
     })
-    .then(res => res.json())
-    .then(data => {
-        console.log("Upload response:", data);
+        .then(res => res.json())
+        .then(data => {
+            console.log("Upload response:", data);
 
-        // Debug output
-        if (data.courses_found) {
-            console.log("🔍 Available Courses:");
-            data.courses_found.forEach(course => {
-                console.log(`- ${course.name} (${course.id}) | Model uploaded: ${course.has_model}`);
-            });
-        }
+            // Debug output
+            if (data.courses_found) {
+                console.log("🔍 Available Courses:");
+                data.courses_found.forEach(course => {
+                    console.log(`- ${course.name} (${course.id}) | Model uploaded: ${course.has_model}`);
+                });
+            }
 
-        if (data.success) {
-            alert("✅ Model uploaded successfully!");
-        } else {
-            alert("❌ Upload failed: " + data.error);
-            console.warn("Debug info:", data.received || data.debug || data);
-        }
-    })
-    .catch(err => {
-        console.error("🚨 Upload error:", err);
-    });
+            if (data.success) {
+                alert("✅ Model uploaded successfully!");
+            } else {
+                alert("❌ Upload failed: " + data.error);
+                console.warn("Debug info:", data.received || data.debug || data);
+            }
+        })
+        .catch(err => {
+            console.error("🚨 Upload error:", err);
+        });
 }
 
 
