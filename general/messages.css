@@ -9,6 +9,7 @@
     overflow-y: scroll;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    height: 100%;
 }
 
 .content::-webkit-scrollbar {
@@ -22,6 +23,7 @@
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 20px;
+    flex: 0 0 auto;
 }
 
 .filter-content input,
@@ -51,6 +53,7 @@
     margin: 20px;
     display: flex;
     height: 85%;
+    flex: 1 1 auto;
 }
 
 /*Left Content*/
