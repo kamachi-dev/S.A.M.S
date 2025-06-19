@@ -94,7 +94,7 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getRecipient.php`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getRecipients.php`, {
         credentials: 'include',
         method: 'GET',
         headers: {
