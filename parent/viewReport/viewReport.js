@@ -234,6 +234,7 @@ function getStudents() {
             data.forEach(student => {
                 const clone = studentProfile.querySelector('.student-card').cloneNode(true);
                 clone.id = `student-${student['id']}`;
+                clone.querySelector('.student-id').innerHTML = student['id'];
                 clone.querySelector('#pfp').src = '/assets/icons/placeholder-parent.jpeg';
                 clone.querySelector('.student-name').textContent = `${student['lastname']}, ${student['firstname']}`;
                 clone.addEventListener('click', () => {
