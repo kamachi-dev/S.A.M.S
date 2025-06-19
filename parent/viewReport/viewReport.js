@@ -245,6 +245,7 @@ fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
         });
     });
 
+const parser = new DOMParser();
 let studentProfile;
 fetch('/assets/templates/profile.html')
     .then(res => res.text())
