@@ -232,7 +232,7 @@ function getStudents() {
             const leftContent = document.querySelector('.students-grid');
             leftContent.innerHTML = '';
             data.forEach(student => {
-                const clone = studentProfile.querySelector('.profiles').cloneNode(true);
+                const clone = studentProfile.querySelector('.student-card').cloneNode(true);
                 clone.id = `student-${student['id']}`;
                 clone.querySelector('#pfp').src = '/assets/icons/placeholder-parent.jpeg';
                 clone.querySelector('.student-name').textContent = `${student['lastname']}, ${student['firstname']}`;
@@ -246,7 +246,7 @@ function getStudents() {
 
 const parser = new DOMParser();
 let studentProfile;
-fetch('/assets/templates/profile.html')
+fetch('/assets/templates/child.html')
     .then(res => res.text())
     .then(txt => parser.parseFromString(txt, 'text/html'))
     .then(html => {
