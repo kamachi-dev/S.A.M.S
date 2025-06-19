@@ -217,33 +217,32 @@ function viewStudentProfile(studentId) {
     window.location.href = `viewReport.html?studentId=${studentId}`;
 }
 
-
-fetch('/assets/templates/profile.html')
-
-fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
-    credentials: 'include',
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Provider': window.provider,
-        'Token': window.token,
-    }
-})
-    .then(res => res.json())
-    .then(data => {
-        const leftContent = document.querySelector('.students-grid');
-        leftContent.innerHTML = '';
-        data.forEach(student => {
-            const clone = studentProfile.querySelector('.profiles').cloneNode(true);
-            clone.id = `student-${student['id']}`;
-            clone.querySelector('#pfp').src = '/assets/icons/placeholder-parent.jpeg';
-            clone.querySelector('.student-name').textContent = `${student['lastname']}, ${student['firstname']}`;
-            clone.addEventListener('click', () => {
-                viewStudentProfile(student['id']);
+function getStudents() {
+    fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Provider': window.provider,
+            'Token': window.token,
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            const leftContent = document.querySelector('.students-grid');
+            leftContent.innerHTML = '';
+            data.forEach(student => {
+                const clone = studentProfile.querySelector('.profiles').cloneNode(true);
+                clone.id = `student-${student['id']}`;
+                clone.querySelector('#pfp').src = '/assets/icons/placeholder-parent.jpeg';
+                clone.querySelector('.student-name').textContent = `${student['lastname']}, ${student['firstname']}`;
+                clone.addEventListener('click', () => {
+                    viewStudentProfile(student['id']);
+                });
+                leftContent.appendChild(clone);
             });
-            leftContent.appendChild(clone);
         });
-    });
+}
 
 const parser = new DOMParser();
 let studentProfile;
@@ -252,7 +251,5 @@ fetch('/assets/templates/profile.html')
     .then(txt => parser.parseFromString(txt, 'text/html'))
     .then(html => {
         studentProfile = html;
-        console.log(studentProfile);
-        setInterval(updateMessages, 1000);
-        getRecepients();
+        getStudents();
     });
