@@ -35,8 +35,14 @@ window.provider = getCookie('provider');
 console.log('token:', window.token);
 console.log('provider:', window.provider);
 
-fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getUserdetails&provider=${window.provider}&tkn=${window.token}`, {
-    credentials: 'include'
+fetch(`https://sams-backend-u79d.onrender.com/api/getUserdetails.php`, {
+    credentials: 'include',
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'provider': window.provider,
+        'token': window.token,
+    }
 })
     .then(res => res.json())
     .then(json => {
