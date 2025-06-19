@@ -46,8 +46,14 @@ function formatTimestamp(dateString) {
 }
 
 function getMessages(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}&provider=${window.provider}&tkn=${window.token}`, {
-        credentials: 'include'
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getMessages&convo=${id}`, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'provider': window.provider,
+            'token': window.token,
+        },
     })
         .then(res => res.json())
         .then(data => {
@@ -87,8 +93,14 @@ function getMessages(id) {
 }
 
 function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipients&provider=${window.provider}&tkn=${window.token}`, {
-        credentials: 'include'
+    fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=getRecipient`, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'provider': window.provider,
+            'token': window.token,
+        },
     })
         .then(res => res.json())
         .then(data => {
@@ -118,8 +130,17 @@ document.querySelector("#message-input").addEventListener("keydown", function (e
     if (e.key === "Enter") {
         console.log("Enter pressed! Value:", this.value);
         msg = document.querySelector('#message-input').value;
-        fetch(`https://sams-backend-u79d.onrender.com/getData.php?action=addMessage&convo=${convo_id}&msg=${msg}&provider=${window.provider}&tkn=${window.token}`, {
-            credentials: 'include'
+        fetch(`https://sams-backend-u79d.onrender.com/getData.php`, {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'provider': window.provider,
+                'token': window.token,
+            },
+            body: JSON.stringify({
+                action: 'addMessage'
+            })
         });
         const messageDiv = document.createElement('div');
         messageDiv.className = 'reciever';
