@@ -58,6 +58,7 @@ function getMessages(id) {
     })
         .then(res => res.json())
         .then(data => {
+            if (convo_id != id) return;
             if (!window.verifyToken(data)) return;
             if (JSON.stringify(data) === JSON.stringify(prevConvo)) return;
             prevConvo = data;
