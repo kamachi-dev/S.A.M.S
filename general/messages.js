@@ -47,7 +47,7 @@ function formatTimestamp(dateString) {
 }
 
 function getMessages(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getMessages?convo=${id}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getMessages.php?convo=${id}`, {
         credentials: 'include',
         method: 'GET',
         headers: {
