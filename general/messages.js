@@ -90,7 +90,6 @@ function getMessages(id) {
             convo_id = id;
             el = document.querySelector(".middle-part");
             el.scrollTop = el.scrollHeight;
-            isFetching = false;
         })
 }
 
@@ -117,17 +116,14 @@ function getRecepients() {
                 clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
                 clone.querySelector('.profile-preview').textContent = recipient['message'];
                 clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
-                clone.addEventListener('click', () => {
-                    isFetching = true;
-                    getMessages(recipient['conversation'])
-                });
+                clone.addEventListener('click', () => getMessages(recipient['conversation']));
                 leftContent.appendChild(clone);
             });
         });
 }
 
 function updateMessages() {
-    if (convo_id && !isFetching)
+    if (convo_id)
         getMessages(convo_id);
 }
 
@@ -157,7 +153,6 @@ document.querySelector("#message-input").addEventListener("keydown", function (e
     }
 });
 
-let isFetching = false;
 let prevConvo = null;
 let convo_id = null;
 const parser = new DOMParser();
