@@ -120,6 +120,8 @@ function getRecepients() {
                 clone.addEventListener('click', () => {
                     convo_id = recipient['conversation'];
                     getMessages(recipient['conversation']);
+                    const leftContent = document.querySelector('.left-content');
+                    leftContent.innerHTML = 'loading...';
                 });
                 leftContent.appendChild(clone);
             });
