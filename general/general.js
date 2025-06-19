@@ -40,8 +40,8 @@ fetch(`https://sams-backend-u79d.onrender.com/api/getUserdetails.php`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
-        'provider': window.provider,
-        'token': window.token,
+        'Provider': window.provider,
+        'Token': window.token,
     }
 })
     .then(res => res.json())

@@ -12,7 +12,7 @@ profiles.addEventListener('click', () => {
     if (window.matchMedia("(max-width: 750px)").matches) {
         profiles.style.display = 'none';
         rightContent.style.display = 'block';
-        filterContent.style.display = 'none'; 
+        filterContent.style.display = 'none';
         rightContent.style.flex = '1';
     }
 });
@@ -52,8 +52,8 @@ function getMessages(id) {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'provider': window.provider,
-            'token': window.token,
+            'Provider': window.provider,
+            'Token': window.token,
         }
     })
         .then(res => res.json())
@@ -99,8 +99,8 @@ function getRecepients() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'provider': window.provider,
-            'token': window.token,
+            'Provider': window.provider,
+            'Token': window.token,
         }
     })
         .then(res => res.json())
@@ -135,8 +135,8 @@ document.querySelector("#message-input").addEventListener("keydown", function (e
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'provider': window.provider,
-                'token': window.token,
+                'Provider': window.provider,
+                'Token': window.token,
             },
             body: JSON.stringify({
                 convo: convo_id,

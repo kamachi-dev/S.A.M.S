@@ -131,8 +131,8 @@ function uploadModelJS() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'provider': window.provider,
-            'token': window.token,
+            'Provider': window.provider,
+            'Token': window.token,
         },
         body: formData,
         credentials: 'include'
