@@ -111,7 +111,7 @@ function getCourses() {
             leftContent.innerHTML = '';
 
             data.forEach(course => {
-                clone = courseHTML.querySelector('.courses').cloneNode(true);
+                clone = courseHTML.querySelector('.course-root').cloneNode(true);
                 clone.id = `course-${course['name']}`;
                 clone.querySelector('#pfp').src = course['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : course['pfp'];
                 clone.querySelector('.course-name').textContent = course['name'];
