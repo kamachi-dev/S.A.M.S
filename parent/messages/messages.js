@@ -67,7 +67,7 @@ function getCourseRecords(id) {
             messageContainer.innerHTML = '';
 
             const recipient = data;
-            const recipient_pfp = document.querySelector(`#recipient-${id}`).querySelector('#pfp').src;
+            const recipient_pfp = document.querySelector(`#course-${id}`).querySelector('#pfp').src;
             document.querySelector('#recipient-pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
