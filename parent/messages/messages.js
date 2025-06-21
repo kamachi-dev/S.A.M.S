@@ -47,7 +47,7 @@ function formatTimestamp(dateString) {
 }
 
 function getCourseRecords(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getCourseRecords.php?convo=${id}`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getCourseRecords.php?course=${id}`, {
         credentials: 'include',
         method: 'GET',
         headers: {
