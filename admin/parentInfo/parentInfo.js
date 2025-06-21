@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('.search-input');
     const parentCards = document.querySelectorAll('.parent-card');
     const letterFilter = document.getElementById('letterFilter');
+    const gradeFilter = document.getElementById('gradeFilter');
+    const sectionFilter = document.getElementById('sectionFilter');
     const letterSections = document.querySelectorAll('.letter-section');
     const parentCountElement = document.querySelector('.count-number');
     
@@ -95,6 +97,26 @@ document.addEventListener('DOMContentLoaded', function() {
             if (searchInput) {
                 searchInput.value = '';
             }
+        });
+    }
+    
+    // Grade filter functionality (placeholder for future use)
+    if (gradeFilter) {
+        gradeFilter.addEventListener('change', function() {
+            const selectedGrade = this.value;
+            console.log('Grade filter selected:', selectedGrade);
+            // Placeholder - functionality to be implemented later
+            // For now, this doesn't affect the display
+        });
+    }
+    
+    // Section filter functionality (placeholder for future use)
+    if (sectionFilter) {
+        sectionFilter.addEventListener('change', function() {
+            const selectedSection = this.value;
+            console.log('Section filter selected:', selectedSection);
+            // Placeholder - functionality to be implemented later
+            // For now, this doesn't affect the display
         });
     }
     
