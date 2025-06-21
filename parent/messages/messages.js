@@ -58,7 +58,7 @@ function getCourseRecords(id) {
     })
         .then(res => res.json())
         .then(data => {
-            if (convo_id != id) return;
+            if (course_id != id) return;
             if (!window.verifyToken(data)) return;
             if (JSON.stringify(data) === JSON.stringify(prevConvo)) return;
             prevConvo = data;
@@ -66,10 +66,9 @@ function getCourseRecords(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = data;
             const recipient_pfp = document.querySelector(`#course-${id}`).querySelector('#pfp').src;
             document.querySelector('#recipient-pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
-            document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
+            document.querySelector('#profile-name').innerHTML = document.querySelector(`#course-${id}`).querySelector('.course-name').innerHTML;
 
             data.forEach((message, i) => {
                 const messageDiv = document.createElement('div');
@@ -88,7 +87,7 @@ function getCourseRecords(id) {
                 }
                 messageContainer.appendChild(messageDiv);
             });
-            convo_id = id;
+            course_id = id;
             el = document.querySelector(".middle-part");
             el.scrollTop = el.scrollHeight;
         })
@@ -112,14 +111,14 @@ function getCourses() {
 
             data.forEach(course => {
                 clone = courseHTML.querySelector('.course-root').cloneNode(true);
-                clone.id = `course-${course['name']}`;
+                clone.id = `course-${course['id']}`;
                 clone.querySelector('#pfp').src = course['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : course['pfp'];
                 clone.querySelector('.course-name').textContent = course['name'];
                 clone.querySelector('.course-preview').textContent = `${attendanceArr[parseInt(course['attendance'])]} : ${course['firstname']} ${course['lastname']}`;
                 clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
                 clone.addEventListener('click', () => {
-                    convo_id = course['name'];
-                    getCourseRecords(course['name']);
+                    course_id = course['id'];
+                    getCourseRecords(course['id']);
                     const leftContent = document.querySelector('.middle-part');
                     leftContent.innerHTML = 'loading...';
                 });
@@ -129,8 +128,8 @@ function getCourses() {
 }
 
 function updateMessages() {
-    if (convo_id)
-        getCourseRecords(convo_id);
+    if (course_id)
+        getCourseRecords(course_id);
 }
 
 document.querySelector("#message-input").addEventListener("keydown", function (e) {
@@ -145,7 +144,7 @@ document.querySelector("#message-input").addEventListener("keydown", function (e
                 'Token': window.token,
             },
             body: JSON.stringify({
-                convo: convo_id,
+                convo: course_id,
                 msg: msg
             })
         });
@@ -166,7 +165,7 @@ const attendanceArr = [
     'Present'
 ];
 let prevConvo = null;
-let convo_id = null;
+let course_id = null;
 const parser = new DOMParser();
 
 let courseHTML;
