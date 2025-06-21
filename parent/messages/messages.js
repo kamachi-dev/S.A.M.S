@@ -72,7 +72,7 @@ function getCourseRecords(id) {
 
             data.forEach((message, i) => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = 'sender';
+                messageDiv.className = `sender ${attendanceArr[parseInt(message['attendance'])].toLocaleLowerCase()}`;
                 messageDiv.innerHTML = `${attendanceArr[parseInt(message['attendance'])]} : ${message['firstname']} ${message['lastname']}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 if (i > 0) {
