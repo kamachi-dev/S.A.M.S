@@ -46,8 +46,8 @@ function formatTimestamp(dateString) {
     }
 }
 
-function getMessages(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getMessages.php?convo=${id}`, {
+function getCourseRecords(id) {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getCourseRecords.php?convo=${id}`, {
         credentials: 'include',
         method: 'GET',
         headers: {
@@ -66,15 +66,15 @@ function getMessages(id) {
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
 
-            const recipient = data.find(m => m.email !== window.email);
+            const recipient = data;
             const recipient_pfp = document.querySelector(`#recipient-${id}`).querySelector('#pfp').src;
             document.querySelector('#recipient-pfp').src = recipient_pfp == null ? '/assets/icons/placeholder-parent.jpeg' : recipient_pfp;
             document.querySelector('#profile-name').innerHTML = recipient.lastname + ', ' + recipient.firstname;
 
             data.forEach((message, i) => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = window.email == message.email ? 'reciever' : 'sender';
-                messageDiv.innerHTML = `${message.message}
+                messageDiv.className = 'sender';
+                messageDiv.innerHTML = `${attendanceArr[parseInt(message['attendance'])]} : ${message['firstname']} ${message['lastname']}
                     <p>${formatTimestamp(message.sent)}</p>`;
                 if (i > 0) {
                     const prevMsg = data[i - 1];
@@ -119,7 +119,7 @@ function getCourses() {
                 clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
                 clone.addEventListener('click', () => {
                     convo_id = course['conversation'];
-                    getMessages(course['conversation']);
+                    getCourseRecords(course['conversation']);
                     const leftContent = document.querySelector('.middle-part');
                     leftContent.innerHTML = 'loading...';
                 });
@@ -130,7 +130,7 @@ function getCourses() {
 
 function updateMessages() {
     if (convo_id)
-        getMessages(convo_id);
+        getCourseRecords(convo_id);
 }
 
 document.querySelector("#message-input").addEventListener("keydown", function (e) {
