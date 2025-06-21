@@ -95,7 +95,7 @@ function getMessages(id) {
 }
 
 function getCourses() {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getStudentsCourses.php`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getStudentsRecords.php`, {
         credentials: 'include',
         method: 'GET',
         headers: {
