@@ -283,19 +283,19 @@
 }
 
 .present {
-    border-color: #4A90E2;
+    background-color: #4A90E2;
 }
 
 .late {
-    border-color: #f39c12;
+    background-color: #f39c12;
 }
 
 .absent {
-    border-color: #e74c3c;
+    background-color: #e74c3c;
 }
 
 .excused {
-    border-color: #797979;
+    background-color: #797979;
 }
 
 .sender>p,
