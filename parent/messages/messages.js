@@ -132,32 +132,6 @@ function updateMessages() {
         getCourseRecords(course_id);
 }
 
-document.querySelector("#message-input").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-        msg = document.querySelector('#message-input').value;
-        fetch(`https://sams-backend-u79d.onrender.com/api/postMessage.php`, {
-            credentials: 'include',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
-            },
-            body: JSON.stringify({
-                convo: course_id,
-                msg: msg
-            })
-        });
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'reciever';
-        messageDiv.innerHTML = `${msg}
-        <p>${formatTimestamp(new Date())}</p>`;
-        document.querySelector('.middle-part').appendChild(messageDiv);
-        el = document.querySelector(".middle-part");
-        el.scrollTop = el.scrollHeight;
-    }
-});
-
 const attendanceArr = [
     'Excused',
     'Absent',
