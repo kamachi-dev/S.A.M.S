@@ -118,8 +118,8 @@ function getCourses() {
                 clone.querySelector('.course-preview').textContent = `${attendanceArr[parseInt(course['attendance'])]} : ${course['firstname']} ${course['lastname']}`;
                 clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
                 clone.addEventListener('click', () => {
-                    convo_id = course['conversation'];
-                    getCourseRecords(course['conversation']);
+                    convo_id = course['name'];
+                    getCourseRecords(course['name']);
                     const leftContent = document.querySelector('.middle-part');
                     leftContent.innerHTML = 'loading...';
                 });
