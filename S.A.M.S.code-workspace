@@ -1,13 +1,16 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
+    "folders": [
 		{
 			"path": "../../../xampp/htdocs/SAMS"
+		},
+		{
+			"path": "."
 		}
 	],
-	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "S.A.M.S"
-	}
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": "S.A.M.S",
+        "php.format.rules.openBraceOnNewLineForLambdas": false,
+        "php.format.rules.openBraceOnNewLineForFunctions": false,
+        "php.format.rules.openBraceOnNewLineForBlocks": false
+    }
 }

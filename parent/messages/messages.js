@@ -94,8 +94,8 @@ function getMessages(id) {
         })
 }
 
-function getRecepients() {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getRecipients.php`, {
+function getCourses() {
+    fetch(`https://sams-backend-u79d.onrender.com/api/getStudentCourses.php`, {
         credentials: 'include',
         method: 'GET',
         headers: {
@@ -110,16 +110,16 @@ function getRecepients() {
             const leftContent = document.querySelector('.left-content');
             leftContent.innerHTML = '';
 
-            data.forEach(recipient => {
-                clone = profileHTML.querySelector('.profiles').cloneNode(true);
-                clone.id = `recipient-${recipient['conversation']}`;
-                clone.querySelector('#pfp').src = recipient['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : recipient['pfp'];
-                clone.querySelector('.profile-name').textContent = recipient['lastname'] + ', ' + recipient['firstname'];
-                clone.querySelector('.profile-preview').textContent = recipient['message'];
-                clone.querySelector('.profile-status').textContent = formatTimestamp(recipient['sent']);
+            data.forEach(course => {
+                clone = courseHTML.querySelector('.courses').cloneNode(true);
+                clone.id = `course-${course['name']}`;
+                clone.querySelector('#pfp').src = course['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : course['pfp'];
+                clone.querySelector('.course-name').textContent = course['name'];
+                clone.querySelector('.course-preview').textContent = `${course['attendance']} : ${course['firstname']} ${course['lastname']}`;
+                clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
                 clone.addEventListener('click', () => {
-                    convo_id = recipient['conversation'];
-                    getMessages(recipient['conversation']);
+                    convo_id = course['conversation'];
+                    getMessages(course['conversation']);
                     const leftContent = document.querySelector('.middle-part');
                     leftContent.innerHTML = 'loading...';
                 });
@@ -163,15 +163,15 @@ let prevConvo = null;
 let convo_id = null;
 const parser = new DOMParser();
 
-let profileHTML;
+let courseHTML;
 
-fetch('/assets/templates/profile.html')
+fetch('/assets/templates/course.html')
     .then(res => res.text())
     .then(txt => parser.parseFromString(txt, 'text/html'))
     .then(html => {
-        profileHTML = html;
-        console.log(profileHTML);
+        courseHTML = html;
+        console.log(courseHTML);
         setInterval(updateMessages, 1000);
-        getRecepients();
+        getCourses();
     });
 
