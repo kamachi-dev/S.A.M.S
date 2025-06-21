@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SAMS : Admin - Parent Info</title>
+    <link rel="shortcut icon" type="image/png" href="/assets/HatLogo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/general/general.css">
+    <link rel="stylesheet" type="text/css" href="/admin/parentInfo/parentInfo.css">
+    <script defer src="/general/general.js"></script>
+    <script defer src="/admin/parentInfo/parentInfo.js"></script>
+</head>
+
+<body>
+    <img src="/assets/School1.jpg" alt="background" class="background" />
+    <div class="slip">
+        <img src="/assets/School1.jpg" alt="headerPicture" class="headerPicture" />
+        <img src="/assets/MMCL_Logo_Horizontal.webp" alt="longLogo" class="longLogo" />
+        <nav class="navBar">
+            <ul>
+                <li class="ReportTab">
+                    <img src="/assets/icons/Student Info.png" />
+                    <a href="teacherInfo.html">Teacher Info</a>
+                </li>
+
+                <li class="ReportTab">
+                    <img src="/assets/icons/Student Info.png" />
+                    <a href="studentInfo.html">Student Info</a>
+                </li>
+
+                <li class="MessageTab currentTab">
+                    <img src="/assets/icons/Parent Info.png" />
+                    <a href="parentInfo.html">Parent Info</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="content-wrapper">
+            <div class="content-border">
+                <div class="content">
+                    <div class="filter-section">
+                        <div class="search-container">
+                            <input type="text" placeholder="Search parents..." class="search-input">
+                        </div>
+                        <div class="filter-dropdowns">
+                            <select class="filter-select" id="letterFilter">
+                                <option value="all">All Letters</option>
+                                <option value="a">A</option>
+                                <option value="b">B</option>
+                                <option value="c">C</option>
+                                <option value="d">D</option>
+                                <option value="e">E</option>
+                                <option value="f">F</option>
+                                <option value="g">G</option>
+                                <option value="h">H</option>
+                                <option value="i">I</option>
+                                <option value="j">J</option>
+                                <option value="k">K</option>
+                                <option value="l">L</option>
+                                <option value="m">M</option>
+                                <option value="n">N</option>
+                                <option value="o">O</option>
+                                <option value="p">P</option>
+                                <option value="q">Q</option>
+                                <option value="r">R</option>
+                                <option value="s">S</option>
+                                <option value="t">T</option>
+                                <option value="u">U</option>
+                                <option value="v">V</option>
+                                <option value="w">W</option>
+                                <option value="x">X</option>
+                                <option value="y">Y</option>
+                                <option value="z">Z</option>
+                            </select>
+                            <div class="parent-count">
+                                <span>No. of Parents</span>
+                                <span class="count-number">42</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="a">
+                        <h2 class="letter-title">A</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="a">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Roberto C. Alvarez</div>
+                                    <div class="parent-id">2006928901</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0301</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">r.alvarez@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="a">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Carmen D. Antonio</div>
+                                    <div class="parent-id">2006928902</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0302</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">c.antonio@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="a">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Fernando L. Aquino</div>
+                                    <div class="parent-id">2006928903</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0303</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">f.aquino@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="b">
+                        <h2 class="letter-title">B</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="b">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Maria S. Bautista</div>
+                                    <div class="parent-id">2006928904</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0304</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">m.bautista@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="b">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Jose R. Bernardo</div>
+                                    <div class="parent-id">2006928905</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0305</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">j.bernardo@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="b">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Ana P. Buenaventura</div>
+                                    <div class="parent-id">2006928906</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0306</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">a.buenaventura@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="c">
+                        <h2 class="letter-title">C</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="c">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Ricardo M. Cruz</div>
+                                    <div class="parent-id">2006928907</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0307</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">r.cruz@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="c">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Elena V. Castro</div>
+                                    <div class="parent-id">2006928908</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0308</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">e.castro@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="c">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Miguel A. Cabrera</div>
+                                    <div class="parent-id">2006928909</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0309</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">m.cabrera@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="d">
+                        <h2 class="letter-title">D</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="d">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Rosa T. Dela Cruz</div>
+                                    <div class="parent-id">2006928910</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0310</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">r.delacruz@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="d">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Antonio G. Domingo</div>
+                                    <div class="parent-id">2006928911</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0311</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">a.domingo@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="d">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Luz B. Dizon</div>
+                                    <div class="parent-id">2006928912</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0312</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">l.dizon@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="g">
+                        <h2 class="letter-title">G</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="g">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Carlos E. Garcia</div>
+                                    <div class="parent-id">2006928913</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0313</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">c.garcia@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="g">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Patricia L. Gonzales</div>
+                                    <div class="parent-id">2006928914</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0314</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">p.gonzales@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="g">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Eduardo S. Gutierrez</div>
+                                    <div class="parent-id">2006928915</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0315</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">e.gutierrez@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="l">
+                        <h2 class="letter-title">L</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="l">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Gloria M. Lopez</div>
+                                    <div class="parent-id">2006928916</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0316</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">g.lopez@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="l">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Ramon P. Luna</div>
+                                    <div class="parent-id">2006928917</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0317</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">r.luna@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="l">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Esperanza R. Lim</div>
+                                    <div class="parent-id">2006928918</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0318</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">e.lim@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="r">
+                        <h2 class="letter-title">R</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="r">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Francisco J. Reyes</div>
+                                    <div class="parent-id">2006928919</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0319</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">f.reyes@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="r">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Marilyn C. Rodriguez</div>
+                                    <div class="parent-id">2006928920</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0320</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">m.rodriguez@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="r">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Benjamin D. Ramos</div>
+                                    <div class="parent-id">2006928921</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0321</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">b.ramos@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="s">
+                        <h2 class="letter-title">S</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="s">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Teresita F. Santos</div>
+                                    <div class="parent-id">2006928922</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0322</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">t.santos@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="s">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Alfredo H. Silva</div>
+                                    <div class="parent-id">2006928923</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0323</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">a.silva@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="s">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Corazon N. Soriano</div>
+                                    <div class="parent-id">2006928924</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0324</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">c.soriano@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="letter-section" data-letter="v">
+                        <h2 class="letter-title">V</h2>
+
+                        <div class="parents-grid">
+                            <div class="parent-card" data-letter="v">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Manuel K. Villanueva</div>
+                                    <div class="parent-id">2006928925</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0325</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">m.villanueva@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="v">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mrs. Remedios Q. Valdez</div>
+                                    <div class="parent-id">2006928926</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0326</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">r.valdez@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="parent-card" data-letter="v">
+                                <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+                                <div class="parent-info">
+                                    <div class="parent-name">Mr. Ernesto W. Velasco</div>
+                                    <div class="parent-id">2006928927</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="phone-badge">
+                                        <span class="phone-number">(555) 0327</span>
+                                    </div>
+                                    <div class="email-badge">
+                                        <span class="email-address">e.velasco@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="menu" onclick="TogglePopup()">
+        <img src="/assets/icons/Hamburger.png" alt="menu" />
+    </button>
+    <div class="hiddenMenu">
+        <section class="popup" id="popup">
+            <div class="menuNav">
+                <div class="menuItem">
+                    <img src="/assets/icons/Student Info.png" />
+                    <a href="teacherInfo.html"><label for="teacher_info">Teacher Info</label></a>
+                </div>
+                <div class="menuItem">
+                    <img src="/assets/icons/Student Info.png" />
+                    <a href="studentInfo.html"><label for="student_info">Student Info</label></a>
+                </div>
+                <div class="menuItem">
+                    <img src="/assets/icons/Parent Info.png" />
+                    <a href="parentInfo.html"><label for="parent_info">Parent Info</label></a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
