@@ -235,7 +235,7 @@
     flex-direction: column;
     gap: 10px;
     width: auto;
-    height: auto;
+    height: 100%;
     margin: 5px;
     justify-content: flex-start;
     overflow-y: scroll;
@@ -260,15 +260,7 @@
     text-align: left;
 }
 
-.reciever {
-    align-self: flex-end;
-    /*right*/
-    background-color: #007bff;
-    text-align: right;
-}
-
-.sender,
-.reciever {
+.sender {
     color: white;
     padding: 10px 15px;
     border-radius: 12px;
@@ -298,39 +290,13 @@
     background-color: #797979;
 }
 
-.sender>p,
-.reciever>p {
+.sender>p {
     color: rgb(220, 220, 220);
     font-size: x-small;
     display: block;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-}
-
-.bottom-part {
-    background-color: #f7f7f7;
-    padding: 10px;
-    width: auto;
-    border-top: 1px solid #ccc;
-}
-
-.bottom-inner {
-    background-color: white;
-    padding: 10px;
-    height: auto;
-    border: 1px solid #ccc;
-    font-size: 20px;
-    display: flex;
-    flex-direction: row;
-}
-
-.bottom-inner input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size: 20px;
-    background-color: transparent;
 }
 
 @media only screen and (max-width: 750px) {
