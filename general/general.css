@@ -169,7 +169,8 @@ nav > ul > li > a {
 }
 
 .content > * {
-    font: 2em sans-serif;
+    /* font: 2em sans-serif; */
+    font: 1em sans-serif;
 }
 .menu {
     visibility: hidden;
