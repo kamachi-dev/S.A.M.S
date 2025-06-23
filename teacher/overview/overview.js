@@ -127,7 +127,7 @@ function uploadModelJS() {
         return;
     }
 
-    fetch(`https://sams-backend-u79d.onrender.com/api/uploadModel.php`, {
+    fetch(`https://sams-backend-u79d.onrender.com/api/postModel.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
