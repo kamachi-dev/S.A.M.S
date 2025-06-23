@@ -71,10 +71,11 @@
             <option value="Advanced Statistics">Advanced Statistics</option>
             <option value="Data Structures">Data Structures</option>
         </select>
-
-        <button onclick="startAttendance()">Start Attendance</button>
+        </div>
+        <div>
+            <button onclick="startAttendance()">Start Attendance</button>
+        </div>
     </div>
-
     <!-- 🎥 Camera view section -->
     <div class="camera-container" id="cameraContainer">
         <!-- <h3>Camera is Live</h3> -->
@@ -84,7 +85,12 @@
 
     <script>
         function startAttendance() {
-             startCamera(); 
+            const courseName = document.getElementById("subject").value;
+            if (!courseName) {
+                alert("Please select a subject before starting attendance.");
+                return;
+            }
+            startCamera(); 
         }
 
         let recognitionInterval;
@@ -93,18 +99,22 @@
             const setupForm = document.getElementById("setupForm");
             const cameraContainer = document.getElementById("cameraContainer");
             const video = document.getElementById("video");
-            const courseName = document.getElementById("courseDropdown").value;
-
+            const courseName = document.getElementById("subject").value;
             setupForm.style.display = "none";
             cameraContainer.style.display = "block";
 
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
+                    if (data.error) {
+                        console.warn("No model or recognition error:", data.error);
+                    } else {
+                        console.log("Recognition Result:", data);
+                    }
                     video.srcObject = stream;
 
                     recognitionInterval = setInterval(() => {
                         sendFrameForRecognition(video);
-                    }, 3000); // Every 3 seconds
+                    }, 5000); // Every 3 seconds
                 })
                 .catch(err => {
                     console.error("Camera access denied:", err);
