@@ -105,55 +105,74 @@
 
     <script>
         function startAttendance() {
-            const subject = document.getElementById("subject").value;
-            const section = document.getElementById("section").value;
-            const time = document.getElementById("startTime").value;
-            const date = document.getElementById("meetingDate").value;
-
-            if (!subject || !section || !time || !date) {
-                alert("Please fill out all fields to start the session.");
-                return;
-            }
-
              startCamera(); 
         }
 
-        function endSession() {
-            // Stop the camera stream
-            const video = document.getElementById("video");
-            const stream = video.srcObject;
-            if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            }
+        let recognitionInterval;
 
-            // Close this tab (only works if this tab was opened via `window.open()`)
-            window.close();
-
-            // If tab can't be closed (browser blocked), show fallback
-            alert("You can now return to the Overview tab.");
-        }
         function startCamera() {
             const setupForm = document.getElementById("setupForm");
             const cameraContainer = document.getElementById("cameraContainer");
             const video = document.getElementById("video");
 
-            // Hide form, show camera
             setupForm.style.display = "none";
             cameraContainer.style.display = "block";
 
-            // Access the webcam
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     video.srcObject = stream;
+
+                    recognitionInterval = setInterval(() => {
+                        sendFrameForRecognition(video);
+                    }, 3000); // Every 3 seconds
                 })
                 .catch(err => {
                     console.error("Camera access denied:", err);
                     alert("Unable to access the camera.");
-                    // Optional: Show the form again if access is denied
                     setupForm.style.display = "block";
                     cameraContainer.style.display = "none";
                 });
         }
+
+        function endSession() {
+            const video = document.getElementById("video");
+            const stream = video.srcObject;
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+
+            if (recognitionInterval) clearInterval(recognitionInterval);
+
+            alert("Attendance session ended.");
+            window.close();
+        }
+
+        function sendFrameForRecognition(videoElement) {
+            const canvas = document.createElement("canvas");
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            const context = canvas.getContext("2d");
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            const base64Image = canvas.toDataURL("image/jpeg");
+
+            fetch("https://sams-backend-u79d.onrender.com/api/useModel.php", {
+                method: "POST",
+                body: JSON.stringify({
+                    image: base64Image,
+                    course_name: "IAN RM"
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => response.json())
+            .then(data => {
+                console.log("Recognition Result:", data);
+            }).catch(err => {
+                console.error("Recognition error:", err);
+            });
+        }
+
   </script>
 </body>
 </html>
