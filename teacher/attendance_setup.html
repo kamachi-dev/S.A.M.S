@@ -66,32 +66,11 @@
         <label>Subject:</label><br>
         <select id="subject">
             <option value="">-- Select Subject --</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="Science">Science</option>
-            <option value="History">History</option>
-            <option value="English">English</option>
+            <option value="IAN RM">IAN RM</option>
+            <option value="Testing Model1">Testing Model1</option>
+            <option value="Advanced Statistics">Advanced Statistics</option>
+            <option value="Data Structures">Data Structures</option>
         </select>
-        </div>
-
-        <div>
-        <label>Section:</label><br>
-        <select id="section">
-            <option value="">-- Select Section --</option>
-            <option value="CIS12">CIS12</option>
-            <option value="CIS13">CIS13</option>
-            <option value="CIS14">CIS14</option>
-        </select>
-        </div>
-
-        <div>
-        <label>Start Time:</label><br>
-        <input type="time" id="startTime">
-        </div>
-
-        <div>
-        <label>Date:</label><br>
-        <input type="date" id="meetingDate">
-        </div>
 
         <button onclick="startAttendance()">Start Attendance</button>
     </div>
@@ -114,6 +93,7 @@
             const setupForm = document.getElementById("setupForm");
             const cameraContainer = document.getElementById("cameraContainer");
             const video = document.getElementById("video");
+            const courseName = document.getElementById("courseDropdown").value;
 
             setupForm.style.display = "none";
             cameraContainer.style.display = "block";
@@ -152,6 +132,7 @@
             canvas.width = videoElement.videoWidth;
             canvas.height = videoElement.videoHeight;
             const context = canvas.getContext("2d");
+            const courseName = document.getElementById("courseDropdown").value;
             context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
             const base64Image = canvas.toDataURL("image/jpeg");
@@ -160,7 +141,7 @@
                 method: "POST",
                 body: JSON.stringify({
                     image: base64Image,
-                    course_name: "IAN RM"
+                    course_name: courseName
                 }),
                 headers: {
                     "Content-Type": "application/json"
