@@ -178,13 +178,21 @@ function startCamera() {
         });
 }
 
-function openAttendanceSetup() {
-    const token = window.token;
-    const provider = window.provider;
-    const url = `attendance.html?tkn=${token}`;
-    const newTab = window.open(url, "_blank");
-
-    if (!newTab) {
-        alert("Pop-up blocked! Please allow pop-ups for this site.");
+function startAttendance() {
+    const subject = document.getElementById("subject").value;
+    if (!subject) {
+        alert("Please select a subject before starting attendance.");
+        return;
     }
+
+    const attendanceTab = window.open("attendance.html", "_blank");
+
+    // Wait a bit to ensure the tab has loaded, then send the data
+    setTimeout(() => {
+        attendanceTab.postMessage({
+            course_name: subject,
+            token: "SOME_SESSION_TOKEN" 
+            // email: "teacher@email.com"   
+        }, "https://sams-mmcl.netlify.app/teacher/overview"); 
+    }, 3000); 
 }

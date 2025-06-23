@@ -84,6 +84,30 @@
     </div>
 
     <script>
+        let courseName = null;
+        let token = null;
+        let email = null;
+
+        window.addEventListener("message", (event) => {
+            if (event.origin !== "https://sams-mmcl.netlify.app/teacher/overview") return;
+
+            const data = event.data;
+
+            if (data.course_name && data.token) {
+                courseName = data.course_name;
+                token = data.token;
+                email = data.email;
+
+                console.log("Received from opener:", data);
+
+                // Optionally auto-start camera once data is received
+                startCamera();
+            } else {
+                console.warn("Incomplete data received via postMessage");
+            }
+        });
+
+
         function startAttendance() {
             const courseName = document.getElementById("subject").value;
             if (!courseName) {
@@ -157,14 +181,6 @@
                 console.error("Recognition error:", err);
             });
         }
-
-        function getQueryParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        const courseName = getQueryParam("course_name");
-        const token = getQueryParam("tkn");
   </script>
 </body>
 </html>
