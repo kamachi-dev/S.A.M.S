@@ -99,22 +99,16 @@
             const setupForm = document.getElementById("setupForm");
             const cameraContainer = document.getElementById("cameraContainer");
             const video = document.getElementById("video");
-            const courseName = document.getElementById("subject").value;
             setupForm.style.display = "none";
             cameraContainer.style.display = "block";
 
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
-                    if (data.error) {
-                        console.warn("No model or recognition error:", data.error);
-                    } else {
-                        console.log("Recognition Result:", data);
-                    }
                     video.srcObject = stream;
 
                     recognitionInterval = setInterval(() => {
                         sendFrameForRecognition(video);
-                    }, 5000); // Every 3 seconds
+                    }, 5000);
                 })
                 .catch(err => {
                     console.error("Camera access denied:", err);
@@ -142,7 +136,7 @@
             canvas.width = videoElement.videoWidth;
             canvas.height = videoElement.videoHeight;
             const context = canvas.getContext("2d");
-            const courseName = document.getElementById("courseDropdown").value;
+            const courseName = document.getElementById("subject").value;
             context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
             const base64Image = canvas.toDataURL("image/jpeg");
