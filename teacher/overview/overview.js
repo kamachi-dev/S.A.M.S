@@ -181,7 +181,7 @@ function startCamera() {
 function openAttendanceSetup() {
     const token = window.token;
     const provider = window.provider;
-    const url = `attendance.html?course_name=${encodeURIComponent(courseName)}&tkn=${token}`;
+    const url = `attendance.html?tkn=${token}`;
     const newTab = window.open(url, "_blank");
 
     if (!newTab) {
