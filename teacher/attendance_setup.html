@@ -200,14 +200,15 @@
 
             fetch("https://sams-backend-u79d.onrender.com/api/useModel.php", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Token": window.token 
-                },
                 body: JSON.stringify({
                     image: base64Image,
                     course_name: courseName
-                })
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Token": window.token,
+                    "Provider": window.provider
+                }
             }).then(response => response.json())
             .then(data => {
                 console.log("Recognition Result:", data);
