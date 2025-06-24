@@ -179,12 +179,6 @@ function startCamera() {
 }
 
 function openAttendanceSetup() {
-    const subject = document.getElementById("subject").value;
-    if (!subject) {
-        alert("Please select a subject before starting attendance.");
-        return;
-    }
-
     const attendanceTab = window.open("attendance.html", "_blank");
 
     // Wait a bit to ensure the tab has loaded, then send the data
