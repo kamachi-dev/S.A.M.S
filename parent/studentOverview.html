@@ -38,115 +38,100 @@
                 <div class="content">
                     <div class="students-attendance-section-top">
                         <h2 class="section-title">Student's Attendance Record</h2>
+                        <div class="students-left-right">
+                            <div class="students-left" id="studentDetailsPanel"></div>
 
-                        <div class="students-grid" id="studentsGrid">
-                            <!-- Student 1 - Blue border (Present) -->
-                            <div class="student-card blue">
-                                <div class="student-avatar">
-                                    <img src="/assets/Sample.png" alt="Student Photo" />
-                                </div>
-                                <div class="student-details">
-                                    <div class="student-name">Joshua Simon S. Komachi</div>
-                                    <div class="student-id">20211535356</div>
-                                    <div class="attendance-indicator blue">
-                                        <span class="attendance-icon">🔵</span>
-                                        <span>Attendance</span>
+                            <div class="students-right">
+                                <div class="student-card blue" onclick="showStudentDetails('present', this)">
+                                    <div class="student-avatar">
+                                        <img src="/assets/Sample.png" alt="Student Photo" />
                                     </div>
-                                    <button class="profile-button blue"
-                                        onclick="viewStudentProfile('joshua')">PROFILE</button>
+                                    <div class="student-details">
+                                        <div class="student-name">Joshua Simon S. Komachi</div>
+                                        <div class="student-id">20211535356</div>
+                                        <div class="attendance-indicator blue">
+                                            <span class="attendance-icon">🔵</span>
+                                            <span>Present</span>
+                                        </div>
+                                        <button class="profile-button blue"
+                                            onclick="viewStudentProfile('joshua3')">PROFILE</button>
+                                    </div>
                                 </div>
-                            </div>
+                                <!-- Student 2 - Orange border (Late) -->
+                                <div class="student-card orange"  onclick="showStudentDetails('late', this)">
+                                    <div class="student-avatar">
+                                        <img src="/assets/Sample.png" alt="Student Photo" />
+                                    </div>
+                                    <div class="student-details">
+                                        <div class="student-name">Joshua Simon S. Komachi</div>
+                                        <div class="student-id">20211535356</div>
+                                        <div class="attendance-indicator orange">
+                                            <span class="attendance-icon">🟠</span>
+                                            <span>Late</span>
+                                        </div>
+                                        <button class="profile-button orange"
+                                            onclick="viewStudentProfile('joshua2')">PROFILE</button>
+                                    </div>
+                                    
+                                </div>
 
-                            <!-- Student 2 - Orange border (Late) -->
-                            <div class="student-card orange">
-                                <div class="student-avatar">
-                                    <img src="/assets/Sample.png" alt="Student Photo" />
-                                </div>
-                                <div class="student-details">
-                                    <div class="student-name">Joshua Simon S. Komachi</div>
-                                    <div class="student-id">20211535356</div>
-                                    <div class="attendance-indicator orange">
-                                        <span class="attendance-icon">🟠</span>
-                                        <span>Attendance</span>
+                                <!-- Student 3 - Red border (Absent) -->
+                                <div class="student-card red" onclick="showStudentDetails('absent', this)">
+                                    <div class="student-avatar">
+                                        <img src="/assets/Sample.png" alt="Student Photo" />
                                     </div>
-                                    <button class="profile-button orange"
-                                        onclick="viewStudentProfile('joshua2')">PROFILE</button>
+                                    <div class="student-details">
+                                        <div class="student-name">Joshua Simon S. Komachi</div>
+                                        <div class="student-id">20211535356</div>
+                                        <div class="attendance-indicator red">
+                                            <span class="attendance-icon">🔴</span>
+                                            <span>Absent</span>
+                                        </div>
+                                        <button class="profile-button red"
+                                            onclick="viewStudentProfile('joshua3')">PROFILE</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Student 3 - Red border (Absent) -->
-                            <div class="student-card red">
-                                <div class="student-avatar">
-                                    <img src="/assets/Sample.png" alt="Student Photo" />
-                                </div>
-                                <div class="student-details">
-                                    <div class="student-name">Joshua Simon S. Komachi</div>
-                                    <div class="student-id">20211535356</div>
-                                    <div class="attendance-indicator red">
-                                        <span class="attendance-icon">🔴</span>
-                                        <span>Attendance</span>
+                                <!-- Student 2 - Orange border (Late) -->
+                                <div class="student-card orange">
+                                    <div class="student-avatar">
+                                        <img src="/assets/Sample.png" alt="Student Photo" />
                                     </div>
-                                    <button class="profile-button red"
-                                        onclick="viewStudentProfile('joshua3')">PROFILE</button>
-                                </div>
-                            </div>
-                            <!-- Student 1 - Blue border (Present) -->
-                            <div class="student-card blue">
-                                <div class="student-avatar">
-                                    <img src="/assets/Sample.png" alt="Student Photo" />
-                                </div>
-                                <div class="student-details">
-                                    <div class="student-name">Joshua Simon S. Komachi</div>
-                                    <div class="student-id">20211535356</div>
-                                    <div class="attendance-indicator blue">
-                                        <span class="attendance-icon">🔵</span>
-                                        <span>Attendance</span>
+                                    <div class="student-details">
+                                        <div class="student-name">Joshua Simon S. Komachi</div>
+                                        <div class="student-id">20211535356</div>
+                                        <div class="attendance-indicator orange">
+                                            <span class="attendance-icon">🟠</span>
+                                            <span>Late</span>
+                                        </div>
+                                        <button class="profile-button orange"
+                                            onclick="viewStudentProfile('joshua2')">PROFILE</button>
                                     </div>
-                                    <button class="profile-button blue"
-                                        onclick="viewStudentProfile('joshua')">PROFILE</button>
                                 </div>
-                            </div>
 
-                            <!-- Student 2 - Orange border (Late) -->
-                            <div class="student-card orange">
-                                <div class="student-avatar">
-                                    <img src="/assets/Sample.png" alt="Student Photo" />
-                                </div>
-                                <div class="student-details">
-                                    <div class="student-name">Joshua Simon S. Komachi</div>
-                                    <div class="student-id">20211535356</div>
-                                    <div class="attendance-indicator orange">
-                                        <span class="attendance-icon">🟠</span>
-                                        <span>Attendance</span>
+                                <!-- Student 3 - Red border (Absent) -->
+                                <div class="student-card red">
+                                    <div class="student-avatar">
+                                        <img src="/assets/Sample.png" alt="Student Photo" />
                                     </div>
-                                    <button class="profile-button orange"
-                                        onclick="viewStudentProfile('joshua2')">PROFILE</button>
-                                </div>
-                            </div>
-
-                            <!-- Student 3 - Red border (Absent) -->
-                            <div class="student-card red">
-                                <div class="student-avatar">
-                                    <img src="/assets/Sample.png" alt="Student Photo" />
-                                </div>
-                                <div class="student-details">
-                                    <div class="student-name">Joshua Simon S. Komachi</div>
-                                    <div class="student-id">20211535356</div>
-                                    <div class="attendance-indicator red">
-                                        <span class="attendance-icon">🔴</span>
-                                        <span>Attendance</span>
+                                    <div class="student-details">
+                                        <div class="student-name">Joshua Simon S. Komachi</div>
+                                        <div class="student-id">20211535356</div>
+                                        <div class="attendance-indicator red">
+                                            <span class="attendance-icon">🔴</span>
+                                            <span>Absent</span>
+                                        </div>
+                                        <button class="profile-button red"
+                                            onclick="viewStudentProfile('joshua3')">PROFILE</button>
                                     </div>
-                                    <button class="profile-button red"
-                                        onclick="viewStudentProfile('joshua3')">PROFILE</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="students-attendance-section-bottom">
+                    <!-- <div class="students-attendance-section-bottom">
                         <div class="dashboard-bottom">
                             <div class="time-tracking-section">
                                 <div class="calendar-charts-section">
-                                    <!-- Calendar -->
                                     <div class="calendar-container">
                                         <div class="calendar-header">
                                             <button class="nav-button" onclick="previousMonth()">&lt;</button>
@@ -161,12 +146,10 @@
                                             <div class="day-header">Fr</div>
                                             <div class="day-header">Sa</div>
                                             <div class="day-header">Su</div>
-                                            <!-- Calendar days will be populated by JavaScript -->
                                         </div>
                                     </div>
 
                                     <div class="charts-top-bottom">
-                                        <!-- Attendance Charts -->
                                         <div class="charts-container">
                                             <div class="chart-section">
                                                 <h4>Student's Current Attendance</h4>
@@ -211,7 +194,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Info Section -->
                                         <div class="info-section">
                                             <div class="info-text">
                                                 <p><strong>ℹ️</strong> This tracks which subjects the child attended
@@ -234,7 +216,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
