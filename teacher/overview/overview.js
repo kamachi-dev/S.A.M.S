@@ -179,7 +179,7 @@ function startCamera() {
 }
 
 function openAttendanceSetup() {
-    const attendanceTab = window.open("attendance.html", "_blank");
+    const attendanceTab = window.open("attendance_setup.html", "_blank");
 
     // Wait a bit to ensure the tab has loaded, then send the data
     setTimeout(() => {
