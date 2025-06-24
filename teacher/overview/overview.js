@@ -178,7 +178,7 @@ function startCamera() {
         });
 }
 
-function startAttendance() {
+function openAttendanceSetup() {
     const subject = document.getElementById("subject").value;
     if (!subject) {
         alert("Please select a subject before starting attendance.");
