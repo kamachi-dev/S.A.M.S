@@ -212,6 +212,15 @@
             }).then(response => response.json())
             .then(data => {
                 console.log("Recognition Result:", data);
+
+                if (data.success && data.recognition_result?.recognized) {
+                    const name = data.recognition_result.student_name;
+                    const conf = data.recognition_result.confidence;
+                    const time = data.recognition_result.timestamp;
+                    alert(`🧑 Recognized: ${name}\n📈 Confidence: ${conf}%\n🕓 Time: ${time}`);
+                } else {
+                    console.warn("⚠️ Not recognized or error:", data);
+                }
             }).catch(err => {
                 console.error("Recognition error:", err);
             });
