@@ -181,12 +181,10 @@ function startCamera() {
 function openAttendanceSetup() {
     const attendanceTab = window.open("attendance_setup.html", "_blank");
 
-    // Wait a bit to ensure the tab has loaded, then send the data
     setTimeout(() => {
         attendanceTab.postMessage({
-            course_name: subject,
-            token: "SOME_SESSION_TOKEN" 
-            // email: "teacher@email.com"   
+            token: window.token,
+            email: window.email  
         }, "https://sams-mmcl.netlify.app/teacher/overview"); 
     }, 3000); 
 }

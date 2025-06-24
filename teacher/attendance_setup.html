@@ -83,6 +83,8 @@
         <button id="endButton" onclick="endSession()">End Attendance</button>
     </div>
 
+    
+    <script defer src="/general/general.js"></script>
     <script>
         let courseName = null;
         let token = null;
@@ -165,7 +167,7 @@
 
             const base64Image = canvas.toDataURL("image/jpeg");
 
-            fetch(`https://sams-backend-u79d.onrender.com/api/useModel.php?tkn=${token}`, {
+            fetch(`https://sams-backend-u79d.onrender.com/api/useModel.php?tkn=${window.token}`, {
                 method: "POST",
                 body: JSON.stringify({
                     image: base64Image,
