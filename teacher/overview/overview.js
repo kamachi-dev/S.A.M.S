@@ -183,8 +183,9 @@ function openAttendanceSetup() {
 
     setTimeout(() => {
         attendanceTab.postMessage({
+            course_name: subject,
             token: window.token,
-            email: window.email  
+            email: window.email
         }, "https://sams-mmcl.netlify.app/teacher/overview"); 
-    }, 3000); 
+    }, 3000); // You can even reduce this to 1000ms
 }

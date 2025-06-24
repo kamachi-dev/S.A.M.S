@@ -86,6 +86,37 @@
     
     <script defer src="/general/general.js"></script>
     <script>
+        window.addEventListener("message", (event) => {
+            console.log("📩 Message received:", event);
+
+            if (event.origin !== "https://sams-mmcl.netlify.app/teacher/overview") {
+                console.warn("Message from unknown origin:", event.origin);
+                return;
+            }
+
+            const data = event.data;
+
+            // DEBUG: Log each key individually
+            console.log("✅ Data received:");
+            console.log("course_name:", data.course_name);
+            console.log("token:", data.token);
+            console.log("email:", data.email);
+
+            if (data.course_name && data.token && data.email) {
+                courseName = data.course_name;
+                token = data.token;
+                email = data.email;
+
+                // Optionally display it on-screen for debugging
+                alert(`Email: ${email}\nToken: ${token}`);
+
+                startCamera();
+            } else {
+                console.warn("⚠️ Incomplete data received via postMessage");
+            }
+        });
+
+
         let courseName = null;
         let token = null;
         let email = null;
