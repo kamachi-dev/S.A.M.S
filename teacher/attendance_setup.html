@@ -40,7 +40,6 @@
             margin: 0 auto;
             border: 3px solid #333;
             border-radius: 12px;
-            /* box-shadow: 0 0 20px rgba(0,0,0,0.2); */
         }
         #endButton {
             margin-top: 2rem;
@@ -53,122 +52,157 @@
             cursor: pointer;
             transition: background 0.2s ease;
         }
-            #endButton:hover {
+        #endButton:hover {
             background-color: #c51f1f;
+        }
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <!-- 🔽 This container will be hidden after submission -->
+    <!-- Debug information display -->
+    <div id="debugInfo" class="debug-info" style="display: none;">
+        <h4>Debug Information:</h4>
+        <div id="debugContent"></div>
+    </div>
+
+    <!-- Form container -->
     <div class="form-container" id="setupForm">
         <h2>Set Up Class Attendance</h2>
         <div>
-        <label>Subject:</label><br>
-        <select id="subject">
-            <option value="">-- Select Subject --</option>
-            <option value="IAN RM">IAN RM</option>
-            <option value="Testing Model1">Testing Model1</option>
-            <option value="Advanced Statistics">Advanced Statistics</option>
-            <option value="Data Structures">Data Structures</option>
-        </select>
+            <label>Subject:</label><br>
+            <select id="subject">
+                <option value="">-- Select Subject --</option>
+                <option value="IAN RM">IAN RM</option>
+                <option value="Testing Model1">Testing Model1</option>
+                <option value="Advanced Statistics">Advanced Statistics</option>
+                <option value="Data Structures">Data Structures</option>
+            </select>
         </div>
         <div>
             <button onclick="startAttendance()">Start Attendance</button>
+            <button onclick="toggleDebug()">Toggle Debug</button>
         </div>
     </div>
-    <!-- 🎥 Camera view section -->
+
+    <!-- Camera view section -->
     <div class="camera-container" id="cameraContainer">
-        <!-- <h3>Camera is Live</h3> -->
         <video id="video" autoplay playsinline></video>
         <button id="endButton" onclick="endSession()">End Attendance</button>
     </div>
 
-    
-    <script defer src="/general/general.js"></script>
     <script>
+        // Global variables
+        let courseName = null;
+        let token = null;
+        let email = null;
+        let provider = null;
+        let recognitionInterval = null;
+
+        // Debug functions
+        function toggleDebug() {
+            const debugDiv = document.getElementById('debugInfo');
+            debugDiv.style.display = debugDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addDebugInfo(message) {
+            const debugContent = document.getElementById('debugContent');
+            const timestamp = new Date().toLocaleTimeString();
+            debugContent.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            debugContent.scrollTop = debugContent.scrollHeight;
+        }
+
+        // SINGLE event listener for postMessage
         window.addEventListener("message", (event) => {
+            addDebugInfo(`📩 Message received from: ${event.origin}`);
             console.log("📩 Message received:", event);
 
-            if (event.origin !== "https://sams-mmcl.netlify.app/teacher/overview") {
+            // Validate origin
+            if (event.origin !== "https://sams-mmcl.netlify.app") {
+                addDebugInfo(`⚠️ Message from unknown origin: ${event.origin}`);
                 console.warn("Message from unknown origin:", event.origin);
                 return;
             }
 
             const data = event.data;
+            addDebugInfo(`📦 Data keys: ${Object.keys(data).join(', ')}`);
 
-            // DEBUG: Log each key individually
+            // Log each key individually
             console.log("✅ Data received:");
             console.log("course_name:", data.course_name);
             console.log("token:", data.token);
             console.log("email:", data.email);
+            console.log("provider:", data.provider);
 
+            // Store the received data
             if (data.course_name && data.token && data.email) {
                 courseName = data.course_name;
                 token = data.token;
                 email = data.email;
+                provider = data.provider || 'google'; // Default to google if not provided
 
-                // Optionally display it on-screen for debugging
-                alert(`Email: ${email}\nToken: ${token}`);
+                addDebugInfo(`✅ Data stored - Course: ${courseName}, Email: ${email}`);
+                
+                // Set the subject dropdown to match received course
+                const subjectSelect = document.getElementById("subject");
+                subjectSelect.value = courseName;
 
-                startCamera();
+                // Optionally display confirmation
+                alert(`Ready to start attendance for:\nCourse: ${courseName}\nEmail: ${email}`);
+
+                // Auto-start camera if desired
+                // startCamera();
             } else {
+                addDebugInfo("⚠️ Incomplete data received via postMessage");
                 console.warn("⚠️ Incomplete data received via postMessage");
             }
         });
 
-
-        let courseName = null;
-        let token = null;
-        let email = null;
-
-        window.addEventListener("message", (event) => {
-            if (event.origin !== "https://sams-mmcl.netlify.app/teacher/overview") return;
-
-            const data = event.data;
-
-            if (data.course_name && data.token) {
-                courseName = data.course_name;
-                token = data.token;
-                email = data.email;
-
-                console.log("Received from opener:", data);
-
-                // Optionally auto-start camera once data is received
-                startCamera();
-            } else {
-                console.warn("Incomplete data received via postMessage");
-            }
-        });
-
-
         function startAttendance() {
-            const courseName = document.getElementById("subject").value;
-            if (!courseName) {
+            const selectedCourse = document.getElementById("subject").value;
+            if (!selectedCourse) {
                 alert("Please select a subject before starting attendance.");
                 return;
             }
+            
+            // Use the selected course or the one from postMessage
+            courseName = selectedCourse;
+            addDebugInfo(`🎬 Starting attendance for: ${courseName}`);
             startCamera(); 
         }
-
-        let recognitionInterval;
 
         function startCamera() {
             const setupForm = document.getElementById("setupForm");
             const cameraContainer = document.getElementById("cameraContainer");
             const video = document.getElementById("video");
+            
             setupForm.style.display = "none";
             cameraContainer.style.display = "block";
+
+            addDebugInfo("📹 Requesting camera access...");
 
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
                     video.srcObject = stream;
+                    addDebugInfo("✅ Camera access granted");
 
+                    // Start recognition every 5 seconds
                     recognitionInterval = setInterval(() => {
                         sendFrameForRecognition(video);
                     }, 5000);
                 })
                 .catch(err => {
                     console.error("Camera access denied:", err);
+                    addDebugInfo(`❌ Camera error: ${err.message}`);
                     alert("Unable to access the camera.");
                     setupForm.style.display = "block";
                     cameraContainer.style.display = "none";
@@ -182,40 +216,84 @@
                 stream.getTracks().forEach(track => track.stop());
             }
 
-            if (recognitionInterval) clearInterval(recognitionInterval);
+            if (recognitionInterval) {
+                clearInterval(recognitionInterval);
+                recognitionInterval = null;
+            }
 
+            addDebugInfo("🛑 Attendance session ended");
             alert("Attendance session ended.");
             window.close();
         }
 
         function sendFrameForRecognition(videoElement) {
+            if (!token || !courseName) {
+                addDebugInfo("❌ Missing token or course name");
+                console.error("Missing token or course name");
+                return;
+            }
+
             const canvas = document.createElement("canvas");
             canvas.width = videoElement.videoWidth;
             canvas.height = videoElement.videoHeight;
             const context = canvas.getContext("2d");
-            const courseName = document.getElementById("subject").value;
+            
             context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
             const base64Image = canvas.toDataURL("image/jpeg");
+
+            const requestData = {
+                image: base64Image,
+                course_name: courseName
+            };
+
+            const requestHeaders = {
+                "Content-Type": "application/json",
+                "Token": token
+            };
+
+            if (provider) {
+                requestHeaders["Provider"] = provider;
+            }
+
+            addDebugInfo(`🔄 Sending recognition request for course: ${courseName}`);
+            console.log("🔄 Sending request:", {
+                url: "https://sams-backend-u79d.onrender.com/api/useModel.php",
+                headers: requestHeaders,
+                bodyKeys: Object.keys(requestData),
+                imageLength: base64Image.length
+            });
 
             fetch("https://sams-backend-u79d.onrender.com/api/useModel.php", {
                 method: "POST",
-                body: JSON.stringify({
-                    image: base64Image,
-                    course_name: courseName
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                    "Token": window.token,
-                    "Provider": window.provider
-                }
-            }).then(response => response.json())
+                body: JSON.stringify(requestData),
+                headers: requestHeaders
+            })
+            .then(response => {
+                addDebugInfo(`📡 Response status: ${response.status}`);
+                return response.json();
+            })
             .then(data => {
+                addDebugInfo(`✅ Recognition response received`);
                 console.log("Recognition Result:", data);
-            }).catch(err => {
+                
+                // Display result to user if successful
+                if (data.success && data.recognition_result) {
+                    const result = data.recognition_result;
+                    if (result.recognized) {
+                        addDebugInfo(`👤 Student recognized: ${result.student_name} (${result.confidence}%)`);
+                        // You could show a notification here
+                    } else {
+                        addDebugInfo(`❓ No student recognized (confidence: ${result.confidence}%)`);
+                    }
+                } else if (data.error) {
+                    addDebugInfo(`❌ Error: ${data.error}`);
+                }
+            })
+            .catch(err => {
+                addDebugInfo(`❌ Network error: ${err.message}`);
                 console.error("Recognition error:", err);
             });
         }
-  </script>
+    </script>
 </body>
 </html>
