@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
                 
-                // Hide all cards first, then show only matching ones
+                // Update card visibility within visible sections
                 studentCards.forEach(card => {
                     if (card.dataset.grade === selectedGrade) {
                         card.classList.remove('hidden');
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     section.style.display = 'none';
                 });
                 
-                // Show sections that have matching cards
+                // Show sections that have matching cards and update card visibility
                 studentCards.forEach(card => {
                     if (card.dataset.section === selectedSection) {
                         // Show the parent section

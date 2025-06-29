@@ -251,6 +251,7 @@
 .student-card.hidden {
     display: none;
 }
+
 /* Mobile Responsiveness */
 @media only screen and (max-width: 1200px) {
     .students-grid {
