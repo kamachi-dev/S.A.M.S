@@ -243,6 +243,14 @@
     letter-spacing: 0.3px;
 }
 
+/* Hidden state for filtering */
+.grade-section.hidden {
+    display: none;
+}
+
+.student-card.hidden {
+    display: none;
+}
 /* Mobile Responsiveness */
 @media only screen and (max-width: 1200px) {
     .students-grid {
