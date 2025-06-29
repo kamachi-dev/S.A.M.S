@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show all sections and cards
                 gradeSections.forEach(section => {
                     section.classList.remove('hidden');
+                    section.style.display = 'block';
                 });
                 studentCards.forEach(card => {
                     card.classList.remove('hidden');
@@ -63,13 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 // Hide all sections first
                 gradeSections.forEach(section => {
-                    section.classList.add('hidden');
-                });
-                
-                // Show sections that match the selected grade
-                gradeSections.forEach(section => {
                     if (section.dataset.grade === selectedGrade) {
                         section.classList.remove('hidden');
+                        section.style.display = 'block';
+                    } else {
+                        section.classList.add('hidden');
+                        section.style.display = 'none';
                     }
                 });
                 
@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show all sections and cards
                 gradeSections.forEach(section => {
                     section.classList.remove('hidden');
+                    section.style.display = 'block';
                 });
                 studentCards.forEach(card => {
                     card.classList.remove('hidden');
@@ -113,29 +114,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Hide all sections first
                 gradeSections.forEach(section => {
                     section.classList.add('hidden');
+                    section.style.display = 'none';
                 });
                 
-                // Show sections that match the selected section
+                // Show sections that have matching cards
                 studentCards.forEach(card => {
                     if (card.dataset.section === selectedSection) {
                         // Show the parent section
                         const parentSection = card.closest('.grade-section');
                         if (parentSection) {
                             parentSection.classList.remove('hidden');
+                            parentSection.style.display = 'block';
                         }
                         card.classList.remove('hidden');
                         card.style.display = 'flex';
                     } else {
                         card.classList.add('hidden');
                         card.style.display = 'none';
-                    }
-                });
-                
-                // Hide sections that have no visible cards
-                gradeSections.forEach(section => {
-                    const visibleCardsInSection = section.querySelectorAll('.student-card:not(.hidden)');
-                    if (visibleCardsInSection.length === 0) {
-                        section.classList.add('hidden');
                     }
                 });
             }
