@@ -12,6 +12,87 @@ document.addEventListener('DOMContentLoaded', function() {
     const gradeSections = document.querySelectorAll('.grade-section');
     const studentCountElement = document.querySelector('.count-number');
     
+    // Combined filtering function
+    function applyFilters() {
+        const selectedGrade = gradeFilter.value;
+        const selectedSection = sectionFilter.value;
+        
+        // Hide all sections first
+        gradeSections.forEach(section => {
+            section.classList.add('hidden');
+            section.style.display = 'none';
+        });
+        
+        // Hide all cards first
+        studentCards.forEach(card => {
+            card.classList.add('hidden');
+            card.style.display = 'none';
+        });
+        
+        // Apply combined filtering logic
+        if (selectedGrade === 'all' && selectedSection === 'all') {
+            // Show everything
+            gradeSections.forEach(section => {
+                section.classList.remove('hidden');
+                section.style.display = 'block';
+            });
+            studentCards.forEach(card => {
+                card.classList.remove('hidden');
+                card.style.display = 'flex';
+            });
+        } else if (selectedGrade !== 'all' && selectedSection === 'all') {
+            // Filter by grade only
+            gradeSections.forEach(section => {
+                if (section.dataset.grade === selectedGrade) {
+                    section.classList.remove('hidden');
+                    section.style.display = 'block';
+                }
+            });
+            studentCards.forEach(card => {
+                if (card.dataset.grade === selectedGrade) {
+                    card.classList.remove('hidden');
+                    card.style.display = 'flex';
+                }
+            });
+        } else if (selectedGrade === 'all' && selectedSection !== 'all') {
+            // Filter by section only
+            studentCards.forEach(card => {
+                if (card.dataset.section === selectedSection) {
+                    // Show the parent section
+                    const parentSection = card.closest('.grade-section');
+                    if (parentSection) {
+                        parentSection.classList.remove('hidden');
+                        parentSection.style.display = 'block';
+                    }
+                    card.classList.remove('hidden');
+                    card.style.display = 'flex';
+                }
+            });
+        } else {
+            // Filter by both grade AND section
+            studentCards.forEach(card => {
+                if (card.dataset.grade === selectedGrade && card.dataset.section === selectedSection) {
+                    // Show the parent section
+                    const parentSection = card.closest('.grade-section');
+                    if (parentSection) {
+                        parentSection.classList.remove('hidden');
+                        parentSection.style.display = 'block';
+                    }
+                    card.classList.remove('hidden');
+                    card.style.display = 'flex';
+                }
+            });
+        }
+        
+        // Update student count
+        updateStudentCount();
+        
+        // Clear search when filters change
+        if (searchInput) {
+            searchInput.value = '';
+        }
+    }
+    
     // Search functionality
     if (searchInput) {
         searchInput.addEventListener('input', function() {
@@ -49,99 +130,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Grade filter functionality
     if (gradeFilter) {
         gradeFilter.addEventListener('change', function() {
-            const selectedGrade = this.value;
-            
-            if (selectedGrade === 'all') {
-                // Show all sections and cards
-                gradeSections.forEach(section => {
-                    section.classList.remove('hidden');
-                    section.style.display = 'block';
-                });
-                studentCards.forEach(card => {
-                    card.classList.remove('hidden');
-                    card.style.display = 'flex';
-                });
-            } else {
-                // Hide all sections first
-                gradeSections.forEach(section => {
-                    if (section.dataset.grade === selectedGrade) {
-                        section.classList.remove('hidden');
-                        section.style.display = 'block';
-                    } else {
-                        section.classList.add('hidden');
-                        section.style.display = 'none';
-                    }
-                });
-                
-                // Update card visibility within visible sections
-                studentCards.forEach(card => {
-                    if (card.dataset.grade === selectedGrade) {
-                        card.classList.remove('hidden');
-                        card.style.display = 'flex';
-                    } else {
-                        card.classList.add('hidden');
-                        card.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Update student count
-            updateStudentCount();
-            
-            // Clear search when filter changes
-            if (searchInput) {
-                searchInput.value = '';
-            }
+            applyFilters();
         });
     }
     
     // Section filter functionality
     if (sectionFilter) {
         sectionFilter.addEventListener('change', function() {
-            const selectedSection = this.value;
-            
-            if (selectedSection === 'all') {
-                // Show all sections and cards
-                gradeSections.forEach(section => {
-                    section.classList.remove('hidden');
-                    section.style.display = 'block';
-                });
-                studentCards.forEach(card => {
-                    card.classList.remove('hidden');
-                    card.style.display = 'flex';
-                });
-            } else {
-                // Hide all sections first
-                gradeSections.forEach(section => {
-                    section.classList.add('hidden');
-                    section.style.display = 'none';
-                });
-                
-                // Show sections that have matching cards and update card visibility
-                studentCards.forEach(card => {
-                    if (card.dataset.section === selectedSection) {
-                        // Show the parent section
-                        const parentSection = card.closest('.grade-section');
-                        if (parentSection) {
-                            parentSection.classList.remove('hidden');
-                            parentSection.style.display = 'block';
-                        }
-                        card.classList.remove('hidden');
-                        card.style.display = 'flex';
-                    } else {
-                        card.classList.add('hidden');
-                        card.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Update student count
-            updateStudentCount();
-            
-            // Clear search when filter changes
-            if (searchInput) {
-                searchInput.value = '';
-            }
+            applyFilters();
         });
     }
     
