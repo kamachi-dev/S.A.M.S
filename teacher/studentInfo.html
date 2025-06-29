@@ -41,16 +41,14 @@
                             <input type="text" placeholder="Search..." class="search-input">
                         </div>
                         <div class="filter-dropdowns">
-                            <select class="filter-select">
-                                <option disabled selected>Grade</option>
-                                <option value="all">All</option>
+                            <select class="filter-select" id="gradeFilter">
+                                <option value="all">All Grades</option>
                                 <option value="10">Grade 10</option>
                                 <option value="11">Grade 11</option>
                                 <option value="12">Grade 12</option>
                             </select>
-                            <select class="filter-select">
-                                <option disabled selected>Section</option>
-                                <option value="all">All</option>
+                            <select class="filter-select" id="sectionFilter">
+                                <option value="all">All Sections</option>
                                 <option value="cis12">CIS12</option>
                                 <option value="cis13">CIS13</option>
                                 <option value="cis23">CIS23</option>
@@ -63,12 +61,12 @@
                         </div>
                     </div>
 
-                    <div class="grade-section">
+                    <div class="grade-section" data-grade="10">
                         <h2 class="grade-title">Grade 10 Students</h2>
                         <h3 class="section-subtitle">CIS23</h3>
 
                         <div class="students-grid">
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Justine B. Cruz</div>
@@ -84,7 +82,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Sophia L. Garcia</div>
@@ -100,7 +98,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Daniel P. Reyes</div>
@@ -116,7 +114,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Isabella M. Santos</div>
@@ -132,7 +130,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Ethan K. Lim</div>
@@ -148,7 +146,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Olivia R. Tan</div>
@@ -164,7 +162,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Noah C. Dela Cruz</div>
@@ -180,7 +178,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Ava G. Mendoza</div>
@@ -196,7 +194,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Liam A. Ferrer</div>
@@ -212,7 +210,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Mia S. Ramos</div>
@@ -228,7 +226,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Benjamin D. Castro</div>
@@ -244,7 +242,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Chloe E. Torres</div>
@@ -260,7 +258,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">William F. Gomez</div>
@@ -276,7 +274,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Harper I. Gonzales</div>
@@ -292,7 +290,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="10" data-section="cis23">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Juan Carlos B. Antonio</div>
@@ -310,12 +308,12 @@
                         </div>
                     </div>
 
-                    <div class="grade-section">
+                    <div class="grade-section" data-grade="11">
                         <h2 class="grade-title">Grade 11 Students</h2>
                         <h3 class="section-subtitle">CIS56</h3>
 
                         <div class="students-grid">
-                            <div class="student-card">
+                            <div class="student-card" data-grade="11" data-section="cis56">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Francis Homer B. Sanchez</div>
@@ -331,7 +329,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="11" data-section="cis56">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Ella Grace V. Rivera</div>
@@ -347,7 +345,7 @@
                                 </div>
                             </div>
 
-                            <div class="student-card">
+                            <div class="student-card" data-grade="11" data-section="cis56">
                                 <img src="/assets/Sample.png" alt="Student" class="student-photo">
                                 <div class="student-info">
                                     <div class="student-name">Angelo Justine B. Alcantara</div>

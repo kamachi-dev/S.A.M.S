@@ -7,13 +7,10 @@ function TogglePopup() {
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('.search-input');
     const studentCards = document.querySelectorAll('.student-card');
-    const gradeFilters = document.querySelectorAll('.filter-select');
+    const gradeFilter = document.getElementById('gradeFilter');
+    const sectionFilter = document.getElementById('sectionFilter');
     const gradeSections = document.querySelectorAll('.grade-section');
     const studentCountElement = document.querySelector('.count-number');
-    
-    // Get the specific filter dropdowns
-    const gradeFilter = gradeFilters[0]; // First dropdown (Grade)
-    const sectionFilter = gradeFilters[1]; // Second dropdown (Section)
     
     // Search functionality
     if (searchInput) {
@@ -71,17 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Show sections that match the selected grade
                 gradeSections.forEach(section => {
-                    const sectionTitle = section.querySelector('.grade-title').textContent;
-                    if (sectionTitle.includes(`Grade ${selectedGrade}`)) {
+                    if (section.dataset.grade === selectedGrade) {
                         section.classList.remove('hidden');
                     }
                 });
                 
                 // Hide all cards first, then show only matching ones
                 studentCards.forEach(card => {
-                    // Check if the card's parent section is visible
-                    const parentSection = card.closest('.grade-section');
-                    if (parentSection && !parentSection.classList.contains('hidden')) {
+                    if (card.dataset.grade === selectedGrade) {
                         card.classList.remove('hidden');
                         card.style.display = 'flex';
                     } else {
@@ -122,23 +116,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 // Show sections that match the selected section
-                gradeSections.forEach(section => {
-                    const sectionSubtitle = section.querySelector('.section-subtitle');
-                    if (sectionSubtitle && sectionSubtitle.textContent.toLowerCase().includes(selectedSection)) {
-                        section.classList.remove('hidden');
-                    }
-                });
-                
-                // Hide all cards first, then show only matching ones
                 studentCards.forEach(card => {
-                    // Check if the card's parent section is visible
-                    const parentSection = card.closest('.grade-section');
-                    if (parentSection && !parentSection.classList.contains('hidden')) {
+                    if (card.dataset.section === selectedSection) {
+                        // Show the parent section
+                        const parentSection = card.closest('.grade-section');
+                        if (parentSection) {
+                            parentSection.classList.remove('hidden');
+                        }
                         card.classList.remove('hidden');
                         card.style.display = 'flex';
                     } else {
                         card.classList.add('hidden');
                         card.style.display = 'none';
+                    }
+                });
+                
+                // Hide sections that have no visible cards
+                gradeSections.forEach(section => {
+                    const visibleCardsInSection = section.querySelectorAll('.student-card:not(.hidden)');
+                    if (visibleCardsInSection.length === 0) {
+                        section.classList.add('hidden');
                     }
                 });
             }
