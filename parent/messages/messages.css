@@ -43,6 +43,7 @@
 }
 
 .filter-content input {
+    width: 30%;
     margin-right: 9px;
 }
 

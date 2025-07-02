@@ -46,6 +46,22 @@ function formatTimestamp(dateString) {
     }
 }
 
+function levenshtein(a, b) {
+    const dp = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+            );
+        }
+    }
+    return dp[a.length][b.length];
+}
+
 function getCourseRecords(id) {
     fetch(`https://sams-backend-u79d.onrender.com/api/getCourseRecords.php?course=${id}`, {
         credentials: 'include',
@@ -106,23 +122,27 @@ function getCourses() {
         .then(res => res.json())
         .then(data => {
             if (!window.verifyToken(data)) return;
+            const filter = document.querySelector('#search-input').value;
             const leftContent = document.querySelector('.left-content');
             leftContent.innerHTML = '';
 
             data.forEach(course => {
-                clone = courseHTML.querySelector('.course-root').cloneNode(true);
-                clone.id = `course-${course['id']}`;
-                clone.querySelector('#pfp').src = course['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : course['pfp'];
-                clone.querySelector('.course-name').textContent = course['name'];
-                clone.querySelector('.course-preview').textContent = `${attendanceArr[parseInt(course['attendance'])]} : ${course['firstname']} ${course['lastname']}`;
-                clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
-                clone.addEventListener('click', () => {
-                    course_id = course['id'];
-                    getCourseRecords(course['id']);
-                    const leftContent = document.querySelector('.middle-part');
-                    leftContent.innerHTML = 'loading...';
-                });
-                leftContent.appendChild(clone);
+                if (filter !== '' && levenshtein(filter, course['name']) > 2) console.log(`filtered out ${course['name']}`);
+                else {
+                    clone = courseHTML.querySelector('.course-root').cloneNode(true);
+                    clone.id = `course-${course['id']}`;
+                    clone.querySelector('#pfp').src = course['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : course['pfp'];
+                    clone.querySelector('.course-name').textContent = course['name'];
+                    clone.querySelector('.course-preview').textContent = `${attendanceArr[parseInt(course['attendance'])]} : ${course['firstname']} ${course['lastname']}`;
+                    clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
+                    clone.addEventListener('click', () => {
+                        course_id = course['id'];
+                        getCourseRecords(course['id']);
+                        const leftContent = document.querySelector('.middle-part');
+                        leftContent.innerHTML = 'loading...';
+                    });
+                    leftContent.appendChild(clone);
+                }
             });
         });
 }
@@ -154,3 +174,6 @@ fetch('/assets/templates/course.html')
         getCourses();
     });
 
+document.querySelector("#myInput").addEventListener("input", (e) => {
+    getCourses();
+});
