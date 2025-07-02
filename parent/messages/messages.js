@@ -127,7 +127,7 @@ function getCourses() {
             leftContent.innerHTML = '';
 
             data.forEach(course => {
-                if (filter !== '' && levenshtein(filter, course['name']) > 2) console.log(`filtered out ${course['name']}`);
+                if (filter !== '' && levenshtein(filter, course['name']) > 4) console.log(`filtered out ${course['name']}`);
                 else {
                     clone = courseHTML.querySelector('.course-root').cloneNode(true);
                     clone.id = `course-${course['id']}`;
@@ -174,6 +174,6 @@ fetch('/assets/templates/course.html')
         getCourses();
     });
 
-document.querySelector("#myInput").addEventListener("input", (e) => {
+document.querySelector("#search-input").addEventListener("input", (e) => {
     getCourses();
 });
