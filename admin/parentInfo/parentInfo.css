@@ -153,58 +153,88 @@
 }
 
 /* Contact Info Container */
-.contact-info {
+.action-buttons {
     display: flex;
     flex-direction: column;
     gap: 8px;
     align-items: flex-end;
 }
 
-/* Parent-specific color scheme for badges */
-.phone-badge {
+/* Action Buttons */
+.details-btn, .delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 80px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.details-btn {
     background: #6366F1;
     color: white;
-    padding: 10px 16px;
-    border-radius: 18px;
-    font-weight: bold;
-    font-size: 13px;
-    min-width: 110px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
-    transition: background-color 0.2s ease;
 }
 
-.phone-badge:hover {
+.details-btn:hover {
     background: #4F46E5;
+    transform: translateY(-1px);
 }
 
-.email-badge {
-    background: #8B5CF6;
+.delete-btn {
+    background: #E74C3C;
     color: white;
-    padding: 8px 14px;
-    border-radius: 16px;
-    font-weight: 500;
-    font-size: 11px;
-    min-width: 110px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
-    transition: background-color 0.2s ease;
 }
 
-.email-badge:hover {
-    background: #7C3AED;
+.delete-btn:hover {
+    background: #C0392B;
+    transform: translateY(-1px);
 }
 
-.phone-number {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.email-address {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-info {
+    margin-top: 20px;
+}
+
+.modal-info p {
+    margin: 10px 0;
+    font-size: 16px;
 }
 
 /* Hidden state for filtering */
@@ -254,14 +284,19 @@
         margin-bottom: 10px;
     }
 
-    .contact-info {
+    .action-buttons {
         align-items: center;
         width: 100%;
     }
 
-    .phone-badge, .email-badge {
-        min-width: 140px;
+    .details-btn, .delete-btn {
+        min-width: 120px;
         font-size: 12px;
+    }
+
+    .modal-content {
+        margin: 50% auto;
+        width: 300px;
     }
 
     .menu {

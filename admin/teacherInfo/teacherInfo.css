@@ -149,198 +149,88 @@
 }
 
 /* Contact Info Container */
-.contact-info {
+.action-buttons {
     display: flex;
     flex-direction: column;
     gap: 8px;
     align-items: flex-end;
 }
 
-/* Subject-specific color schemes for badges */
-.phone-badge {
-    color: white;
-    padding: 10px 16px;
-    border-radius: 18px;
+/* Action Buttons */
+.details-btn, .delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
     font-weight: bold;
-    font-size: 13px;
-    min-width: 110px;
+    font-size: 12px;
+    min-width: 80px;
     text-align: center;
-    transition: background-color 0.2s ease;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.email-badge {
+.details-btn {
+    background: #4A90E2;
     color: white;
-    padding: 8px 14px;
-    border-radius: 16px;
-    font-weight: 500;
-    font-size: 11px;
-    min-width: 110px;
-    text-align: center;
-    transition: background-color 0.2s ease;
 }
 
-/* Mathematics - Blue */
-.phone-badge.mathematics {
-    background: #2563EB;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+.details-btn:hover {
+    background: #357ABD;
+    transform: translateY(-1px);
 }
 
-.phone-badge.mathematics:hover {
-    background: #1D4ED8;
+.delete-btn {
+    background: #E74C3C;
+    color: white;
 }
 
-.email-badge.mathematics {
-    background: #1E40AF;
-    box-shadow: 0 2px 6px rgba(30, 64, 175, 0.3);
+.delete-btn:hover {
+    background: #C0392B;
+    transform: translateY(-1px);
 }
 
-.email-badge.mathematics:hover {
-    background: #1E3A8A;
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Science - Green */
-.phone-badge.science {
-    background: #059669;
-    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.phone-badge.science:hover {
-    background: #047857;
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
 }
 
-.email-badge.science {
-    background: #047857;
-    box-shadow: 0 2px 6px rgba(4, 120, 87, 0.3);
+.close:hover {
+    color: #000;
 }
 
-.email-badge.science:hover {
-    background: #065F46;
+.modal-info {
+    margin-top: 20px;
 }
 
-/* English - Purple */
-.phone-badge.english {
-    background: #7C3AED;
-    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
-}
-
-.phone-badge.english:hover {
-    background: #6D28D9;
-}
-
-.email-badge.english {
-    background: #6D28D9;
-    box-shadow: 0 2px 6px rgba(109, 40, 217, 0.3);
-}
-
-.email-badge.english:hover {
-    background: #5B21B6;
-}
-
-/* History - Brown */
-.phone-badge.history {
-    background: #92400E;
-    box-shadow: 0 2px 6px rgba(146, 64, 14, 0.3);
-}
-
-.phone-badge.history:hover {
-    background: #78350F;
-}
-
-.email-badge.history {
-    background: #78350F;
-    box-shadow: 0 2px 6px rgba(120, 53, 15, 0.3);
-}
-
-.email-badge.history:hover {
-    background: #451A03;
-}
-
-/* Filipino - Red */
-.phone-badge.filipino {
-    background: #DC2626;
-    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
-}
-
-.phone-badge.filipino:hover {
-    background: #B91C1C;
-}
-
-.email-badge.filipino {
-    background: #B91C1C;
-    box-shadow: 0 2px 6px rgba(185, 28, 28, 0.3);
-}
-
-.email-badge.filipino:hover {
-    background: #991B1B;
-}
-
-/* Arts - Pink */
-.phone-badge.arts {
-    background: #DB2777;
-    box-shadow: 0 2px 6px rgba(219, 39, 119, 0.3);
-}
-
-.phone-badge.arts:hover {
-    background: #BE185D;
-}
-
-.email-badge.arts {
-    background: #BE185D;
-    box-shadow: 0 2px 6px rgba(190, 24, 93, 0.3);
-}
-
-.email-badge.arts:hover {
-    background: #9D174D;
-}
-
-/* Economics - Orange */
-.phone-badge.economics {
-    background: #EA580C;
-    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
-}
-
-.phone-badge.economics:hover {
-    background: #C2410C;
-}
-
-.email-badge.economics {
-    background: #C2410C;
-    box-shadow: 0 2px 6px rgba(194, 65, 12, 0.3);
-}
-
-.email-badge.economics:hover {
-    background: #9A3412;
-}
-
-/* Physical Education - Teal */
-.phone-badge.physical-education {
-    background: #0891B2;
-    box-shadow: 0 2px 6px rgba(8, 145, 178, 0.3);
-}
-
-.phone-badge.physical-education:hover {
-    background: #0E7490;
-}
-
-.email-badge.physical-education {
-    background: #0E7490;
-    box-shadow: 0 2px 6px rgba(14, 116, 144, 0.3);
-}
-
-.email-badge.physical-education:hover {
-    background: #155E75;
-}
-
-.phone-number {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-.email-address {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
+.modal-info p {
+    margin: 10px 0;
+    font-size: 16px;
 }
 
 /* Hidden state for filtering */
@@ -390,14 +280,19 @@
         margin-bottom: 10px;
     }
 
-    .contact-info {
+    .action-buttons {
         align-items: center;
         width: 100%;
     }
 
-    .phone-badge, .email-badge {
-        min-width: 140px;
+    .details-btn, .delete-btn {
+        min-width: 120px;
         font-size: 12px;
+    }
+
+    .modal-content {
+        margin: 50% auto;
+        width: 300px;
     }
 
     .menu {

@@ -102,5 +102,34 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTeacherCount();
 });
 
-// Mobile menu functionality (inherited from general.js)
-// Additional teacher info specific functionality can be added here
+// Modal functionality
+function showTeacherDetails(name, phone, email) {
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalPhone').textContent = phone;
+    document.getElementById('modalEmail').textContent = email;
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+function closeDetailsModal() {
+    document.getElementById('detailsModal').style.display = 'none';
+}
+
+function deleteTeacher(button) {
+    if (confirm('Are you sure you want to delete this teacher?')) {
+        const teacherCard = button.closest('.teacher-card');
+        teacherCard.remove();
+        
+        // Update teacher count after deletion
+        const teacherCountElement = document.querySelector('.count-number');
+        const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
+        teacherCountElement.textContent = visibleCards.length;
+    }
+}
+
+// Close modal when clicking outside of it
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('detailsModal');
+    if (event.target === modal) {
+        closeDetailsModal();
+    }
+});

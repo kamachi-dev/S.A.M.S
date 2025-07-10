@@ -43,35 +43,6 @@
                             <input type="text" placeholder="Search parents..." class="search-input">
                         </div>
                         <div class="filter-dropdowns">
-                            <select class="filter-select" id="letterFilter">
-                                <option value="all">All Letters</option>
-                                <option value="a">A</option>
-                                <option value="b">B</option>
-                                <option value="c">C</option>
-                                <option value="d">D</option>
-                                <option value="e">E</option>
-                                <option value="f">F</option>
-                                <option value="g">G</option>
-                                <option value="h">H</option>
-                                <option value="i">I</option>
-                                <option value="j">J</option>
-                                <option value="k">K</option>
-                                <option value="l">L</option>
-                                <option value="m">M</option>
-                                <option value="n">N</option>
-                                <option value="o">O</option>
-                                <option value="p">P</option>
-                                <option value="q">Q</option>
-                                <option value="r">R</option>
-                                <option value="s">S</option>
-                                <option value="t">T</option>
-                                <option value="u">U</option>
-                                <option value="v">V</option>
-                                <option value="w">W</option>
-                                <option value="x">X</option>
-                                <option value="y">Y</option>
-                                <option value="z">Z</option>
-                            </select>
                             <select class="filter-select" id="gradeFilter">
                                 <option value="all">All Grades</option>
                                 <option value="10">Grade 10</option>
@@ -103,13 +74,9 @@
                                     <div class="parent-name">Mr. Roberto C. Alvarez</div>
                                     <div class="parent-id">2006928901</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0301</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">r.alvarez@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Roberto C. Alvarez', '(555) 0301', 'r.alvarez@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -119,13 +86,9 @@
                                     <div class="parent-name">Mrs. Carmen D. Antonio</div>
                                     <div class="parent-id">2006928902</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0302</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">c.antonio@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Carmen D. Antonio', '(555) 0302', 'c.antonio@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -135,13 +98,9 @@
                                     <div class="parent-name">Mr. Fernando L. Aquino</div>
                                     <div class="parent-id">2006928903</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0303</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">f.aquino@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Fernando L. Aquino', '(555) 0303', 'f.aquino@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -157,13 +116,9 @@
                                     <div class="parent-name">Mrs. Maria S. Bautista</div>
                                     <div class="parent-id">2006928904</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0304</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">m.bautista@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Maria S. Bautista', '(555) 0304', 'm.bautista@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -173,13 +128,9 @@
                                     <div class="parent-name">Mr. Jose R. Bernardo</div>
                                     <div class="parent-id">2006928905</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0305</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">j.bernardo@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Jose R. Bernardo', '(555) 0305', 'j.bernardo@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -189,13 +140,9 @@
                                     <div class="parent-name">Mrs. Ana P. Buenaventura</div>
                                     <div class="parent-id">2006928906</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0306</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">a.buenaventura@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Ana P. Buenaventura', '(555) 0306', 'a.buenaventura@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -211,13 +158,9 @@
                                     <div class="parent-name">Mr. Ricardo M. Cruz</div>
                                     <div class="parent-id">2006928907</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0307</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">r.cruz@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Ricardo M. Cruz', '(555) 0307', 'r.cruz@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -227,13 +170,9 @@
                                     <div class="parent-name">Mrs. Elena V. Castro</div>
                                     <div class="parent-id">2006928908</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0308</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">e.castro@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Elena V. Castro', '(555) 0308', 'e.castro@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -243,13 +182,9 @@
                                     <div class="parent-name">Mr. Miguel A. Cabrera</div>
                                     <div class="parent-id">2006928909</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0309</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">m.cabrera@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Miguel A. Cabrera', '(555) 0309', 'm.cabrera@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -265,13 +200,9 @@
                                     <div class="parent-name">Mrs. Rosa T. Dela Cruz</div>
                                     <div class="parent-id">2006928910</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0310</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">r.delacruz@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Rosa T. Dela Cruz', '(555) 0310', 'r.delacruz@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -281,13 +212,9 @@
                                     <div class="parent-name">Mr. Antonio G. Domingo</div>
                                     <div class="parent-id">2006928911</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0311</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">a.domingo@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Antonio G. Domingo', '(555) 0311', 'a.domingo@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -297,13 +224,9 @@
                                     <div class="parent-name">Mrs. Luz B. Dizon</div>
                                     <div class="parent-id">2006928912</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0312</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">l.dizon@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Luz B. Dizon', '(555) 0312', 'l.dizon@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -319,13 +242,9 @@
                                     <div class="parent-name">Mr. Carlos E. Garcia</div>
                                     <div class="parent-id">2006928913</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0313</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">c.garcia@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Carlos E. Garcia', '(555) 0313', 'c.garcia@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -335,13 +254,9 @@
                                     <div class="parent-name">Mrs. Patricia L. Gonzales</div>
                                     <div class="parent-id">2006928914</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0314</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">p.gonzales@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Patricia L. Gonzales', '(555) 0314', 'p.gonzales@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -351,13 +266,9 @@
                                     <div class="parent-name">Mr. Eduardo S. Gutierrez</div>
                                     <div class="parent-id">2006928915</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0315</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">e.gutierrez@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Eduardo S. Gutierrez', '(555) 0315', 'e.gutierrez@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -373,13 +284,9 @@
                                     <div class="parent-name">Mrs. Gloria M. Lopez</div>
                                     <div class="parent-id">2006928916</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0316</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">g.lopez@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Gloria M. Lopez', '(555) 0316', 'g.lopez@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -389,13 +296,9 @@
                                     <div class="parent-name">Mr. Ramon P. Luna</div>
                                     <div class="parent-id">2006928917</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0317</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">r.luna@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Ramon P. Luna', '(555) 0317', 'r.luna@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -405,13 +308,9 @@
                                     <div class="parent-name">Mrs. Esperanza R. Lim</div>
                                     <div class="parent-id">2006928918</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0318</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">e.lim@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Esperanza R. Lim', '(555) 0318', 'e.lim@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -427,13 +326,9 @@
                                     <div class="parent-name">Mr. Francisco J. Reyes</div>
                                     <div class="parent-id">2006928919</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0319</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">f.reyes@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Francisco J. Reyes', '(555) 0319', 'f.reyes@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -443,13 +338,9 @@
                                     <div class="parent-name">Mrs. Marilyn C. Rodriguez</div>
                                     <div class="parent-id">2006928920</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0320</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">m.rodriguez@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Marilyn C. Rodriguez', '(555) 0320', 'm.rodriguez@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -459,13 +350,9 @@
                                     <div class="parent-name">Mr. Benjamin D. Ramos</div>
                                     <div class="parent-id">2006928921</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0321</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">b.ramos@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Benjamin D. Ramos', '(555) 0321', 'b.ramos@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -481,13 +368,9 @@
                                     <div class="parent-name">Mrs. Teresita F. Santos</div>
                                     <div class="parent-id">2006928922</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0322</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">t.santos@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Teresita F. Santos', '(555) 0322', 't.santos@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -497,13 +380,9 @@
                                     <div class="parent-name">Mr. Alfredo H. Silva</div>
                                     <div class="parent-id">2006928923</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0323</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">a.silva@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Alfredo H. Silva', '(555) 0323', 'a.silva@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -513,13 +392,9 @@
                                     <div class="parent-name">Mrs. Corazon N. Soriano</div>
                                     <div class="parent-id">2006928924</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0324</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">c.soriano@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Corazon N. Soriano', '(555) 0324', 'c.soriano@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -535,13 +410,9 @@
                                     <div class="parent-name">Mr. Manuel K. Villanueva</div>
                                     <div class="parent-id">2006928925</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0325</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">m.villanueva@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Manuel K. Villanueva', '(555) 0325', 'm.villanueva@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -551,13 +422,9 @@
                                     <div class="parent-name">Mrs. Remedios Q. Valdez</div>
                                     <div class="parent-id">2006928926</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0326</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">r.valdez@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mrs. Remedios Q. Valdez', '(555) 0326', 'r.valdez@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
 
@@ -567,18 +434,26 @@
                                     <div class="parent-name">Mr. Ernesto W. Velasco</div>
                                     <div class="parent-id">2006928927</div>
                                 </div>
-                                <div class="contact-info">
-                                    <div class="phone-badge">
-                                        <span class="phone-number">(555) 0327</span>
-                                    </div>
-                                    <div class="email-badge">
-                                        <span class="email-address">e.velasco@gmail.com</span>
-                                    </div>
+                                <div class="action-buttons">
+                                    <button class="details-btn" onclick="showParentDetails('Mr. Ernesto W. Velasco', '(555) 0327', 'e.velasco@gmail.com')">Details</button>
+                                    <button class="delete-btn" onclick="deleteParent(this)">Delete</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDetailsModal()">&times;</span>
+            <h2 id="modalName">Parent Details</h2>
+            <div class="modal-info">
+                <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
             </div>
         </div>
     </div>

@@ -52,54 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Letter filter functionality
-    if (letterFilter) {
-        letterFilter.addEventListener('change', function() {
-            const selectedLetter = this.value;
-            
-            if (selectedLetter === 'all') {
-                // Show all sections and cards
-                letterSections.forEach(section => {
-                    section.classList.remove('hidden');
-                });
-                parentCards.forEach(card => {
-                    card.classList.remove('hidden');
-                    card.style.display = 'flex';
-                });
-            } else {
-                // Hide all sections first
-                letterSections.forEach(section => {
-                    section.classList.add('hidden');
-                });
-                
-                // Show only the selected letter section
-                const targetSection = document.querySelector(`[data-letter="${selectedLetter}"]`);
-                if (targetSection) {
-                    targetSection.classList.remove('hidden');
-                }
-                
-                // Hide all cards first, then show only matching ones
-                parentCards.forEach(card => {
-                    if (card.dataset.letter === selectedLetter) {
-                        card.classList.remove('hidden');
-                        card.style.display = 'flex';
-                    } else {
-                        card.classList.add('hidden');
-                        card.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Update parent count
-            updateParentCount();
-            
-            // Clear search when filter changes
-            if (searchInput) {
-                searchInput.value = '';
-            }
-        });
-    }
-    
     // Grade filter functionality (placeholder for future use)
     if (gradeFilter) {
         gradeFilter.addEventListener('change', function() {
@@ -129,5 +81,34 @@ document.addEventListener('DOMContentLoaded', function() {
     updateParentCount();
 });
 
-// Mobile menu functionality (inherited from general.js)
-// Additional parent info specific functionality can be added here
+// Modal functionality
+function showParentDetails(name, phone, email) {
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalPhone').textContent = phone;
+    document.getElementById('modalEmail').textContent = email;
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+function closeDetailsModal() {
+    document.getElementById('detailsModal').style.display = 'none';
+}
+
+function deleteParent(button) {
+    if (confirm('Are you sure you want to delete this parent?')) {
+        const parentCard = button.closest('.parent-card');
+        parentCard.remove();
+        
+        // Update parent count after deletion
+        const parentCountElement = document.querySelector('.count-number');
+        const visibleCards = document.querySelectorAll('.parent-card:not(.hidden)');
+        parentCountElement.textContent = visibleCards.length;
+    }
+}
+
+// Close modal when clicking outside of it
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('detailsModal');
+    if (event.target === modal) {
+        closeDetailsModal();
+    }
+});
