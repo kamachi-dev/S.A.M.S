@@ -32,10 +32,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
+            // Hide/show subject sections based on whether they have visible cards
+            subjectSections.forEach(section => {
+                const visibleCardsInSection = section.querySelectorAll('.teacher-card[style*="flex"]');
+                if (searchTerm && visibleCardsInSection.length === 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+            
             // Update count based on search results
             if (searchTerm) {
                 teacherCountElement.textContent = visibleCount;
             } else {
+                // Show all sections when search is cleared
+                subjectSections.forEach(section => {
+                    section.style.display = 'block';
+                });
                 updateTeacherCount();
             }
         });

@@ -36,10 +36,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
+            // Hide/show letter sections based on whether they have visible cards
+            letterSections.forEach(section => {
+                const visibleCardsInSection = section.querySelectorAll('.parent-card[style*="flex"]');
+                if (searchTerm && visibleCardsInSection.length === 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+            
             // Update count based on search results
             if (searchTerm) {
                 parentCountElement.textContent = visibleCount;
             } else {
+                // Show all sections when search is cleared
+                letterSections.forEach(section => {
+                    section.style.display = 'block';
+                });
                 updateParentCount();
             }
         });
