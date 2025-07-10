@@ -7,7 +7,6 @@ function TogglePopup() {
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('.search-input');
     const parentCards = document.querySelectorAll('.parent-card');
-    const letterFilter = document.getElementById('letterFilter');
     const gradeFilter = document.getElementById('gradeFilter');
     const sectionFilter = document.getElementById('sectionFilter');
     const letterSections = document.querySelectorAll('.letter-section');
@@ -21,19 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             parentCards.forEach(card => {
                 const parentName = card.querySelector('.parent-name').textContent.toLowerCase();
-                const parentId = card.querySelector('.parent-id').textContent.toLowerCase();
-                const phoneNumber = card.querySelector('.phone-number').textContent.toLowerCase();
-                const emailAddress = card.querySelector('.email-address').textContent.toLowerCase();
                 
                 // Extract last name for search (everything after the last space)
                 const nameParts = parentName.split(' ');
                 const lastName = nameParts[nameParts.length - 1];
                 
                 const isVisible = parentName.includes(searchTerm) || 
-                    lastName.includes(searchTerm) ||
-                    parentId.includes(searchTerm) || 
-                    phoneNumber.includes(searchTerm) ||
-                    emailAddress.includes(searchTerm);
+                    lastName.includes(searchTerm);
                 
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';

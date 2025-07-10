@@ -20,13 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
             teacherCards.forEach(card => {
                 const teacherName = card.querySelector('.teacher-name').textContent.toLowerCase();
                 const teacherId = card.querySelector('.teacher-id').textContent.toLowerCase();
-                const phoneNumber = card.querySelector('.phone-number').textContent.toLowerCase();
-                const emailAddress = card.querySelector('.email-address').textContent.toLowerCase();
                 
                 const isVisible = teacherName.includes(searchTerm) || 
-                    teacherId.includes(searchTerm) || 
-                    phoneNumber.includes(searchTerm) ||
-                    emailAddress.includes(searchTerm);
+                    teacherId.includes(searchTerm);
                 
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';
