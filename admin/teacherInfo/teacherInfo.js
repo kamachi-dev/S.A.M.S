@@ -2,7 +2,7 @@ function TogglePopup() {
     const popup = document.getElementById("popup");
     popup.classList.toggle("show");
 }
-const teachers = null;
+let teachers = null;
 
 // Search functionality
 function teacherGrid(data) {
