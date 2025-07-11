@@ -103,7 +103,7 @@ function teacherGrid(data) {
 
         teachers = new Set();
         visibleCards.forEach(card => {
-            teachers.add(`${card.querySelector('.teacher-name')}`);
+            teachers.add(`${card.querySelector('.teacher-name').innerText}`);
         });
         teacherCountElement.textContent = teachers.size;
     }
@@ -165,6 +165,9 @@ async function init() {
             const box = document.querySelector('.content');
             let grid = null;
             let prevDepartment = '';
+            const filterBox = document.querySelector('.filter-select');
+            courseCodes = new Set();
+            //update teachers and filters
             data.forEach((row) => {
                 if (prevDepartment != row['department']) {
                     const sec = document.createElement('div');
@@ -181,8 +184,9 @@ async function init() {
                     prevDepartment = row['department'];
                 }
                 let courses = ''
-                JSON.parse(row['code']).forEach((course_i) => {
+                JSON.parse(row['code']).forEach((course_i, i) => {
                     courses += `${course_i} `;
+                    courseCodes.add([row['code'][i], row['course'][i]]);
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = row['department'];
@@ -193,6 +197,14 @@ async function init() {
                 grid.appendChild(clone)
             })
             document.querySelector('.loader').remove();
+
+            //update filters
+            courseCodes.forEach(({ code, name }) => {
+                const option = document.createElement('option');
+                option.value = code;
+                option.innerText = name;
+                filterBox.appendChild(option);
+            });
 
             teacherGrid(data);
         });
