@@ -162,7 +162,7 @@ async function init() {
     })
         .then(res => res.json())
         .then(data => {
-            const box = document.querySelector('content');
+            const box = document.querySelector('.content');
             let grid = null;
             let prevDepartment = '';
             data.forEach((row) => {
