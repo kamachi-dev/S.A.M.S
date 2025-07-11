@@ -185,7 +185,7 @@ async function init() {
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = row['pfp'];
-                clone.querySelector('.details-button').onclick = `showTeacherDetails('${row['firstname']} ${row['lastname']}', '${row['phone']}', '${row[email]}')`
+                clone.querySelector('.details-btn').onclick = `showTeacherDetails('${row['firstname']} ${row['lastname']}', '${row['phone']}', '${row[email]}')`
                 grid.appendChild(clone)
             })
         });
