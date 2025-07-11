@@ -72,8 +72,8 @@ function teacherGrid(data) {
 
                 // Hide all cards first, then show only matching ones
                 teacherCards.forEach(card => {
-                    if (JSON.parse(card.dataset.subject).contains(selectedSubject)) {
-                        card.classList.remove('hidden').classList.remove('hidden');
+                    if (JSON.parse(card.dataset.subject).includes(selectedSubject)) {
+                        card.classList.remove('hidden');
                         card.closest('.subject-section')
                         card.style.display = 'flex';
                     } else {
