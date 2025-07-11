@@ -144,6 +144,8 @@ window.addEventListener('click', function (event) {
     }
 });
 
+const parser = new DOMParser();
+
 async function init() {
     const html = await fetch('/assets/templates/teacher.html')
         .then(res => res.text())
