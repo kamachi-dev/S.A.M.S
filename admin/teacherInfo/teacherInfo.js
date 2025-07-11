@@ -4,18 +4,22 @@ function TogglePopup() {
 }
 
 // Search functionality
-document.addEventListener('DOMContentLoaded', function () {
+function teacherGrid(data) {
     const searchInput = document.querySelector('.search-input');
     const teacherCards = document.querySelectorAll('.teacher-card');
     const subjectFilter = document.getElementById('subjectFilter');
     const subjectSections = document.querySelectorAll('.subject-section');
     const teacherCountElement = document.querySelector('.count-number');
 
+    const teachers = new Set();
+    data.forEach(entry => {
+        teachers.add(`${entry.firstname}|${entry.lastname}|${entry.email}`);
+    });
+
     // Search functionality
     if (searchInput) {
         searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase();
-            let visibleCount = 0;
 
             teacherCards.forEach(card => {
                 const teacherName = card.querySelector('.teacher-name').textContent.toLowerCase();
@@ -26,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
@@ -44,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Update count based on search results
             if (searchTerm) {
-                teacherCountElement.textContent = visibleCount;
+                teacherCountElement.textContent = teachers.size;
             } else {
                 // Show all sections when search is cleared
                 subjectSections.forEach(section => {
@@ -110,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize count
     updateTeacherCount();
-});
+}
 
 // Modal functionality
 function showTeacherDetails(name, phone, email) {
@@ -193,6 +196,8 @@ async function init() {
                 grid.appendChild(clone)
             })
             document.querySelector('.loader').remove();
+
+            teacherGrid(data);
         });
 }
 
