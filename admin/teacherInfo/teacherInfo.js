@@ -157,6 +157,7 @@ async function init() {
     })
         .then(res => res.json())
         .then(data => {
+            if (!window.verifyToken(data)) return;
             const box = document.querySelector('.content');
             let grid = null;
             let prevDepartment = '';
