@@ -198,8 +198,9 @@ async function init() {
             })
             document.querySelector('.loader').remove();
 
-            //update filters
-            courseCodes.forEach(({ code, name }) => {
+            //update 
+            filterBox.innerHTML = '';
+            courseCodes.forEach(([code, name]) => {
                 const option = document.createElement('option');
                 option.value = code;
                 option.innerText = name;
