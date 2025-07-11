@@ -4,26 +4,26 @@ function TogglePopup() {
 }
 
 // Search functionality
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.querySelector('.search-input');
     const teacherCards = document.querySelectorAll('.teacher-card');
     const subjectFilter = document.getElementById('subjectFilter');
     const subjectSections = document.querySelectorAll('.subject-section');
     const teacherCountElement = document.querySelector('.count-number');
-    
+
     // Search functionality
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase();
             let visibleCount = 0;
-            
+
             teacherCards.forEach(card => {
                 const teacherName = card.querySelector('.teacher-name').textContent.toLowerCase();
                 const teacherId = card.querySelector('.teacher-id').textContent.toLowerCase();
-                
-                const isVisible = teacherName.includes(searchTerm) || 
+
+                const isVisible = teacherName.includes(searchTerm) ||
                     teacherId.includes(searchTerm);
-                
+
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';
                     visibleCount++;
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'none';
                 }
             });
-            
+
             // Hide/show subject sections based on whether they have visible cards
             subjectSections.forEach(section => {
                 const visibleCardsInSection = section.querySelectorAll('.teacher-card[style*="flex"]');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     section.style.display = 'block';
                 }
             });
-            
+
             // Update count based on search results
             if (searchTerm) {
                 teacherCountElement.textContent = visibleCount;
@@ -54,12 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Subject filter functionality
     if (subjectFilter) {
-        subjectFilter.addEventListener('change', function() {
+        subjectFilter.addEventListener('change', function () {
             const selectedSubject = this.value;
-            
+
             if (selectedSubject === 'all') {
                 // Show all sections and cards
                 subjectSections.forEach(section => {
@@ -74,13 +74,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 subjectSections.forEach(section => {
                     section.classList.add('hidden');
                 });
-                
+
                 // Show only the selected subject section
                 const targetSection = document.querySelector(`[data-subject="${selectedSubject}"]`);
                 if (targetSection) {
                     targetSection.classList.remove('hidden');
                 }
-                
+
                 // Hide all cards first, then show only matching ones
                 teacherCards.forEach(card => {
                     if (card.dataset.subject === selectedSubject) {
@@ -92,22 +92,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
-            
+
             // Update teacher count
             updateTeacherCount();
-            
+
             // Clear search when filter changes
             if (searchInput) {
                 searchInput.value = '';
             }
         });
     }
-    
+
     function updateTeacherCount() {
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
         teacherCountElement.textContent = visibleCards.length;
     }
-    
+
     // Initialize count
     updateTeacherCount();
 });
@@ -128,7 +128,7 @@ function deleteTeacher(button) {
     if (confirm('Are you sure you want to delete this teacher?')) {
         const teacherCard = button.closest('.teacher-card');
         teacherCard.remove();
-        
+
         // Update teacher count after deletion
         const teacherCountElement = document.querySelector('.count-number');
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
@@ -137,9 +137,54 @@ function deleteTeacher(button) {
 }
 
 // Close modal when clicking outside of it
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     const modal = document.getElementById('detailsModal');
     if (event.target === modal) {
         closeDetailsModal();
     }
 });
+
+async function init() {
+    const html = await fetch('/assets/templates/teacher.html')
+        .then(res => res.text())
+        .then(txt => parser.parseFromString(txt, 'text/html'));
+
+    fetch(`https://sams-backend-u79d.onrender.com/api/getTeachers.php`, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Provider': window.provider,
+            'Token': window.token,
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            const box = document.querySelector('content');
+            let grid = null;
+            let prevDepartment = '';
+            data.forEach((row) => {
+                if (prevDepartment != row['department']) {
+                    const sec = document.createElement('div');
+                    sec.className = 'subject-section'
+                    sec.dataset.subject = row['department'];
+                    const departmentName = document.createElement('h2');
+                    departmentName.className = 'subject-title';
+                    departmentName.innerText = row['department'];
+                    grid = document.createElement('div');
+                    grid.className = 'teachers-grid';
+                    sec.appendChild(departmentName);
+                    sec.appendChild(grid);
+                    box.appendChild(sec);
+                    prevDepartment = row['department'];
+                }
+                const clone = html.querySelector('.teacher-card').cloneNode(true);
+                clone.dataset.subject = row['department'];
+                clone.querySelector('.teacher-photo').src = row['pfp'];
+                clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
+                clone.querySelector('.teacher-id').innerText = row['pfp'];
+                clone.querySelector('.details-button').onclick = `showTeacherDetails('${row['firstname']} ${row['lastname']}', '${row['phone']}', '${row[email]}')`
+                grid.appendChild(clone)
+            })
+        });
+}
