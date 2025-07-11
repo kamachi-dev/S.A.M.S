@@ -188,3 +188,5 @@ async function init() {
             })
         });
 }
+
+init()
