@@ -180,11 +180,15 @@ async function init() {
                     box.appendChild(sec);
                     prevDepartment = row['department'];
                 }
+                let courses = ''
+                row['code'].forEach((course_i) => {
+                    courses += `${course_i} `;
+                });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = row['department'];
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
-                clone.querySelector('.teacher-id').innerText = row['pfp'];
+                clone.querySelector('.teacher-id').innerText = courses;
                 clone.querySelector('.details-btn').onclick = `showTeacherDetails('${row['firstname']} ${row['lastname']}', '${row['phone']}', '${row[email]}')`
                 grid.appendChild(clone)
             })
