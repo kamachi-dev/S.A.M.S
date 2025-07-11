@@ -2,6 +2,7 @@ function TogglePopup() {
     const popup = document.getElementById("popup");
     popup.classList.toggle("show");
 }
+const teachers = null;
 
 // Search functionality
 function teacherGrid(data) {
@@ -10,11 +11,6 @@ function teacherGrid(data) {
     const subjectFilter = document.getElementById('subjectFilter');
     const subjectSections = document.querySelectorAll('.subject-section');
     const teacherCountElement = document.querySelector('.count-number');
-
-    const teachers = new Set();
-    data.forEach(entry => {
-        teachers.add(`${entry.firstname}|${entry.lastname}|${entry.email}`);
-    });
 
     // Search functionality
     if (searchInput) {
@@ -47,7 +43,7 @@ function teacherGrid(data) {
 
             // Update count based on search results
             if (searchTerm) {
-                teacherCountElement.textContent = teachers.size;
+                updateTeacherCount()
             } else {
                 // Show all sections when search is cleared
                 subjectSections.forEach(section => {
@@ -108,7 +104,7 @@ function teacherGrid(data) {
 
     function updateTeacherCount() {
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
-        teacherCountElement.textContent = visibleCards.length;
+        teacherCountElement.textContent = teachers.size;
     }
 
     // Initialize count
@@ -135,7 +131,7 @@ function deleteTeacher(button) {
         // Update teacher count after deletion
         const teacherCountElement = document.querySelector('.count-number');
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
-        teacherCountElement.textContent = visibleCards.length;
+        updateTeacherCount()
     }
 }
 
@@ -196,6 +192,10 @@ async function init() {
                 grid.appendChild(clone)
             })
             document.querySelector('.loader').remove();
+            teachers = new Set();
+            data.forEach(entry => {
+                teachers.add(`${entry.firstname}|${entry.lastname}|${entry.email}`);
+            });
 
             teacherGrid(data);
         });
