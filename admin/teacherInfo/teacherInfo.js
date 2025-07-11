@@ -21,14 +21,10 @@ function teacherGrid(data) {
                 const teacherName = card.querySelector('.teacher-name').textContent.toLowerCase();
                 const teacherId = card.querySelector('.teacher-id').textContent.toLowerCase();
 
-                const isVisible = teacherName.includes(searchTerm) ||
-                    teacherId.includes(searchTerm);
+                const isVisible = teacherName.includes(searchTerm) || teacherId.includes(searchTerm);
 
-                if (isVisible && !card.classList.contains('hidden')) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
+                if (isVisible && !card.classList.contains('hidden')) card.style.display = 'flex';
+                else card.style.display = 'none';
             });
 
             // Hide/show subject sections based on whether they have visible cards
@@ -104,6 +100,11 @@ function teacherGrid(data) {
 
     function updateTeacherCount() {
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
+
+        teachers = new Set();
+        visibleCards.forEach(card => {
+            teachers.add(`${card.querySelector('.teacher-name')}`);
+        });
         teacherCountElement.textContent = teachers.size;
     }
 
@@ -192,10 +193,6 @@ async function init() {
                 grid.appendChild(clone)
             })
             document.querySelector('.loader').remove();
-            teachers = new Set();
-            data.forEach(entry => {
-                teachers.add(`${entry.firstname}|${entry.lastname}|${entry.email}`);
-            });
 
             teacherGrid(data);
         });
