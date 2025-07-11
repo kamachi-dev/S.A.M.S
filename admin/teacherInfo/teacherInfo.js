@@ -70,16 +70,11 @@ function teacherGrid(data) {
                     section.classList.add('hidden');
                 });
 
-                // Show only the selected subject section
-                const targetSection = document.querySelector(`[data-subject="${selectedSubject}"]`);
-                if (targetSection) {
-                    targetSection.classList.remove('hidden');
-                }
-
                 // Hide all cards first, then show only matching ones
                 teacherCards.forEach(card => {
-                    if (card.dataset.subject === selectedSubject) {
-                        card.classList.remove('hidden');
+                    if (JSON.parse(card.dataset.subject).contains(selectedSubject)) {
+                        card.classList.remove('hidden').classList.remove('hidden');
+                        card.closest('.subject-section')
                         card.style.display = 'flex';
                     } else {
                         card.classList.add('hidden');
@@ -172,7 +167,7 @@ async function init() {
                 if (prevDepartment != row['department']) {
                     const sec = document.createElement('div');
                     sec.className = 'subject-section'
-                    sec.dataset.subject = row['department'];
+                    sec.dataset.subject = row['code'];
                     const departmentName = document.createElement('h2');
                     departmentName.className = 'subject-title';
                     departmentName.innerText = row['department'];
@@ -200,6 +195,10 @@ async function init() {
 
             //update 
             filterBox.innerHTML = '';
+            const allOption = document.createElement('option');
+            allOption.value = 'all';
+            allOption.innerText = 'All subjects';
+            filterBox.appendChild(allOption);
             courseCodes.forEach(([code, name]) => {
                 const option = document.createElement('option');
                 option.value = code;
