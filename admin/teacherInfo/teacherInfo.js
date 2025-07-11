@@ -167,7 +167,7 @@ async function init() {
                 if (prevDepartment != row['department']) {
                     const sec = document.createElement('div');
                     sec.className = 'subject-section'
-                    sec.dataset.subject = row['code'];
+                    sec.dataset.subject = row['department'];
                     const departmentName = document.createElement('h2');
                     departmentName.className = 'subject-title';
                     departmentName.innerText = row['department'];
@@ -184,7 +184,7 @@ async function init() {
                     courseCodes.add([JSON.parse(row['code'])[i], JSON.parse(row['course'])[i]]);
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
-                clone.dataset.subject = row['department'];
+                clone.dataset.subject = row['code'];
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
