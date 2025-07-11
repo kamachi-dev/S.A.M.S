@@ -181,7 +181,7 @@ async function init() {
                     prevDepartment = row['department'];
                 }
                 let courses = ''
-                row['code'].forEach((course_i) => {
+                JSON.parse(row['code']).forEach((course_i) => {
                     courses += `${course_i} `;
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
@@ -192,6 +192,7 @@ async function init() {
                 clone.querySelector('.details-btn').onclick = `showTeacherDetails('${row['firstname']} ${row['lastname']}', '${row['phone']}', '${row[email]}')`
                 grid.appendChild(clone)
             })
+            document.querySelector('.loader').remove();
         });
 }
 
