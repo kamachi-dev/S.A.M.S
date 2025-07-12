@@ -42,6 +42,7 @@
                         <div class="search-container">
                             <input type="text" placeholder="Search teachers..." class="search-input">
                         </div>
+                        <button class="add-button" onclick="openAddTeacherModal()">Add Teacher</button>
                         <div class="filter-dropdowns">
                             <select class="filter-select" id="subjectFilter">
                             </select>
@@ -57,6 +58,68 @@
         </div>
     </div>
 
+    <!-- Add Teacher Modal -->
+    <div id="addTeacherModal" class="modal">
+        <div class="modal-content add-teacher-modal">
+            <span class="close" onclick="closeAddTeacherModal()">&times;</span>
+            <h2>Add New Teacher</h2>
+            
+            <div class="modal-body">
+                <div class="form-section">
+                    <h3>Teacher Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="teacherFirstName">First Name *</label>
+                            <input type="text" id="teacherFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherLastName">Last Name *</label>
+                            <input type="text" id="teacherLastName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="teacherEmail">Email *</label>
+                            <input type="email" id="teacherEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teacherPhone">Phone Number *</label>
+                            <input type="tel" id="teacherPhone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="teacherDepartment">Department</label>
+                            <input type="text" id="teacherDepartment" placeholder="Leave empty for Unassigned">
+                        </div>
+                        <div class="form-group">
+                            <!-- Empty space for layout -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Course Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="courseName">Course Name</label>
+                            <input type="text" id="courseName" placeholder="Leave empty for Unassigned">
+                        </div>
+                        <div class="form-group">
+                            <label for="courseCode">Course Code</label>
+                            <input type="text" id="courseCode" placeholder="Leave empty for Unassigned">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeAddTeacherModal()">Cancel</button>
+                <button class="confirm-btn" onclick="confirmAddTeacher()">Add Teacher</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Details Modal -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
@@ -65,6 +128,7 @@
             <div class="modal-info">
                 <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
                 <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Course:</strong> <span id="modalCourse"></span></p>
             </div>
         </div>
     </div>
