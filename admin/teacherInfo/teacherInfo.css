@@ -19,8 +19,9 @@
 /* Filter Section */
 .filter-section {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 30px;
     margin-bottom: 30px;
     padding: 0 10px;
 }
@@ -41,7 +42,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-    margin-left: 30px;
+    margin-left: 15px;
 }
 
 .add-button:hover {
@@ -63,9 +64,7 @@
 }
 
 .filter-dropdowns {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    margin-left: auto;
 }
 
 .filter-select {

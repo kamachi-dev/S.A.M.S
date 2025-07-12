@@ -119,7 +119,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #e9ecef;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    justify-content: space-between;
 }
 
 .student-card:hover {
@@ -137,23 +136,22 @@
 }
 
 .student-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    flex: 1;
 }
 
 .student-name {
     font-size: 14px;
     font-weight: bold;
     color: #333;
-    margin: 0;
+    margin-bottom: 5px;
 }
 
 /* Action Buttons */
 .action-buttons {
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .details-btn, .delete-btn {
