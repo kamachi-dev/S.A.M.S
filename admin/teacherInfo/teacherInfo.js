@@ -10,7 +10,6 @@ function teacherGrid(data) {
     const teacherCards = document.querySelectorAll('.teacher-card');
     const subjectFilter = document.getElementById('subjectFilter');
     const subjectSections = document.querySelectorAll('.subject-section');
-    const teacherCountElement = document.querySelector('.count-number');
 
     // Search functionality
     if (searchInput) {
@@ -93,18 +92,19 @@ function teacherGrid(data) {
         });
     }
 
-    function updateTeacherCount() {
-        const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
-
-        teachers = new Set();
-        visibleCards.forEach(card => {
-            teachers.add(`${card.querySelector('.teacher-name').innerText}`);
-        });
-        teacherCountElement.textContent = teachers.size;
-    }
-
     // Initialize count
     updateTeacherCount();
+}
+
+function updateTeacherCount() {
+    const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
+    const teacherCountElement = document.querySelector('.count-number');
+
+    teachers = new Set();
+    visibleCards.forEach(card => {
+        teachers.add(`${card.querySelector('.teacher-name').innerText}`);
+    });
+    teacherCountElement.textContent = teachers.size;
 }
 
 // Modal functionality
