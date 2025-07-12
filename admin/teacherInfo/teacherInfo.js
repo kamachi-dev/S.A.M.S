@@ -128,6 +128,8 @@ function deleteTeacher(button) {
         const teacherCountElement = document.querySelector('.count-number');
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
         updateTeacherCount()
+        const department = teacherCard.closest('.subject-section');
+        if (department.innerHTML == '') department.remove();
     }
 }
 
