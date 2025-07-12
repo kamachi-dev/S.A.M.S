@@ -182,7 +182,7 @@ async function init() {
                 let courses = '';
                 JSON.parse(row['code']).forEach((course_i, i) => {
                     courses += `${course_i ?? 'Unassigned'} `;
-                    courseCodes.add(tuple([JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned']));
+                    courseCodes.add(JSON.stringify([JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned']));
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = (row['code'] == '[null]') ? JSON.stringify('Unassigned') : row['code'];
@@ -200,7 +200,8 @@ async function init() {
             allOption.value = 'all';
             allOption.innerText = 'All subjects';
             filterBox.appendChild(allOption);
-            courseCodes.forEach(([code, name]) => {
+            courseCodes.forEach((entry) => {
+                const [code, name] = JSON.parse(entry);
                 const option = document.createElement('option');
                 option.value = code;
                 option.innerText = name;
