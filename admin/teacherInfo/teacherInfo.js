@@ -122,14 +122,14 @@ function closeDetailsModal() {
 function deleteTeacher(button) {
     if (confirm('Are you sure you want to delete this teacher?')) {
         const teacherCard = button.closest('.teacher-card');
-        teacherCard.remove();
+        const grid = teacherCard.parentNode;
+        if (grid.children.length <= 1) grid.closest('.subject-section').remove();
+        else teacherCard.remove();
 
         // Update teacher count after deletion
         const teacherCountElement = document.querySelector('.count-number');
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
         updateTeacherCount()
-        const department = teacherCard.closest('.subject-section');
-        if (department.innerHTML == '') department.remove();
     }
 }
 
