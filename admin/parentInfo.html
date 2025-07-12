@@ -426,37 +426,39 @@
             <span class="close" onclick="closeAddParentModal()">&times;</span>
             <h2>Add New Parent</h2>
             
-            <div class="form-section">
-                <h3>Parent Information</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="parentFirstName">First Name *</label>
-                        <input type="text" id="parentFirstName" required>
+            <div class="modal-body">
+                <div class="form-section">
+                    <h3>Parent Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="parentFirstName">First Name *</label>
+                            <input type="text" id="parentFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentLastName">Last Name *</label>
+                            <input type="text" id="parentLastName" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="parentLastName">Last Name *</label>
-                        <input type="text" id="parentLastName" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="parentEmail">Email *</label>
+                            <input type="email" id="parentEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentPhone">Phone Number *</label>
+                            <input type="tel" id="parentPhone" required>
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="parentEmail">Email *</label>
-                        <input type="email" id="parentEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="parentPhone">Phone Number *</label>
-                        <input type="tel" id="parentPhone" required>
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-section">
-                <div class="children-header">
-                    <h3>Children Information</h3>
-                    <button type="button" class="add-child-btn" onclick="addChildForm()">+ Add Child</button>
-                </div>
-                <div id="childrenContainer">
-                    <!-- Child forms will be added here -->
+                <div class="form-section">
+                    <div class="children-header">
+                        <h3>Children Information</h3>
+                        <button type="button" class="add-child-btn" onclick="addChildForm()">+ Add Child</button>
+                    </div>
+                    <div id="childrenContainer">
+                        <!-- Child forms will be added here -->
+                    </div>
                 </div>
             </div>
 

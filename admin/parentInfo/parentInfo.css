@@ -21,7 +21,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
     margin-bottom: 30px;
     padding: 0 10px;
 }
@@ -42,6 +42,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     white-space: nowrap;
+    margin-left: 15px;
 }
 
 .add-button:hover {
@@ -230,9 +231,25 @@
 .add-parent-modal {
     width: 600px;
     max-width: 95%;
-    margin: 5% auto;
-    max-height: 90vh;
+    margin: 2% auto;
+    max-height: 95vh;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-parent-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 95vh;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 20px;
 }
 
 .form-section {
@@ -344,9 +361,13 @@
     display: flex;
     justify-content: flex-end;
     gap: 15px;
-    margin-top: 25px;
-    padding-top: 20px;
+    margin-top: 0;
+    padding: 20px 0 0 0;
     border-top: 1px solid #e9ecef;
+    flex-shrink: 0;
+    background: white;
+    position: sticky;
+    bottom: 0;
 }
 
 .cancel-btn, .confirm-btn {
