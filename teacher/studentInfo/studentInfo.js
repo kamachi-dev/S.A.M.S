@@ -101,14 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             studentCards.forEach(card => {
                 const studentName = card.querySelector('.student-name').textContent.toLowerCase();
-                const studentId = card.querySelector('.student-id').textContent.toLowerCase();
-                const phoneNumber = card.querySelector('.phone-number').textContent.toLowerCase();
-                const emailAddress = card.querySelector('.email-address').textContent.toLowerCase();
                 
-                const isVisible = studentName.includes(searchTerm) || 
-                    studentId.includes(searchTerm) || 
-                    phoneNumber.includes(searchTerm) ||
-                    emailAddress.includes(searchTerm);
+                const isVisible = studentName.includes(searchTerm);
                 
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';
