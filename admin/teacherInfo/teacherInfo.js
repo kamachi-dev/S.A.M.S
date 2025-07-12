@@ -165,27 +165,27 @@ async function init() {
             courseCodes = new Set();
             //update teachers and filters
             data.forEach((row) => {
-                if (prevDepartment != row['department'] ?? 'unassigned') {
+                if (prevDepartment != (row['department'] ?? 'Unassigned')) {
                     const sec = document.createElement('div');
                     sec.className = 'subject-section'
-                    sec.dataset.subject = row['department'] ?? 'unassigned';
+                    sec.dataset.subject = row['department'] ?? 'Unassigned';
                     const departmentName = document.createElement('h2');
                     departmentName.className = 'subject-title';
-                    departmentName.innerText = row['department'] ?? 'unassigned';
+                    departmentName.innerText = row['department'] ?? 'Unassigned';
                     grid = document.createElement('div');
                     grid.className = 'teachers-grid';
                     sec.appendChild(departmentName);
                     sec.appendChild(grid);
                     box.appendChild(sec);
-                    prevDepartment = row['department'] ?? 'unassigned';
+                    prevDepartment = row['department'] ?? 'Unassigned';
                 }
-                let courses = (row['code'] == null) ? 'unassigned' : '';
+                let courses = '';
                 JSON.parse(row['code']).forEach((course_i, i) => {
-                    courses += `${course_i} `;
-                    courseCodes.add([JSON.parse(row['code'])[i] ?? 'unassigned', JSON.parse(row['course'])[i]] ?? 'unassigned');
+                    courses += `${course_i ?? 'Unassigned'} `;
+                    courseCodes.add([JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned']);
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
-                clone.dataset.subject = row['code'] ?? 'unassigned';
+                clone.dataset.subject = row['code'] ?? 'Unassigned';
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
