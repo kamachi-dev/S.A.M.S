@@ -185,7 +185,7 @@ async function init() {
                     courseCodes.add([JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned']);
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
-                clone.dataset.subject = row['code'] ?? 'Unassigned';
+                clone.dataset.subject = row['code'] ?? JSON.stringify('Unassigned');
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
