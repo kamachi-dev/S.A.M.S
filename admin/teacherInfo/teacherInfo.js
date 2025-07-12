@@ -182,7 +182,7 @@ async function init() {
                 let courses = '';
                 JSON.parse(row['code']).forEach((course_i, i) => {
                     courses += `${course_i ?? 'Unassigned'} `;
-                    courseCodes.add([JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned']);
+                    courseCodes.add((JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned'));
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = (row['code'] == '[null]') ? JSON.stringify('Unassigned') : row['code'];
