@@ -3,7 +3,177 @@ function TogglePopup() {
     popup.classList.toggle("show");
 }
 let teachers = null;
+let addedTeachers = []; // Store added teachers data
 
+// Add Teacher Modal Functions
+function openAddTeacherModal() {
+    document.getElementById('addTeacherModal').style.display = 'block';
+}
+
+function closeAddTeacherModal() {
+    document.getElementById('addTeacherModal').style.display = 'none';
+    // Clear form
+    clearAddTeacherForm();
+}
+
+function clearAddTeacherForm() {
+    document.getElementById('teacherFirstName').value = '';
+    document.getElementById('teacherLastName').value = '';
+    document.getElementById('teacherEmail').value = '';
+    document.getElementById('teacherPhone').value = '';
+    document.getElementById('teacherDepartment').value = '';
+    document.getElementById('courseName').value = '';
+    document.getElementById('courseCode').value = '';
+}
+
+function confirmAddTeacher() {
+    // Validate required fields
+    const firstName = document.getElementById('teacherFirstName').value.trim();
+    const lastName = document.getElementById('teacherLastName').value.trim();
+    const email = document.getElementById('teacherEmail').value.trim();
+    const phone = document.getElementById('teacherPhone').value.trim();
+    
+    if (!firstName || !lastName || !email || !phone) {
+        alert('Please fill in all required teacher information fields (First Name, Last Name, Email, Phone).');
+        return;
+    }
+    
+    // Get optional fields
+    const department = document.getElementById('teacherDepartment').value.trim() || 'Unassigned';
+    const courseName = document.getElementById('courseName').value.trim() || 'Unassigned';
+    const courseCode = document.getElementById('courseCode').value.trim() || 'Unassigned';
+    
+    // Create teacher object
+    const newTeacher = {
+        id: Date.now(), // Simple ID generation
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        department: department,
+        courseName: courseName,
+        courseCode: courseCode
+    };
+    
+    // Add to stored teachers
+    addedTeachers.push(newTeacher);
+    
+    // Create and add teacher card to the page
+    addTeacherCardToPage(newTeacher);
+    
+    // Close modal and clear form
+    closeAddTeacherModal();
+    
+    // Update teacher count
+    updateTeacherCount();
+}
+
+function addTeacherCardToPage(teacher) {
+    // Find or create department section
+    let departmentSection = document.querySelector(`[data-subject="${teacher.department}"]`);
+    
+    // If department section doesn't exist, create it
+    if (!departmentSection) {
+        departmentSection = createDepartmentSection(teacher.department);
+    }
+    
+    // Create teacher card
+    const teacherCard = document.createElement('div');
+    teacherCard.className = 'teacher-card';
+    teacherCard.setAttribute('data-subject', JSON.stringify([teacher.courseCode]));
+    teacherCard.setAttribute('data-added', 'true');
+    
+    teacherCard.innerHTML = `
+        <img src="/assets/Sample.png" alt="Teacher" class="teacher-photo">
+        <div class="teacher-info">
+            <div class="teacher-name">${teacher.firstName} ${teacher.lastName}</div>
+            <div class="teacher-id">${teacher.courseCode}</div>
+        </div>
+        <div class="action-buttons">
+            <button class="details-btn" onclick="showAddedTeacherDetails(${teacher.id})">Details</button>
+            <button class="delete-btn" onclick="deleteAddedTeacher(${teacher.id}, this)">Delete</button>
+        </div>
+    `;
+    
+    // Add to the appropriate grid
+    const teachersGrid = departmentSection.querySelector('.teachers-grid');
+    teachersGrid.appendChild(teacherCard);
+}
+
+function createDepartmentSection(department) {
+    const content = document.querySelector('.content');
+    const departmentSection = document.createElement('div');
+    departmentSection.className = 'subject-section';
+    departmentSection.setAttribute('data-subject', department);
+    
+    departmentSection.innerHTML = `
+        <h2 class="subject-title">${department}</h2>
+        <div class="teachers-grid"></div>
+    `;
+    
+    // Insert in alphabetical order (but keep "Unassigned" at the end)
+    const existingSections = document.querySelectorAll('.subject-section');
+    let inserted = false;
+    
+    if (department === 'Unassigned') {
+        // Always put Unassigned at the end
+        content.appendChild(departmentSection);
+        inserted = true;
+    } else {
+        for (let section of existingSections) {
+            const sectionDepartment = section.getAttribute('data-subject');
+            if (sectionDepartment === 'Unassigned') {
+                // Insert before Unassigned
+                content.insertBefore(departmentSection, section);
+                inserted = true;
+                break;
+            } else if (department.toLowerCase() < sectionDepartment.toLowerCase()) {
+                content.insertBefore(departmentSection, section);
+                inserted = true;
+                break;
+            }
+        }
+    }
+    
+    if (!inserted) {
+        content.appendChild(departmentSection);
+    }
+    
+    return departmentSection;
+}
+
+function showAddedTeacherDetails(teacherId) {
+    const teacher = addedTeachers.find(t => t.id === teacherId);
+    if (!teacher) return;
+    
+    document.getElementById('modalName').innerHTML = `${teacher.firstName} ${teacher.lastName}`;
+    document.getElementById('modalPhone').textContent = teacher.phone;
+    document.getElementById('modalEmail').textContent = teacher.email;
+    document.getElementById('modalCourse').textContent = teacher.courseName;
+    
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+function deleteAddedTeacher(teacherId, button) {
+    if (confirm('Are you sure you want to delete this teacher?')) {
+        // Remove from stored teachers
+        addedTeachers = addedTeachers.filter(t => t.id !== teacherId);
+        
+        // Remove card from page
+        const teacherCard = button.closest('.teacher-card');
+        const departmentSection = teacherCard.closest('.subject-section');
+        teacherCard.remove();
+        
+        // If department section is now empty, remove it
+        const remainingCards = departmentSection.querySelectorAll('.teacher-card');
+        if (remainingCards.length === 0) {
+            departmentSection.remove();
+        }
+        
+        // Update teacher count
+        updateTeacherCount();
+    }
+}
 // Search functionality
 function teacherGrid(data) {
     const searchInput = document.querySelector('.search-input');
@@ -112,6 +282,7 @@ function showTeacherDetails(name, phone, email) {
     document.getElementById('modalName').textContent = name;
     document.getElementById('modalPhone').textContent = phone;
     document.getElementById('modalEmail').textContent = email;
+    document.getElementById('modalCourse').textContent = 'N/A'; // For existing teachers
     document.getElementById('detailsModal').style.display = 'block';
 }
 
@@ -136,8 +307,14 @@ function deleteTeacher(button) {
 // Close modal when clicking outside of it
 window.addEventListener('click', function (event) {
     const modal = document.getElementById('detailsModal');
+    const addModal = document.getElementById('addTeacherModal');
+    
     if (event.target === modal) {
         closeDetailsModal();
+    }
+    
+    if (event.target === addModal) {
+        closeAddTeacherModal();
     }
 });
 

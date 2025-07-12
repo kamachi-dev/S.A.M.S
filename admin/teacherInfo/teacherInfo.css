@@ -30,6 +30,24 @@
     max-width: 300px;
 }
 
+.add-button {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    margin-left: 30px;
+}
+
+.add-button:hover {
+    background: #218838;
+}
+
 .search-input {
     width: 100%;
     padding: 12px 20px;
@@ -233,6 +251,118 @@
     font-size: 16px;
 }
 
+/* Add Teacher Modal Styles */
+.add-teacher-modal {
+    width: 600px;
+    max-width: 95%;
+    margin: 2% auto;
+    max-height: 95vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-teacher-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 95vh;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 20px;
+}
+
+.form-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.form-section h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    font-size: 14px;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4A90E2;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 0;
+    padding: 20px 0 0 0;
+    border-top: 1px solid #e9ecef;
+    flex-shrink: 0;
+    background: white;
+    position: sticky;
+    bottom: 0;
+}
+
+.cancel-btn, .confirm-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+}
+
+.confirm-btn {
+    background: #28a745;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background: #218838;
+}
+
 /* Hidden state for filtering */
 .subject-section.hidden {
     display: none;
@@ -259,6 +389,17 @@
     .filter-dropdowns {
         justify-content: space-between;
         flex-wrap: wrap;
+    }
+
+    .add-teacher-modal {
+        width: 95%;
+        margin: 2% auto;
+        padding: 15px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .teachers-grid {
