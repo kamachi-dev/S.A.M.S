@@ -42,6 +42,7 @@
                         <div class="search-container">
                             <input type="text" placeholder="Search parents..." class="search-input">
                         </div>
+                        <button class="add-button" onclick="openAddParentModal()">Add Parent</button>
                         <div class="filter-dropdowns">
                             <select class="filter-select" id="gradeFilter">
                                 <option value="all">All Grades</option>
@@ -415,6 +416,55 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Parent Modal -->
+    <div id="addParentModal" class="modal">
+        <div class="modal-content add-parent-modal">
+            <span class="close" onclick="closeAddParentModal()">&times;</span>
+            <h2>Add New Parent</h2>
+            
+            <div class="modal-body">
+                <div class="form-section">
+                    <h3>Parent Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="parentFirstName">First Name *</label>
+                            <input type="text" id="parentFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentLastName">Last Name *</label>
+                            <input type="text" id="parentLastName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="parentEmail">Email *</label>
+                            <input type="email" id="parentEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentPhone">Phone Number *</label>
+                            <input type="tel" id="parentPhone" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="children-header">
+                        <h3>Children Information</h3>
+                        <button type="button" class="add-child-btn" onclick="addChildForm()">+ Add Child</button>
+                    </div>
+                    <div id="childrenContainer">
+                        <!-- Child forms will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeAddParentModal()">Cancel</button>
+                <button class="confirm-btn" onclick="confirmAddParent()">Add Parent</button>
             </div>
         </div>
     </div>
