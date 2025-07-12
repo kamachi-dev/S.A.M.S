@@ -243,6 +243,91 @@
     letter-spacing: 0.3px;
 }
 
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    margin-top: 10px;
+}
+
+.details-btn, .delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 80px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.details-btn {
+    background: #4A90E2;
+    color: white;
+}
+
+.details-btn:hover {
+    background: #357ABD;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background: #E74C3C;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #C0392B;
+    transform: translateY(-1px);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-info {
+    margin-top: 20px;
+}
+
+.modal-info p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
 /* Hidden state for filtering */
 .grade-section.hidden {
     display: none;
@@ -297,6 +382,11 @@
     .phone-badge, .email-badge {
         min-width: 140px;
         font-size: 12px;
+    }
+
+    .modal-content {
+        margin: 50% auto;
+        width: 300px;
     }
 
     .menu {

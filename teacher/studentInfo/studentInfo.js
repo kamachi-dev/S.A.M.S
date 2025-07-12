@@ -150,5 +150,46 @@ document.addEventListener('DOMContentLoaded', function() {
     updateStudentCount();
 });
 
+// Modal functionality
+function showStudentDetails(name, studentId, phone, email, gradeSection) {
+    document.getElementById('modalName').textContent = name;
+    document.getElementById('modalStudentId').textContent = studentId;
+    document.getElementById('modalPhone').textContent = phone;
+    document.getElementById('modalEmail').textContent = email;
+    document.getElementById('modalGradeSection').textContent = gradeSection;
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+function closeDetailsModal() {
+    document.getElementById('detailsModal').style.display = 'none';
+}
+
+function deleteStudent(button) {
+    if (confirm('Are you sure you want to delete this student?')) {
+        const studentCard = button.closest('.student-card');
+        const gradeSection = studentCard.closest('.grade-section');
+        studentCard.remove();
+        
+        // If grade section is now empty, remove it
+        const remainingCards = gradeSection.querySelectorAll('.student-card');
+        if (remainingCards.length === 0) {
+            gradeSection.remove();
+        }
+        
+        // Update student count after deletion
+        const studentCountElement = document.querySelector('.count-number');
+        const visibleCards = document.querySelectorAll('.student-card:not(.hidden)');
+        studentCountElement.textContent = visibleCards.length;
+    }
+}
+
+// Close modal when clicking outside of it
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('detailsModal');
+    if (event.target === modal) {
+        closeDetailsModal();
+    }
+});
+
 // Mobile menu functionality (inherited from general.js)
 // Additional student info specific functionality can be added here
