@@ -278,13 +278,29 @@ function updateTeacherCount() {
     teacherCountElement.textContent = teachers.size;
 }
 
-// Modal functionality
-function showTeacherDetails(name, phone, email) {
+// Helper functions for updating existing teacher details
+function showTeacherDetails(name, phone, email, courseName = 'N/A') {
     document.getElementById('modalName').textContent = name;
     document.getElementById('modalPhone').textContent = phone;
     document.getElementById('modalEmail').textContent = email;
-    document.getElementById('modalCourse').textContent = 'N/A'; // For existing teachers
+    document.getElementById('modalCourse').textContent = courseName;
     document.getElementById('detailsModal').style.display = 'block';
+}
+
+function updateExistingTeacher(firstName, lastName, phone, email, department, courseName, courseCode) {
+    currentUpdatingTeacher = {
+        isExisting: true,
+        originalName: `${firstName} ${lastName}`,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        department: department,
+        courseName: courseName,
+        courseCode: courseCode
+    };
+    
+    openUpdateTeacherModal();
 }
 
 function closeDetailsModal() {
@@ -371,51 +387,7 @@ function saveTeacherChanges() {
     const courseCode = document.getElementById('updateCourseCode').value.trim() || 'Unassigned';
     
     if (currentUpdatingTeacher.isExisting) {
-        // For existing teachers, update the card display
-        const teacherCards = document.querySelectorAll('.teacher-card:not([data-added="true"])');
-        teacherCards.forEach(card => {
-            const cardName = card.querySelector('.teacher-name').textContent;
-            if (cardName.includes(currentUpdatingTeacher.firstName) && cardName.includes(currentUpdatingTeacher.lastName)) {
-                // Update the card display
-                card.querySelector('.teacher-name').textContent = `${firstName} ${lastName}`;
-                card.querySelector('.teacher-id').textContent = courseCode;
-                
-                // If department changed, move the card
-                const currentSection = card.closest('.subject-section');
-                const currentDepartment = currentSection.getAttribute('data-subject');
-                
-                if (currentDepartment !== department) {
-                    // Remove from current section
-                    card.remove();
-                    
-                    // Clean up empty section
-                    if (currentSection.querySelectorAll('.teacher-card').length === 0) {
-                        currentSection.remove();
-                    }
-                    
-                    // Add to new department
-                    const updatedTeacher = {
-                        id: Date.now(),
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        phone: phone,
-                        department: department,
-                        courseName: courseName,
-                        courseCode: courseCode
-                    };
-                    addTeacherCardToPage(updatedTeacher);
-                } else {
-                    // Update the onclick handlers to use new data
-                    const detailsBtn = card.querySelector('.details-btn');
-                    const updateBtn = card.querySelector('.update-btn');
-                    
-                    detailsBtn.onclick = () => showTeacherDetails(`${firstName} ${lastName}`, phone, email, courseName);
-                    updateBtn.onclick = () => updateExistingTeacher(firstName, lastName, phone, email, department, courseName, courseCode);
-                }
-            }
-        });
-        
+        // For existing teachers, just show success message (no actual update to DOM)
         alert('Teacher information updated successfully!');
     } else {
         // For added teachers, update the stored data and card

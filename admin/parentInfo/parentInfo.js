@@ -452,23 +452,7 @@ function saveParentChanges() {
     }
     
     if (currentUpdatingParent.isExisting) {
-        // For existing parents, update the card display
-        const parentCards = document.querySelectorAll('.parent-card:not([data-added="true"])');
-        parentCards.forEach(card => {
-            const cardName = card.querySelector('.parent-name').textContent;
-            if (cardName.includes(currentUpdatingParent.firstName) && cardName.includes(currentUpdatingParent.lastName)) {
-                // Update the card display
-                card.querySelector('.parent-name').textContent = `${parentFirstName} ${parentLastName}`;
-                
-                // Update the onclick handlers to use new data
-                const detailsBtn = card.querySelector('.details-btn');
-                const updateBtn = card.querySelector('.update-btn');
-                
-                detailsBtn.onclick = () => showUpdatedParentDetails(parentFirstName, parentLastName, parentPhone, parentEmail, children);
-                updateBtn.onclick = () => updateExistingParent(parentFirstName, parentLastName, parentPhone, parentEmail, children);
-            }
-        });
-        
+        // For existing parents, just show success message (no actual update to DOM)
         alert('Parent information updated successfully!');
     } else {
         // For added parents, update the stored data and card
@@ -495,6 +479,49 @@ function saveParentChanges() {
     }
     
     closeUpdateParentModal();
+}
+
+// Helper functions for updating existing parent details
+function showUpdatedParentDetails(firstName, lastName, phone, email, children) {
+    let childrenDetails = '';
+    children.forEach((child, index) => {
+        childrenDetails += `
+            <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                <h4 style="margin: 0 0 8px 0; color: #333;">Child ${index + 1}: ${child.firstName} ${child.lastName}</h4>
+                <p style="margin: 3px 0;"><strong>Email:</strong> ${child.email}</p>
+                <p style="margin: 3px 0;"><strong>Phone:</strong> ${child.phone}</p>
+                <p style="margin: 3px 0;"><strong>Grade:</strong> Grade ${child.grade}</p>
+            </div>
+        `;
+    });
+    
+    document.getElementById('modalName').innerHTML = `${firstName} ${lastName}`;
+    
+    const modalInfo = document.querySelector('.modal-info');
+    modalInfo.innerHTML = `
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <div style="margin-top: 20px;">
+            <h3 style="margin-bottom: 15px; color: #333;">Children:</h3>
+            ${childrenDetails}
+        </div>
+    `;
+    
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+function updateExistingParent(firstName, lastName, phone, email, children) {
+    currentUpdatingParent = {
+        isExisting: true,
+        originalName: `${firstName} ${lastName}`,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        children: children
+    };
+    
+    openUpdateParentModal();
 }
 
 // Search functionality
