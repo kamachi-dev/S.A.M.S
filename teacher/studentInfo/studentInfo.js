@@ -158,25 +158,6 @@ function closeDetailsModal() {
     document.getElementById('detailsModal').style.display = 'none';
 }
 
-function deleteStudent(button) {
-    if (confirm('Are you sure you want to delete this student?')) {
-        const studentCard = button.closest('.student-card');
-        const gradeSection = studentCard.closest('.grade-section');
-        studentCard.remove();
-        
-        // If grade section is now empty, remove it
-        const remainingCards = gradeSection.querySelectorAll('.student-card');
-        if (remainingCards.length === 0) {
-            gradeSection.remove();
-        }
-        
-        // Update student count after deletion
-        const studentCountElement = document.querySelector('.count-number');
-        const visibleCards = document.querySelectorAll('.student-card:not(.hidden)');
-        studentCountElement.textContent = visibleCards.length;
-    }
-}
-
 // Close modal when clicking outside of it
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('detailsModal');

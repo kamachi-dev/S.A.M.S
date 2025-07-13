@@ -36,29 +36,43 @@
         <div class="content-wrapper">
             <div class="content-border">
                 <div class="content">
-                    <!-- Dropdown Filters Row -->
-                    <div class="overview-filters-row">
-                        <select id="subjectSelect">
-                            <option>Mathematics</option>
-                            <option>Science</option>
-                            <option>History</option>
-                            <option>English</option>
-                        </select>
-                        <select id="gradeSelect">
-                            <option>Grade 10</option>
-                            <option>Grade 11</option>
-                            <option>Grade 12</option>
-                        </select>
-                        <select id="sectionSelect">
-                            <option>CIS12</option>
-                            <option>CIS13</option>
-                            <option>CIS14</option>
-                        </select>
-                        <select id="termSelect">
-                            <option>1st Term</option>
-                            <option>2nd Term</option>
-                            <option>3rd Term</option>
-                        </select>
+                    <!-- Filter Section -->
+                    <div class="filter-section">
+                        <div class="filter-dropdowns">
+                            <select class="filter-select">
+                                <option disabled selected>Select Subject</option>
+                                <option value="all">All Subjects</option>
+                                <option>Mathematics</option>
+                                <option>Science</option>
+                                <option>History</option>
+                                <option>English</option>
+                            </select>
+                            <select class="filter-select">
+                                <option disabled selected>Select Grade</option>
+                                <option value="all">All Grades</option>
+                                <option>Grade 10</option>
+                                <option>Grade 11</option>
+                                <option>Grade 12</option>
+                            </select>
+                            <select class="filter-select">
+                                <option disabled selected>Select Section</option>
+                                <option value="all">All Sections</option>
+                                <option>CIS12</option>
+                                <option>CIS13</option>
+                                <option>CIS14</option>
+                            </select>
+                            <select class="filter-select">
+                                <option disabled selected>Select Term</option>
+                                <option value="all">All Terms</option>
+                                <option>1st Term</option>
+                                <option>2nd Term</option>
+                                <option>3rd Term</option>
+                            </select>
+                            <div class="student-count">
+                                <span>No. of Students</span>
+                                <span class="count-number">26</span>
+                            </div>
+                        </div>
                         <button onclick="openAttendanceSetup()" class="attendance-button">Start Attendance</button>
                     </div>
                     <div style="margin-top: 30px;">
@@ -109,10 +123,6 @@
                                     <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">259</span>
                                     </li>
                                 </ul>
-                            </div>
-                            <div class="students-summary">
-                                <div class="summary-title">No. of Students</div>
-                                <div class="summary-count">26</div>
                             </div>
                         </div>
                         <div class="visual-row visual-row-bars">

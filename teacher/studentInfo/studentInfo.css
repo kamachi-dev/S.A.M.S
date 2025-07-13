@@ -154,7 +154,7 @@
     align-items: flex-end;
 }
 
-.details-btn, .delete-btn {
+.details-btn {
     padding: 8px 16px;
     border: none;
     border-radius: 12px;
@@ -173,16 +173,6 @@
 
 .details-btn:hover {
     background: #357ABD;
-    transform: translateY(-1px);
-}
-
-.delete-btn {
-    background: #E74C3C;
-    color: white;
-}
-
-.delete-btn:hover {
-    background: #C0392B;
     transform: translateY(-1px);
 }
 
