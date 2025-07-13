@@ -92,6 +92,7 @@ function addTeacherCardToPage(teacher) {
         </div>
         <div class="action-buttons">
             <button class="details-btn" onclick="showAddedTeacherDetails(${teacher.id})">Details</button>
+            <button class="update-btn" onclick="updateAddedTeacher(${teacher.id})">Update</button>
             <button class="delete-btn" onclick="deleteAddedTeacher(${teacher.id}, this)">Delete</button>
         </div>
     `;

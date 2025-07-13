@@ -184,6 +184,7 @@ function addParentCardToPage(parent) {
         </div>
         <div class="action-buttons">
             <button class="details-btn" onclick="showAddedParentDetails(${parent.id})">Details</button>
+            <button class="update-btn" onclick="updateAddedParent(${parent.id})">Update</button>
             <button class="delete-btn" onclick="deleteAddedParent(${parent.id}, this)">Delete</button>
         </div>
     `;
