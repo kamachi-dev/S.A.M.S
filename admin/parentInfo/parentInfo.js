@@ -452,7 +452,23 @@ function saveParentChanges() {
     }
     
     if (currentUpdatingParent.isExisting) {
-        // For existing parents, just show success message (no actual update to DOM)
+        // For existing parents, update the card display
+        const parentCards = document.querySelectorAll('.parent-card:not([data-added="true"])');
+        parentCards.forEach(card => {
+            const cardName = card.querySelector('.parent-name').textContent;
+            if (cardName.includes(currentUpdatingParent.firstName) && cardName.includes(currentUpdatingParent.lastName)) {
+                // Update the card display
+                card.querySelector('.parent-name').textContent = `${parentFirstName} ${parentLastName}`;
+                
+                // Update the onclick handlers to use new data
+                const detailsBtn = card.querySelector('.details-btn');
+                const updateBtn = card.querySelector('.update-btn');
+                
+                detailsBtn.onclick = () => showUpdatedParentDetails(parentFirstName, parentLastName, parentPhone, parentEmail, children);
+                updateBtn.onclick = () => updateExistingParent(parentFirstName, parentLastName, parentPhone, parentEmail, children);
+            }
+        });
+        
         alert('Parent information updated successfully!');
     } else {
         // For added parents, update the stored data and card
