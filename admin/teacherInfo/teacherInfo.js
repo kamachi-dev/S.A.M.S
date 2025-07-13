@@ -3,6 +3,7 @@ function TogglePopup() {
     popup.classList.toggle("show");
 }
 let teachers = null;
+let currentUpdatingTeacher = null;
 let addedTeachers = []; // Store added teachers data
 
 // Add Teacher Modal Functions
@@ -302,6 +303,124 @@ function deleteTeacher(button) {
         const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
         updateTeacherCount()
     }
+}
+
+// Update Teacher Modal Functions
+function updateTeacher(name, phone, email) {
+    // For existing teachers (not added ones), create mock data
+    const nameParts = name.split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(' ');
+    
+    currentUpdatingTeacher = {
+        isExisting: true,
+        originalName: name,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        department: 'Sample Department',
+        courseName: 'Sample Course',
+        courseCode: 'SAM001'
+    };
+    
+    openUpdateTeacherModal();
+}
+
+function updateAddedTeacher(teacherId) {
+    const teacher = addedTeachers.find(t => t.id === teacherId);
+    if (!teacher) return;
+    
+    currentUpdatingTeacher = { ...teacher, isExisting: false };
+    openUpdateTeacherModal();
+}
+
+function openUpdateTeacherModal() {
+    document.getElementById('updateTeacherModal').style.display = 'block';
+    
+    // Pre-fill teacher information
+    document.getElementById('updateTeacherFirstName').value = currentUpdatingTeacher.firstName;
+    document.getElementById('updateTeacherLastName').value = currentUpdatingTeacher.lastName;
+    document.getElementById('updateTeacherEmail').value = currentUpdatingTeacher.email;
+    document.getElementById('updateTeacherPhone').value = currentUpdatingTeacher.phone;
+    document.getElementById('updateTeacherDepartment').value = currentUpdatingTeacher.department === 'Unassigned' ? '' : currentUpdatingTeacher.department;
+    document.getElementById('updateCourseName').value = currentUpdatingTeacher.courseName === 'Unassigned' ? '' : currentUpdatingTeacher.courseName;
+    document.getElementById('updateCourseCode').value = currentUpdatingTeacher.courseCode === 'Unassigned' ? '' : currentUpdatingTeacher.courseCode;
+}
+
+function closeUpdateTeacherModal() {
+    document.getElementById('updateTeacherModal').style.display = 'none';
+    currentUpdatingTeacher = null;
+}
+
+function saveTeacherChanges() {
+    // Validate required fields
+    const firstName = document.getElementById('updateTeacherFirstName').value.trim();
+    const lastName = document.getElementById('updateTeacherLastName').value.trim();
+    const email = document.getElementById('updateTeacherEmail').value.trim();
+    const phone = document.getElementById('updateTeacherPhone').value.trim();
+    
+    if (!firstName || !lastName || !email || !phone) {
+        alert('Please fill in all required teacher information fields (First Name, Last Name, Email, Phone).');
+        return;
+    }
+    
+    // Get optional fields
+    const department = document.getElementById('updateTeacherDepartment').value.trim() || 'Unassigned';
+    const courseName = document.getElementById('updateCourseName').value.trim() || 'Unassigned';
+    const courseCode = document.getElementById('updateCourseCode').value.trim() || 'Unassigned';
+    
+    if (currentUpdatingTeacher.isExisting) {
+        // For existing teachers, just show success message (no actual update to DOM)
+        alert('Teacher information updated successfully!');
+    } else {
+        // For added teachers, update the stored data and card
+        const teacherIndex = addedTeachers.findIndex(t => t.id === currentUpdatingTeacher.id);
+        if (teacherIndex !== -1) {
+            const oldDepartment = addedTeachers[teacherIndex].department;
+            
+            // Update stored data
+            addedTeachers[teacherIndex] = {
+                ...addedTeachers[teacherIndex],
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                department: department,
+                courseName: courseName,
+                courseCode: courseCode
+            };
+            
+            // If department changed, move the card
+            if (oldDepartment !== department) {
+                // Remove old card
+                const oldCard = document.querySelector(`[data-added="true"]`);
+                if (oldCard && oldCard.querySelector('.teacher-name').textContent.includes(currentUpdatingTeacher.firstName)) {
+                    const oldSection = oldCard.closest('.subject-section');
+                    oldCard.remove();
+                    
+                    // Clean up empty section
+                    if (oldSection && oldSection.querySelectorAll('.teacher-card').length === 0) {
+                        oldSection.remove();
+                    }
+                }
+                
+                // Add new card in correct department
+                addTeacherCardToPage(addedTeachers[teacherIndex]);
+            } else {
+                // Update existing card
+                const card = document.querySelector(`[data-added="true"]`);
+                if (card && card.querySelector('.teacher-name').textContent.includes(currentUpdatingTeacher.firstName)) {
+                    card.querySelector('.teacher-name').textContent = `${firstName} ${lastName}`;
+                    card.querySelector('.teacher-id').textContent = courseCode;
+                }
+            }
+            
+            alert('Teacher information updated successfully!');
+        }
+    }
+    
+    closeUpdateTeacherModal();
 }
 
 // Close modal when clicking outside of it

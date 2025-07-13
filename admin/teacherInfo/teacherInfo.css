@@ -168,13 +168,15 @@
 /* Contact Info Container */
 .action-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 8px;
     align-items: flex-end;
+    justify-content: flex-end;
 }
 
 /* Action Buttons */
-.details-btn, .delete-btn {
+.details-btn, .update-btn, .delete-btn {
     padding: 8px 16px;
     border: none;
     border-radius: 12px;
@@ -193,6 +195,16 @@
 
 .details-btn:hover {
     background: #357ABD;
+    transform: translateY(-1px);
+}
+
+.update-btn {
+    background: #28a745;
+    color: white;
+}
+
+.update-btn:hover {
+    background: #218838;
     transform: translateY(-1px);
 }
 

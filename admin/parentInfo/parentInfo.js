@@ -4,6 +4,8 @@ function TogglePopup() {
 }
 
 let childCounter = 0;
+let updateChildCounter = 0;
+let currentUpdatingParent = null;
 let addedParents = []; // Store added parents data
 
 // Add Parent Modal Functions
@@ -275,6 +277,208 @@ function deleteAddedParent(parentId, button) {
         // Update parent count
         updateParentCount();
     }
+}
+
+// Update Parent Modal Functions
+function updateParent(name, phone, email) {
+    // For existing parents (not added ones), create mock data
+    const nameParts = name.split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(' ');
+    
+    currentUpdatingParent = {
+        isExisting: true,
+        originalName: name,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        children: [
+            {
+                firstName: 'Sample',
+                lastName: 'Child',
+                email: 'child@example.com',
+                phone: '(555) 0000',
+                grade: '10'
+            }
+        ]
+    };
+    
+    openUpdateParentModal();
+}
+
+function updateAddedParent(parentId) {
+    const parent = addedParents.find(p => p.id === parentId);
+    if (!parent) return;
+    
+    currentUpdatingParent = { ...parent, isExisting: false };
+    openUpdateParentModal();
+}
+
+function openUpdateParentModal() {
+    document.getElementById('updateParentModal').style.display = 'block';
+    
+    // Pre-fill parent information
+    document.getElementById('updateParentFirstName').value = currentUpdatingParent.firstName;
+    document.getElementById('updateParentLastName').value = currentUpdatingParent.lastName;
+    document.getElementById('updateParentEmail').value = currentUpdatingParent.email;
+    document.getElementById('updateParentPhone').value = currentUpdatingParent.phone;
+    
+    // Clear and populate children
+    const childrenContainer = document.getElementById('updateChildrenContainer');
+    childrenContainer.innerHTML = '';
+    updateChildCounter = 0;
+    
+    // Add existing children
+    currentUpdatingParent.children.forEach(child => {
+        addUpdateChildForm(child);
+    });
+    
+    // If no children, add one empty form
+    if (currentUpdatingParent.children.length === 0) {
+        addUpdateChildForm();
+    }
+}
+
+function closeUpdateParentModal() {
+    document.getElementById('updateParentModal').style.display = 'none';
+    currentUpdatingParent = null;
+    updateChildCounter = 0;
+}
+
+function addUpdateChildForm(childData = null) {
+    updateChildCounter++;
+    const childrenContainer = document.getElementById('updateChildrenContainer');
+    
+    const childForm = document.createElement('div');
+    childForm.className = 'child-form';
+    childForm.id = `updateChild-${updateChildCounter}`;
+    
+    childForm.innerHTML = `
+        <div class="child-form-header">
+            <h4>Child ${updateChildCounter}</h4>
+            <button type="button" class="remove-child-btn" onclick="removeUpdateChildForm(${updateChildCounter})">Remove</button>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="updateChildFirstName${updateChildCounter}">First Name *</label>
+                <input type="text" id="updateChildFirstName${updateChildCounter}" value="${childData?.firstName || ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="updateChildLastName${updateChildCounter}">Last Name *</label>
+                <input type="text" id="updateChildLastName${updateChildCounter}" value="${childData?.lastName || ''}" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="updateChildEmail${updateChildCounter}">Email *</label>
+                <input type="email" id="updateChildEmail${updateChildCounter}" value="${childData?.email || ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="updateChildPhone${updateChildCounter}">Phone Number *</label>
+                <input type="tel" id="updateChildPhone${updateChildCounter}" value="${childData?.phone || ''}" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="updateChildGrade${updateChildCounter}">Grade Level *</label>
+                <select id="updateChildGrade${updateChildCounter}" required>
+                    <option value="">Select Grade</option>
+                    <option value="10" ${childData?.grade === '10' ? 'selected' : ''}>Grade 10</option>
+                    <option value="11" ${childData?.grade === '11' ? 'selected' : ''}>Grade 11</option>
+                    <option value="12" ${childData?.grade === '12' ? 'selected' : ''}>Grade 12</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <!-- Empty space for layout -->
+            </div>
+        </div>
+    `;
+    
+    childrenContainer.appendChild(childForm);
+}
+
+function removeUpdateChildForm(childId) {
+    const childForm = document.getElementById(`updateChild-${childId}`);
+    if (childForm) {
+        childForm.remove();
+    }
+    
+    // If no children left, add one back
+    const remainingChildren = document.querySelectorAll('#updateChildrenContainer .child-form');
+    if (remainingChildren.length === 0) {
+        addUpdateChildForm();
+    }
+}
+
+function saveParentChanges() {
+    // Validate parent fields
+    const parentFirstName = document.getElementById('updateParentFirstName').value.trim();
+    const parentLastName = document.getElementById('updateParentLastName').value.trim();
+    const parentEmail = document.getElementById('updateParentEmail').value.trim();
+    const parentPhone = document.getElementById('updateParentPhone').value.trim();
+    
+    if (!parentFirstName || !parentLastName || !parentEmail || !parentPhone) {
+        alert('Please fill in all parent information fields.');
+        return;
+    }
+    
+    // Validate children fields
+    const childForms = document.querySelectorAll('#updateChildrenContainer .child-form');
+    const children = [];
+    
+    for (let i = 0; i < childForms.length; i++) {
+        const childForm = childForms[i];
+        const childId = childForm.id.split('-')[1];
+        
+        const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
+        const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
+        const childEmail = document.getElementById(`updateChildEmail${childId}`).value.trim();
+        const childPhone = document.getElementById(`updateChildPhone${childId}`).value.trim();
+        const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
+        
+        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
+            alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
+            return;
+        }
+        
+        children.push({
+            firstName: childFirstName,
+            lastName: childLastName,
+            email: childEmail,
+            phone: childPhone,
+            grade: childGrade
+        });
+    }
+    
+    if (currentUpdatingParent.isExisting) {
+        // For existing parents, just show success message (no actual update to DOM)
+        alert('Parent information updated successfully!');
+    } else {
+        // For added parents, update the stored data and card
+        const parentIndex = addedParents.findIndex(p => p.id === currentUpdatingParent.id);
+        if (parentIndex !== -1) {
+            // Update stored data
+            addedParents[parentIndex] = {
+                ...addedParents[parentIndex],
+                firstName: parentFirstName,
+                lastName: parentLastName,
+                email: parentEmail,
+                phone: parentPhone,
+                children: children
+            };
+            
+            // Update card display
+            const card = document.querySelector(`[data-added="true"]`);
+            if (card && card.querySelector('.parent-name').textContent.includes(currentUpdatingParent.firstName)) {
+                card.querySelector('.parent-name').textContent = `${parentFirstName} ${parentLastName}`;
+            }
+            
+            alert('Parent information updated successfully!');
+        }
+    }
+    
+    closeUpdateParentModal();
 }
 
 // Search functionality

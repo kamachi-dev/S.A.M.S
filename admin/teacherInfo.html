@@ -120,6 +120,68 @@
         </div>
     </div>
 
+    <!-- Update Teacher Modal -->
+    <div id="updateTeacherModal" class="modal">
+        <div class="modal-content add-teacher-modal">
+            <span class="close" onclick="closeUpdateTeacherModal()">&times;</span>
+            <h2>Update Teacher Information</h2>
+            
+            <div class="modal-body">
+                <div class="form-section">
+                    <h3>Teacher Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="updateTeacherFirstName">First Name *</label>
+                            <input type="text" id="updateTeacherFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateTeacherLastName">Last Name *</label>
+                            <input type="text" id="updateTeacherLastName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="updateTeacherEmail">Email *</label>
+                            <input type="email" id="updateTeacherEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateTeacherPhone">Phone Number *</label>
+                            <input type="tel" id="updateTeacherPhone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="updateTeacherDepartment">Department</label>
+                            <input type="text" id="updateTeacherDepartment" placeholder="Leave empty for Unassigned">
+                        </div>
+                        <div class="form-group">
+                            <!-- Empty space for layout -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Course Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="updateCourseName">Course Name</label>
+                            <input type="text" id="updateCourseName" placeholder="Leave empty for Unassigned">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateCourseCode">Course Code</label>
+                            <input type="text" id="updateCourseCode" placeholder="Leave empty for Unassigned">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeUpdateTeacherModal()">Cancel</button>
+                <button class="confirm-btn" onclick="saveTeacherChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Details Modal -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
