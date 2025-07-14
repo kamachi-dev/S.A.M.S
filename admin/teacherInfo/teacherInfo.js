@@ -461,7 +461,8 @@ async function init() {
         .then(res => res.text())
         .then(txt => parser.parseFromString(txt, 'text/html'));
 
-    fetch(`https://sams-backend-u79d.onrender.com/api/getTeachers.php`, {
+    // fetch(`https://sams-backend-u79d.onrender.com/api/getTeachers.php`, {
+    fetch(`https://localhost:8000/api/getTeachers.php`, {
         credentials: 'include',
         method: 'GET',
         headers: {
