@@ -222,8 +222,7 @@ function viewStudentProfile(studentId) {
 }
 
 function getStudents() {
-    // fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
-    fetch('https://localhost:8000/api/getStudents.php', {
+    fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
         credentials: 'include',
         method: 'GET',
         headers: {
