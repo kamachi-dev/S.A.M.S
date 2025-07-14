@@ -63,7 +63,8 @@ function levenshtein(a, b) {
 }
 
 function getCourseRecords(id) {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getCourseRecords.php?course=${id}`, {
+    // fetch(`https://sams-backend-u79d.onrender.com/api/getCourseRecords.php?course=${id}`, {
+    fetch(`https://localhost:8000/api/getCourseRecords.php?course=${id}`, {
         credentials: 'include',
         method: 'GET',
         headers: {
@@ -110,7 +111,8 @@ function getCourseRecords(id) {
 }
 
 function getCourses() {
-    fetch(`https://sams-backend-u79d.onrender.com/api/getStudentsRecords.php`, {
+    // fetch(`https://sams-backend-u79d.onrender.com/api/getStudentsRecords.php`, {
+    fetch(`https://localhost:8000/api/getStudentsRecords.php`, {
         credentials: 'include',
         method: 'GET',
         headers: {
