@@ -3,10 +3,171 @@ function TogglePopup() {
     popup.classList.toggle("show");
 }
 
+// Store fetched parents data
+let fetchedParents = [];
 let childCounter = 0;
 let updateChildCounter = 0;
 let currentUpdatingParent = null;
 let addedParents = []; // Store added parents data
+
+// Function to populate parents from database
+async function loadParentsFromDatabase() {
+    try {
+        const response = await fetch(`https://sams-backend-u79d.onrender.com/api/getParents.php`, {
+            credentials: 'include',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (!window.verifyToken(data)) return;
+        
+        fetchedParents = data;
+        displayParents(fetchedParents);
+        updateParentCount();
+        
+        // Remove loader if it exists
+        const loader = document.querySelector('.loader');
+        if (loader) loader.remove();
+        
+    } catch (error) {
+        console.error('Error fetching parents:', error);
+        // Show error message or fallback
+    }
+}
+
+// Function to display parents in the UI
+function displayParents(parents) {
+    // Clear existing content except filter section
+    const content = document.querySelector('.content');
+    const filterSection = content.querySelector('.filter-section');
+    content.innerHTML = '';
+    content.appendChild(filterSection);
+    
+    // Group parents by first letter of last name
+    const groupedParents = {};
+    
+    parents.forEach(parent => {
+        const firstLetter = parent.lastname.charAt(0).toUpperCase();
+        if (!groupedParents[firstLetter]) {
+            groupedParents[firstLetter] = [];
+        }
+        groupedParents[firstLetter].push(parent);
+    });
+    
+    // Sort letters alphabetically
+    const sortedLetters = Object.keys(groupedParents).sort();
+    
+    // Create sections for each letter
+    sortedLetters.forEach(letter => {
+        const letterSection = document.createElement('div');
+        letterSection.className = 'letter-section';
+        letterSection.setAttribute('data-letter', letter.toLowerCase());
+        
+        const letterTitle = document.createElement('h2');
+        letterTitle.className = 'letter-title';
+        letterTitle.textContent = letter;
+        
+        const parentsGrid = document.createElement('div');
+        parentsGrid.className = 'parents-grid';
+        
+        // Sort parents within each letter group by last name
+        groupedParents[letter].sort((a, b) => a.lastname.localeCompare(b.lastname));
+        
+        // Create parent cards
+        groupedParents[letter].forEach(parent => {
+            const parentCard = createParentCard(parent);
+            parentsGrid.appendChild(parentCard);
+        });
+        
+        letterSection.appendChild(letterTitle);
+        letterSection.appendChild(parentsGrid);
+        content.appendChild(letterSection);
+    });
+}
+
+// Function to create a parent card element
+function createParentCard(parent) {
+    const parentCard = document.createElement('div');
+    parentCard.className = 'parent-card';
+    parentCard.setAttribute('data-letter', parent.lastname.charAt(0).toLowerCase());
+    parentCard.setAttribute('data-fetched', 'true');
+    
+    parentCard.innerHTML = `
+        <img src="${parent.pfp || '/assets/Sample.png'}" alt="Parent" class="parent-photo">
+        <div class="parent-info">
+            <div class="parent-name">${parent.firstname} ${parent.lastname}</div>
+        </div>
+        <div class="action-buttons">
+            <button class="details-btn" onclick="showFetchedParentDetails('${parent.firstname}', '${parent.lastname}', '${parent.phone}', '${parent.email}')">Details</button>
+            <button class="update-btn" onclick="updateFetchedParent('${parent.firstname}', '${parent.lastname}', '${parent.phone}', '${parent.email}')">Update</button>
+            <button class="delete-btn" onclick="deleteFetchedParent('${parent.email}', this)">Delete</button>
+        </div>
+    `;
+    
+    return parentCard;
+}
+
+// Function to show details for fetched parents
+function showFetchedParentDetails(firstName, lastName, phone, email) {
+    document.getElementById('modalName').innerHTML = `${firstName} ${lastName}`;
+    
+    const modalInfo = document.querySelector('.modal-info');
+    modalInfo.innerHTML = `
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <div style="margin-top: 20px;">
+            <h3 style="margin-bottom: 15px; color: #333;">Children:</h3>
+            <p style="color: #666; font-style: italic;">Children information not available in current API response.</p>
+        </div>
+    `;
+    
+    document.getElementById('detailsModal').style.display = 'block';
+}
+
+// Function to update fetched parents
+function updateFetchedParent(firstName, lastName, phone, email) {
+    currentUpdatingParent = {
+        isExisting: true,
+        isFetched: true,
+        originalName: `${firstName} ${lastName}`,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        children: [] // No children data available from current API
+    };
+    
+    openUpdateParentModal();
+}
+
+// Function to delete fetched parents
+function deleteFetchedParent(email, button) {
+    if (confirm('Are you sure you want to delete this parent? This will remove them from the database.')) {
+        // Here you would typically make an API call to delete the parent
+        // For now, just remove from UI
+        const parentCard = button.closest('.parent-card');
+        const letterSection = parentCard.closest('.letter-section');
+        parentCard.remove();
+        
+        // If letter section is now empty, remove it
+        const remainingCards = letterSection.querySelectorAll('.parent-card');
+        if (remainingCards.length === 0) {
+            letterSection.remove();
+        }
+        
+        // Update parent count
+        updateParentCount();
+        
+        // Note: In a real implementation, you'd want to make an API call here
+        console.log('Would delete parent with email:', email);
+    }
+}
 
 // Add Parent Modal Functions
 function openAddParentModal() {
@@ -602,13 +763,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateParentCount() {
-        const visibleCards = document.querySelectorAll('.parent-card:not(.hidden)').length;
-        const addedParentsCount = addedParents.length;
-        parentCountElement.textContent = visibleCards.length;
+        const visibleCards = document.querySelectorAll('.parent-card:not(.hidden)');
+        const parentCountElement = document.querySelector('.count-number');
+        if (parentCountElement) {
+            parentCountElement.textContent = visibleCards.length;
+        }
     }
     
-    // Initialize count
-    updateParentCount();
+    // Initialize the page
+    loadParentsFromDatabase();
 });
 
 // Modal functionality
@@ -647,4 +810,9 @@ window.addEventListener('click', function(event) {
     if (event.target === addModal) {
         closeAddParentModal();
     }
+});
+
+// Initialize the page when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    loadParentsFromDatabase();
 });
