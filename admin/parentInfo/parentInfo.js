@@ -124,7 +124,7 @@ function showFetchedParentDetails(firstName, lastName, phone, email, parentData 
             childrenDetails += `
                 <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
                     <h4 style="margin: 0 0 8px 0; color: #333;">Child ${index + 1}: ${child.firstname} ${child.lastname}</h4>
-                    <p style="margin: 3px 0;"><strong>Grade Level:</strong>${child.grade_level}</p>
+                    <p style="margin: 3px 0;"><strong>Grade Level:</strong> ${child.grade_level}</p>
                 </div>
             `;
         });
