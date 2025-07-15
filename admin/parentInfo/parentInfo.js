@@ -104,8 +104,8 @@ function createParentCard(parent) {
             <div class="parent-name">${parent.firstname} ${parent.lastname}</div>
         </div>
         <div class="action-buttons">
-            <button class="details-btn" onclick="showFetchedParentDetails('${parent.firstname}', '${parent.lastname}', '${parent.phone}', '${parent.email}')">Details</button>
-            <button class="update-btn" onclick="updateFetchedParent('${parent.firstname}', '${parent.lastname}', '${parent.phone}', '${parent.email}')">Update</button>
+            <button class="details-btn" onclick="showFetchedParentDetails('${parent.firstname}', '${parent.lastname}', '${parent.phone}', '${parent.email}', ${JSON.stringify(parent).replace(/"/g, '&quot;')})">Details</button>
+            <button class="update-btn" onclick="updateFetchedParent('${parent.firstname}', '${parent.lastname}', '${parent.phone}', '${parent.email}', ${JSON.stringify(parent).replace(/"/g, '&quot;')})">Update</button>
             <button class="delete-btn" onclick="deleteFetchedParent('${parent.email}', this)">Delete</button>
         </div>
     `;
@@ -114,8 +114,23 @@ function createParentCard(parent) {
 }
 
 // Function to show details for fetched parents
-function showFetchedParentDetails(firstName, lastName, phone, email) {
+function showFetchedParentDetails(firstName, lastName, phone, email, parentData = null) {
     document.getElementById('modalName').innerHTML = `${firstName} ${lastName}`;
+    
+    // Find the parent data to get children information
+    let childrenDetails = '';
+    if (parentData && parentData.children && parentData.children.length > 0) {
+        parentData.children.forEach((child, index) => {
+            childrenDetails += `
+                <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                    <h4 style="margin: 0 0 8px 0; color: #333;">Child ${index + 1}: ${child.firstname} ${child.lastname}</h4>
+                    <p style="margin: 3px 0;"><strong>Grade:</strong> Grade ${child.grade_level}</p>
+                </div>
+            `;
+        });
+    } else {
+        childrenDetails = '<p style="color: #666; font-style: italic;">No children information available.</p>';
+    }
     
     const modalInfo = document.querySelector('.modal-info');
     modalInfo.innerHTML = `
@@ -123,7 +138,7 @@ function showFetchedParentDetails(firstName, lastName, phone, email) {
         <p><strong>Email:</strong> ${email}</p>
         <div style="margin-top: 20px;">
             <h3 style="margin-bottom: 15px; color: #333;">Children:</h3>
-            <p style="color: #666; font-style: italic;">Children information not available in current API response.</p>
+            ${childrenDetails}
         </div>
     `;
     
@@ -131,7 +146,7 @@ function showFetchedParentDetails(firstName, lastName, phone, email) {
 }
 
 // Function to update fetched parents
-function updateFetchedParent(firstName, lastName, phone, email) {
+function updateFetchedParent(firstName, lastName, phone, email, parentData = null) {
     currentUpdatingParent = {
         isExisting: true,
         isFetched: true,
@@ -140,7 +155,7 @@ function updateFetchedParent(firstName, lastName, phone, email) {
         lastName: lastName,
         email: email,
         phone: phone,
-        children: [] // No children data available from current API
+        children: parentData && parentData.children ? parentData.children : []
     };
     
     openUpdateParentModal();
@@ -692,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const parentCards = document.querySelectorAll('.parent-card');
     const gradeFilter = document.getElementById('gradeFilter');
     const sectionFilter = document.getElementById('sectionFilter');
-    const letterSections = document.querySelectorAll('.letter-section');
+    const visibleCards = document.querySelectorAll('.parent-card[style*="flex"], .parent-card:not([style*="none"]):not(.hidden)');
     const parentCountElement = document.querySelector('.count-number');
     
     // Search functionality
