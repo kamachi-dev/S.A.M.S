@@ -1,6 +1,6 @@
-donutData.forEach(entry => {
-    drawDonutChart(entry.ctxId, entry.data, entry.colors);
-});
+// donutData.forEach(entry => {
+//     drawDonutChart(entry.ctxId, entry.data, entry.colors);
+// });
 
 function TogglePopup() {
     const popup = document.getElementById("popup");
@@ -24,6 +24,31 @@ function goBackToOverview() {
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
+
+
+function previousMonth() {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    generateCalendar(currentMonth, currentYear);
+}
+
+function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    generateCalendar(currentMonth, currentYear);
+}
+
+// Initialize everything when page loads
+document.addEventListener('DOMContentLoaded', function () {
+    // Generate initial calendar
+    generateCalendar(currentMonth, currentYear);
+});
 
 // SAMPLE DATA
 const attendanceData = {
@@ -65,9 +90,8 @@ function generateCalendar(month, year) {
     const calendarGrid = document.querySelector('.calendar-grid');
 
     // Clear existing days (keep headers)
-    const dayHeaders = calendarGrid.querySelectorAll('.day-header');
-    calendarGrid.innerHTML = '';
-    dayHeaders.forEach(header => calendarGrid.appendChild(header));
+    const days = calendarGrid.querySelectorAll('.calendar-day, .other-month');
+    days.forEach(day => day.remove());
 
     // Get first day of month and number of days
     const firstDay = new Date(year, month, 1);
@@ -119,25 +143,7 @@ function generateCalendar(month, year) {
     }
 }
 
-function previousMonth() {
-    currentMonth--;
-    if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    }
-    generateCalendar(currentMonth, currentYear);
-}
-
-function nextMonth() {
-    currentMonth++;
-    if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-    }
-    generateCalendar(currentMonth, currentYear);
-}
-
-// // Chart functionality
+// // // Chart functionality
 // function drawDonutChart(canvasId, data, colors) {
 //     const canvas = document.getElementById(canvasId);
 //     if (!canvas) return; // Exit if canvas doesn't exist
@@ -171,18 +177,7 @@ function nextMonth() {
 //     });
 // }
 
-// // Initialize everything when page loads
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Generate initial calendar
-//     generateCalendar(currentMonth, currentYear);
 
-//     const currentAttendanceData = [75, 15, 10]; // Present, Late, Absent percentages
-//     const termAttendanceData = [80, 12, 8];
-//     const chartColors = ['#3498db', '#f39c12', '#e74c3c'];
-
-//     drawDonutChart('currentChart', currentAttendanceData, chartColors);
-//     drawDonutChart('termChart', termAttendanceData, chartColors);
-// });
 
 // Enable Swiping for profile contents
 const grid = document.querySelector('.students-grid');
@@ -305,87 +300,99 @@ function showStudentDetails(status, element = null) {
     const statusIcon = status === 'present' ? '🔵' : status === 'late' ? '🟠' : '🔴';
     const statusColor = status === 'present' ? 'blue' : status === 'late' ? 'orange' : 'red';
 
-    // This is the html that will be added
     const chartsHTML = `
         <div class="charts-top-bottom">
             <div class="charts-container">
                 <div class="chart-section">
                     <h4>Today's Attendance</h4>
                     <div class="chart-wrapper">
-                        <canvas id="${dailyId}" width="150" height="150"></canvas>
-                        <div class="chart-legend">
-                            <div class="legend-item"><div class="legend-color present"></div><span>Presents</span></div>
-                            <div class="legend-item"><div class="legend-color late"></div><span>Lates</span></div>
-                            <div class="legend-item"><div class="legend-color absent"></div><span>Absents</span></div>
+                        <div class="time-blocks">
+                            <div class="time-block time-7"><div class="subject">Math Class</div><div class="time">7:00</div></div>
+                            <div class="time-block time-8"><div class="subject">English Literature</div><div class="time">8:00</div></div>
+                            <div class="time-block time-9"><div class="subject">History</div><div class="time">9:00</div></div>
+                            <div class="time-block time-10"><div class="subject">Chemistry Lab</div><div class="time">10:00</div></div>
+                            <div class="time-block time-11"><div class="subject">Lunch</div><div class="time">11:00</div></div>
+                            <div class="time-block time-12"><div class="subject">Physics</div><div class="time">12:00</div></div>
+                            <div class="time-block time-1"><div class="subject">Computer Science</div><div class="time">1:00</div></div>
+                            <div class="time-block time-2"><div class="subject">Music</div><div class="time">2:00</div></div>
+                            <div class="time-block time-3"><div class="subject">Sports</div><div class="time">3:00</div></div>
                         </div>
                     </div>
                 </div>
-                <div class="chart-section">
-                    <h4>Term Attendance</h4>
-                    <div class="chart-wrapper">
-                        <canvas id="${termId}" width="150" height="150"></canvas>
-                        <div class="chart-legend">
-                            <div class="legend-item"><div class="legend-color present"></div><span>Presents</span></div>
-                            <div class="legend-item"><div class="legend-color late"></div><span>Lates</span></div>
-                            <div class="legend-item"><div class="legend-color absent"></div><span>Absents</span></div>
-                        </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="nav-button prev">&lt;</button>
+                        <h3 id="monthYear">December 2026</h3>
+                        <button class="nav-button next">&gt;</button>
                     </div>
-                </div>
-            </div>
-            <div class="info-section">
-                <div class="info-text">
-                    <p><strong>ℹ️</strong> This tracks which subjects the child attended based on the selected day on the schedule</p>
-                </div>
-                <div class="time-blocks">
-                    <div class="time-block time-7">7:00</div>
-                    <div class="time-block time-8">8:00</div>
-                    <div class="time-block time-9">9:00</div>
-                    <div class="time-block time-10">10:00</div>
-                    <div class="time-block time-11">11:00 Lunch</div>
-                    <div class="time-block time-12">12:00</div>
-                    <div class="time-block time-1">1:00</div>
-                    <div class="time-block time-2">2:00</div>
-                    <div class="time-block time-3">3:00</div>
+                    <div class="calendar-grid">
+                        <div class="day-header">Mo</div>
+                        <div class="day-header">Tu</div>
+                        <div class="day-header">We</div>
+                        <div class="day-header">Th</div>
+                        <div class="day-header">Fr</div>
+                        <div class="day-header">Sa</div>
+                        <div class="day-header">Su</div>
+                    </div>
                 </div>
             </div>
         </div>
     `;
 
     if (isMobile) {
-        // Toggle charts on mobile inside selected card
         const existing = element.querySelector(".charts-top-bottom");
         if (existing) {
             existing.remove();
             return;
         }
 
-        // Remove other expanded charts from other cards
         document.querySelectorAll(".charts-top-bottom").forEach(el => el.remove());
 
         element.insertAdjacentHTML("beforeend", chartsHTML);
+
+        // ✅ Generate calendar after HTML is added
+        generateCalendar(currentMonth, currentYear);
+
+        // ✅ Attach navigation listeners
+        element.querySelector(".nav-button.prev").addEventListener("click", previousMonth);
+        element.querySelector(".nav-button.next").addEventListener("click", nextMonth);
+
         drawDonutChart(dailyId, [5, 1, 2], ['#0093ff', '#ffcd03', '#ef2722']);
         drawDonutChart(termId, [20, 4, 3], ['#0093ff', '#ffcd03', '#ef2722']);
+
     } else {
-        // Desktop: full left panel with all details
         const leftPanel = document.querySelector(".students-left");
         leftPanel.innerHTML = `
-            <div class="student-card selected ${statusColor}">
-                <div class="student-avatar">
-                    <img src="/assets/Sample.png" alt="Student Photo" />
-                </div>
-                <div class="student-details">
-                    <div class="student-name">Joshua Simon S. Komachi</div>
-                    <div class="student-id">20211535356</div>
-                    <div class="attendance-indicator ${statusColor}">
-                        <span class="attendance-icon">${statusIcon}</span>
-                        <span>${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+            <div class="student-card_picked">
+                <div class="test">
+                    <div class="student-avatar_picked">
+                        <img src="/assets/Sample.png" alt="Student Photo" />
+                    </div>
+                    <div class="student-details_picked">
+                        <div class="student-name_picked">Joshua Simon S. Komachi</div>
+                        <div class="student-id_picked">20211535356</div>
+                        <div class="attendance-indicator ${statusColor}">
+                            <span class="attendance-icon">${statusIcon}</span>
+                            <span>${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                        </div>
                     </div>
                 </div>
                 ${chartsHTML}
             </div>
         `;
+
+        // ✅ Generate calendar after HTML is added
+        generateCalendar(currentMonth, currentYear);
+
+        // ✅ Attach navigation listeners
+        leftPanel.querySelector(".nav-button.prev").addEventListener("click", previousMonth);
+        leftPanel.querySelector(".nav-button.next").addEventListener("click", nextMonth);
+
         drawDonutChart(dailyId, [5, 1, 2], ['#0093ff', '#ffcd03', '#ef2722']);
         drawDonutChart(termId, [20, 4, 3], ['#0093ff', '#ffcd03', '#ef2722']);
     }
 }
 
+
+window.previousMonth = previousMonth;
+window.nextMonth = nextMonth;

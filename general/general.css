@@ -61,9 +61,9 @@ button:hover {
 
 .longLogo {
     position: relative;
-    top: -11em;
+    top: -11.5em;
     left: 0;
-    height: 8em;
+    height: 5em;
     width: 100%;
     object-fit: contain;
     /* filter: drop-shadow(0 4px 6px rgb(255, 255, 255)); */
@@ -108,7 +108,7 @@ nav > ul > li > a {
 }
 .navBar {
     position: relative;
-    top: -15em;
+    top: -16em;
 }
 .navBar > ul > li{
     height: 6em;
@@ -143,9 +143,9 @@ nav > ul > li > a {
 .content-border {
     display: block;
     background-color: rgb(122, 22, 22);
-    height: calc(100.5vh - 13em);
+    height: calc(100.5vh - 8.6em);
     position: relative;
-    top: -19.8em;
+    top: -20.8em;
     width: auto;
     z-index: 3;
     padding: 0;

@@ -30,7 +30,7 @@ html, body {
 .students-left-right {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  /* gap: 20px; */
   height: 100%;
   width: 100%;
 }
@@ -42,12 +42,17 @@ html, body {
 }
 
 .students-left {
-    width: 50%;
-    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: none;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
 }
+
 .students-left::-webkit-scrollbar {
     display: none;
 }
@@ -58,23 +63,42 @@ html, body {
     max-height: 100%;
     display: flex;
     gap: 10px;
+    box-sizing: border-box;
     flex-direction: column;
-    border-radius: 15px;
-    max-height: 605px;
+    /* border-radius: 15px; */
+    /* max-height: 605px; */
     scrollbar-width: none;
     -ms-overflow-style: none;
     width: 50%;
+    padding: 20px;
+    background-color: #f7f7f7;
 }
 .students-right::-webkit-scrollbar {
     display: none;
 }
     
+.student-card_picked{
+  background: white;
+  border-radius: 15px;
+  padding: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
 
 /* Student Selection Page Styles */
 .students-attendance-section-top,
 .students-attendance-section-bottom {
-  padding: 0 20px;
-  margin-top: 20px;
+  /* padding: 0 20px;
+  margin-top: 20px; */
   width: 100%;
 }
 
@@ -118,12 +142,14 @@ html, body {
 .student-card {
   background: white;
   border-radius: 15px;
-  padding: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
   text-align: center;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
 }
 .student-card:hover {
   background-color: rgb(238, 238, 238);
@@ -131,32 +157,76 @@ html, body {
 
 
 .student-avatar {
-  margin-bottom: 15px;
+  display: flex;
 }
 .student-avatar img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
   object-fit: cover;
-  border: 3px solid #e0e0e0;
 }
 
 .student-details {
   text-align: center;
+  width: 100%;
 }
 
 .student-name {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: bold;
   color: #333;
-  margin: 10px 0 5px 0;
 }
 
 .student-id {
+  font-size: 17px;
+  color: #666;
+}
+
+/* Picked*/
+.student-avatar_picked img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e0e0e0;
+}
+.student-details_picked{
+  text-align: center;
+  width: 100%;
+}
+.student-name_picked{
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+.student-id_picked{
   font-size: 14px;
   color: #666;
-  margin-bottom: 15px;
 }
+.time-block {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;    /* center horizontally */
+  justify-content: center; 
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Optional: style subject & time for better contrast */
+.time-block .subject {
+  font-size: 14px;
+}
+
+.time-block .time {
+  font-size: 12px;
+  opacity: 0.8; /* makes time a bit lighter */
+}
+
+
+
 
 .attendance-indicator {
   display: flex;
@@ -299,16 +369,17 @@ html, body {
   gap: 20px;
   box-sizing: border-box;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .chart-section {
     flex: 1; /* or use width: 50% if you want two per row */    
-    min-width: 0;
+    max-width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     gap: 1rem;
-    width: 100%;
     box-sizing: border-box;
     background: white;
     border-radius: 10px;
