@@ -89,6 +89,9 @@ function displayParents(parents) {
         letterSection.appendChild(parentsGrid);
         content.appendChild(letterSection);
     });
+    
+    // Reinitialize search functionality for new cards
+    initializeSearchAndFilters();
 }
 
 // Function to create a parent card element
@@ -701,34 +704,35 @@ function updateExistingParent(firstName, lastName, phone, email, children) {
     openUpdateParentModal();
 }
 
-// Search functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.querySelector('.search-input');
-    const parentCards = document.querySelectorAll('.parent-card');
-    const gradeFilter = document.getElementById('gradeFilter');
-    const sectionFilter = document.getElementById('sectionFilter');
+// Global function to update parent count
+function updateParentCount() {
     const visibleCards = document.querySelectorAll('.parent-card[style*="flex"], .parent-card:not([style*="none"]):not(.hidden)');
     const parentCountElement = document.querySelector('.count-number');
+    if (parentCountElement) {
+        parentCountElement.textContent = visibleCards.length;
+    }
+}
+
+// Search functionality
+function initializeSearchAndFilters() {
+    const searchInput = document.querySelector('.search-input');
+    const gradeFilter = document.getElementById('gradeFilter');
+    const sectionFilter = document.getElementById('sectionFilter');
     
     // Search functionality
     if (searchInput) {
         searchInput.addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
-            let visibleCount = 0;
+            const parentCards = document.querySelectorAll('.parent-card');
+            const letterSections = document.querySelectorAll('.letter-section');
             
             parentCards.forEach(card => {
                 const parentName = card.querySelector('.parent-name').textContent.toLowerCase();
                 
-                // Extract last name for search (everything after the last space)
-                const nameParts = parentName.split(' ');
-                const lastName = nameParts[nameParts.length - 1];
-                
-                const isVisible = parentName.includes(searchTerm) || 
-                    lastName.includes(searchTerm);
+                const isVisible = parentName.includes(searchTerm);
                 
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';
-                    visibleCount++;
                 } else {
                     card.style.display = 'none';
                 }
@@ -744,16 +748,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Update count based on search results
-            if (searchTerm) {
-                parentCountElement.textContent = visibleCount;
-            } else {
-                // Show all sections when search is cleared
-                letterSections.forEach(section => {
-                    section.style.display = 'block';
-                });
-                updateParentCount();
-            }
+            // Update count
+            updateParentCount();
         });
     }
     
@@ -776,17 +772,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // For now, this doesn't affect the display
         });
     }
-    
-    function updateParentCount() {
-        const visibleCards = document.querySelectorAll('.parent-card:not(.hidden)');
-        const parentCountElement = document.querySelector('.count-number');
-        if (parentCountElement) {
-            parentCountElement.textContent = visibleCards.length;
-        }
-    }
-    
-    // Initialize the page
+}
+
+// Initialize search and filters after DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
     loadParentsFromDatabase();
+    initializeSearchAndFilters();
 });
 
 // Modal functionality

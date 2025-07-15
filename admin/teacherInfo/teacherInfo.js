@@ -194,8 +194,11 @@ function teacherGrid(data) {
 
                 const isVisible = teacherName.includes(searchTerm) || teacherId.includes(searchTerm);
 
-                if (isVisible && !card.classList.contains('hidden')) card.style.display = 'flex';
-                else card.style.display = 'none';
+                if (isVisible && !card.classList.contains('hidden')) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
             });
 
             // Hide/show subject sections based on whether they have visible cards
@@ -208,16 +211,8 @@ function teacherGrid(data) {
                 }
             });
 
-            // Update count based on search results
-            if (searchTerm) {
-                updateTeacherCount()
-            } else {
-                // Show all sections when search is cleared
-                subjectSections.forEach(section => {
-                    section.style.display = 'block';
-                });
-                updateTeacherCount();
-            }
+            // Always update count after search
+            updateTeacherCount();
         });
     }
 
@@ -269,7 +264,7 @@ function teacherGrid(data) {
 }
 
 function updateTeacherCount() {
-    const visibleCards = document.querySelectorAll('.teacher-card:not(.hidden)');
+    const visibleCards = document.querySelectorAll('.teacher-card[style*="flex"], .teacher-card:not([style*="none"]):not(.hidden)');
     const teacherCountElement = document.querySelector('.count-number');
 
     teachers = new Set();
