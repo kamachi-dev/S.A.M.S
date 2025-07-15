@@ -53,3 +53,16 @@ fetch(`https://sams-backend-u79d.onrender.com/api/getUserdetails.php`, {
 const url = new URL(window.location);
 url.search = '';
 window.history.replaceState({}, document.title, url.pathname);
+
+// Signout functionality
+function signOut() {
+    // Clear cookies
+    document.cookie = 'tkn=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = 'provider=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    
+    // Redirect to login page
+    window.location.href = '/index.html';
+}
+
+// Make signOut function globally available
+window.signOut = signOut;
