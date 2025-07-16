@@ -237,8 +237,41 @@ function getStudents() {
                 clone.querySelector('#pfp').src = '/assets/icons/placeholder-parent.jpeg';
                 clone.querySelector('.student-name').textContent = `${student['lastname']}, ${student['firstname']}`;
                 clone.addEventListener('click', () => {
-                    viewStudentProfile(student['id']);
+                    const isMobile = window.matchMedia("(max-width: 750px)").matches;
+
+                    if (isMobile) {
+                        const isAlreadyPicked = clone.classList.contains('student-card_picked');
+
+                        // If this card is already picked, revert it back
+                        if (isAlreadyPicked) {
+                            clone.classList.remove('student-card_picked');
+                            clone.classList.add('student-card');
+
+                            // Remove the charts/details section if present
+                            const existing = clone.querySelector(".charts-top-bottom");
+                            if (existing) existing.remove();
+                        } else {
+                            // Reset all others
+                            document.querySelectorAll('.student-card_picked').forEach(card => {
+                                card.classList.remove('student-card_picked');
+                                card.classList.add('student-card');
+                                const charts = card.querySelector(".charts-top-bottom");
+                                if (charts) charts.remove();
+                            });
+
+                            // Make this one picked
+                            clone.classList.remove('student-card');
+                            clone.classList.add('student-card_picked');
+
+                            // Show details
+                            const status = 'present'; // ← Replace with real logic if needed
+                            showStudentDetails(status, clone);
+                        }
+                    } else {
+                        viewStudentProfile(student['id']);
+                    }
                 });
+
                 leftContent.appendChild(clone);
             });
         });
@@ -340,27 +373,57 @@ function showStudentDetails(status, element = null) {
     `;
 
     if (isMobile) {
-        const existing = element.querySelector(".charts-top-bottom");
-        if (existing) {
-            existing.remove();
-            return;
+        const isAlreadyPicked = element.classList.contains('student-card_picked');
+
+        // Unpick all others first
+        document.querySelectorAll('.student-card_picked').forEach(card => {
+            card.classList.remove('student-card_picked');
+            card.classList.add('student-card');
+
+            const avatar = card.querySelector('.student-avatar_picked');
+            if (avatar) {
+                avatar.classList.remove('student-avatar_picked');
+                avatar.classList.add('student-avatar');
+            }
+
+            const details = card.querySelector('.student-details_picked');
+            if (details) {
+                details.classList.remove('student-details_picked');
+                details.classList.add('student-details');
+            }
+
+            const charts = card.querySelector('.charts-top-bottom');
+            if (charts) charts.remove();
+        });
+
+        if (!isAlreadyPicked) {
+            element.classList.remove('student-card');
+            element.classList.add('student-card_picked');
+
+            const avatar = element.querySelector('.student-avatar');
+            if (avatar) {
+                avatar.classList.remove('student-avatar');
+                avatar.classList.add('student-avatar_picked');
+            }
+
+            const details = element.querySelector('.student-details');
+            if (details) {
+                details.classList.remove('student-details');
+                details.classList.add('student-details_picked');
+            }
+
+            element.insertAdjacentHTML("beforeend", chartsHTML);
+
+            generateCalendar(currentMonth, currentYear);
+
+            element.querySelector(".nav-button.prev").addEventListener("click", previousMonth);
+            element.querySelector(".nav-button.next").addEventListener("click", nextMonth);
+
+            drawDonutChart(dailyId, [5, 1, 2], ['#0093ff', '#ffcd03', '#ef2722']);
+            drawDonutChart(termId, [20, 4, 3], ['#0093ff', '#ffcd03', '#ef2722']);
         }
-
-        document.querySelectorAll(".charts-top-bottom").forEach(el => el.remove());
-
-        element.insertAdjacentHTML("beforeend", chartsHTML);
-
-        // ✅ Generate calendar after HTML is added
-        generateCalendar(currentMonth, currentYear);
-
-        // ✅ Attach navigation listeners
-        element.querySelector(".nav-button.prev").addEventListener("click", previousMonth);
-        element.querySelector(".nav-button.next").addEventListener("click", nextMonth);
-
-        drawDonutChart(dailyId, [5, 1, 2], ['#0093ff', '#ffcd03', '#ef2722']);
-        drawDonutChart(termId, [20, 4, 3], ['#0093ff', '#ffcd03', '#ef2722']);
-
-    } else {
+    }
+else {
         const leftPanel = document.querySelector(".students-left");
         leftPanel.innerHTML = `
             <div class="student-card_picked">
@@ -381,10 +444,8 @@ function showStudentDetails(status, element = null) {
             </div>
         `;
 
-        // ✅ Generate calendar after HTML is added
         generateCalendar(currentMonth, currentYear);
 
-        // ✅ Attach navigation listeners
         leftPanel.querySelector(".nav-button.prev").addEventListener("click", previousMonth);
         leftPanel.querySelector(".nav-button.next").addEventListener("click", nextMonth);
 
@@ -392,6 +453,61 @@ function showStudentDetails(status, element = null) {
         drawDonutChart(termId, [20, 4, 3], ['#0093ff', '#ffcd03', '#ef2722']);
     }
 }
+
+let wasMobile = window.matchMedia("(max-width: 750px)").matches;
+
+window.addEventListener('resize', () => {
+    const isNowMobile = window.matchMedia("(max-width: 750px)").matches;
+
+    if (wasMobile && !isNowMobile) {
+        // Reset right panel
+        const leftPanel = document.querySelector(".students-left");
+        if (leftPanel) {
+            leftPanel.innerHTML = `
+                <div class="students-left" id="studentDetailsPanel">
+                    Please Select a student to display its contents
+                </div>
+            `;
+        }
+
+        // Force rebuild of student cards from original template
+        fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
+            credentials: 'include',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const grid = document.querySelector('.students-grid');
+            grid.innerHTML = ''; // clear old cards
+
+            data.forEach(student => {
+                const clone = studentProfile.querySelector('.student-card').cloneNode(true);
+                clone.id = `student-${student['id']}`;
+                clone.querySelector('.student-id').innerHTML = student['id'].toString().padStart(10, '0');
+                clone.querySelector('#pfp').src = '/assets/icons/placeholder-parent.jpeg';
+                clone.querySelector('.student-name').textContent = `${student['lastname']}, ${student['firstname']}`;
+                clone.setAttribute('onclick', `showStudentDetails('present', this)`);
+
+                const button = clone.querySelector('.profile-button');
+                button.setAttribute('onclick', `viewStudentProfile('${student['id']}')`);
+
+                grid.appendChild(clone);
+            });
+        });
+    }
+
+    wasMobile = isNowMobile;
+});
+
+
+
+
+
 
 
 window.previousMonth = previousMonth;

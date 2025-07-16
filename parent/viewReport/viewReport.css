@@ -71,6 +71,7 @@ html, body {
     -ms-overflow-style: none;
     width: 50%;
     padding: 20px;
+    height: 100%;
     background-color: #f7f7f7;
 }
 .students-right::-webkit-scrollbar {
@@ -504,6 +505,19 @@ html, body {
         gap: 0px;
         padding: 0px;
     }
+    .student-avatar img{
+      width: 7em;
+      height: 7em;
+    }
+}
+
+@media only screen and (max-width: 1470px){
+  .student-name{
+    font-size:16px;
+  }
+  .student-id{
+    font-size: 13px;
+  }
 }
 
 @media only screen and (max-width: 1050px) {
@@ -550,6 +564,44 @@ html, body {
         margin-right: 0;
         margin-bottom: 10px;
     }
+
+    .chart-section{
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: none;
+      gap: 20px;
+      overflow: auto;
+    }
+    .student-card_picked{
+      box-sizing: border-box;
+    }
+
+  .charts-container{
+    gap: 0;
+  }
+  .student-avatar_picked img{
+    box-sizing: border-box;
+  }
+  .student-avatar_picked{
+    box-sizing: border-box;
+  }
+  .attendance-indicator{
+    gap:0;
+    margin: 0;
+  }
+  .calendar-container{
+    padding:5px;
+  }
+  .student-avatar img{
+      width: 6em;
+      height: 6em;
+  }
+  .calendar-grid{
+    align-items: center;
+    justify-content: center;
+  }
+    
 } 
 
 @media only screen and (max-width: 750px) {
@@ -574,6 +626,8 @@ html, body {
     .calendar-container {
         display: flex;
         max-width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
     }
 
     .calendar-day{
