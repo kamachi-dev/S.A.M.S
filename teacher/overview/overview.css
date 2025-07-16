@@ -40,11 +40,9 @@
     align-items: center;
     gap: 20px;
     flex-wrap: wrap;
+    flex: 1;
 }
 
-.student-count-container {
-    margin-left: auto;
-}
 
 .filter-select {
     padding: 10px 15px;
@@ -77,6 +75,7 @@
     transition: all 0.2s ease;
     font-family: inherit;
     white-space: nowrap;
+    margin-left: 20px;
 }
 
 .download-button:hover {
@@ -97,6 +96,7 @@
     padding: 15px 25px;
     border-radius: 10px;
     border: 2px solid #e9ecef;
+    margin-left: auto;
 }
 
 .student-count span:first-child {
@@ -271,6 +271,7 @@
     .download-button {
         padding: 8px 16px;
         font-size: 13px;
+        margin-left: 15px;
     }
 }
 
@@ -291,13 +292,18 @@
         align-items: stretch;
     }
     
-    .student-count-container {
+    .student-count {
         margin-left: 0;
         align-self: center;
+    }
+    
+    .filter-dropdowns {
+        justify-content: center;
     }
     
     .download-button {
         padding: 8px 12px;
         font-size: 12px;
+        margin-left: 10px;
     }
 }

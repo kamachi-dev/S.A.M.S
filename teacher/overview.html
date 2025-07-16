@@ -73,10 +73,18 @@
                                 <option>2nd Term</option>
                                 <option>3rd Term</option>
                             </select>
-                            <div class="student-count">
-                                <span>No. of Students</span>
-                                <span class="count-number">26</span>
-                            </div>
+                            <button class="download-button" onclick="downloadAttendanceData()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7,10 12,15 17,10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Download
+                            </button>
+                        </div>
+                        <div class="student-count">
+                            <span>No. of Students</span>
+                            <span class="count-number">26</span>
                         </div>
                     </div>
                     <!-- Visualizations Section -->
@@ -129,16 +137,108 @@
                             <div class="bar-chart-container">
                                 <canvas id="absentBar"></canvas>
                             </div>
-                        <button class="download-button" onclick="downloadAttendanceData()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7,10 12,15 17,10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                            Download
-                        </button>
+                        </div>
+                        <div class="student-count-container">
+                            <div class="bar-chart-container">
+                                <canvas id="lateBar"></canvas>
+                            </div>
+                        </div>
                     </div>
-                    <div class="student-count-container">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="menu" onclick="TogglePopup()">
+        <img src="/assets/icons/Hamburger.png" alt="menu" />
+    </button>
+    <div class="hiddenMenu">
+        <section class="popup" id="popup">
+            <div class="menuNav">
+                <div class="menuItem">
+                    <img src="/assets/icons/View Report.png" />
+                    <a href="overview.html"><label for="overview">Overview</label></a>
+                </div>
+                <div class="menuItem">
+                    <img src="/assets/icons/User Profile.png" />
+                    <a href="studentInfo.html"><label for="student_info">Student Info</label></a>
+                </div>
+                <div class="menuItem">
+                    <img src="/assets/icons/message.png" />
+                    <a href="messages.html"><label for="message">Messages</label></a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
+                            <button class="download-button" onclick="downloadAttendanceData()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7,10 12,15 17,10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Download
+                            </button>
+                        </div>
+                        <div class="student-count">
+                            <span>No. of Students</span>
+                            <span class="count-number">26</span>
+                        </div>
+                    </div>
+                    <!-- Visualizations Section -->
+                    <div class="overview-visuals">
+                        <div class="visual-row">
+                            <div class="donut-chart-container">
+                                <div class="chart-title">Daily Class Attendance</div>
+                                <canvas id="dailyDonut"></canvas>
+                                <div class="chart-percent">81.25%</div>
+                                <ul class="legend-donut">
+                                    <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">25</span>
+                                    </li>
+                                    <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">1</span>
+                                    </li>
+                                    <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">0</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="donut-chart-container">
+                                <div class="chart-title">Class Term Attendance</div>
+                                <canvas id="termDonut"></canvas>
+                                <div class="chart-percent">76.5%</div>
+                                <ul class="legend-donut">
+                                    <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">204</span>
+                                    </li>
+                                    <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">103</span>
+                                    </li>
+                                    <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">27</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="donut-chart-container">
+                                <div class="chart-title">Class Semester Attendance</div>
+                                <canvas id="semDonut"></canvas>
+                                <div class="chart-percent">63.85%</div>
+                                <ul class="legend-donut">
+                                    <li><span class="legend-dot legend-dot-blue"></span>Presents <span class="legend-val">548</span>
+                                    </li>
+                                    <li><span class="legend-dot legend-dot-yellow"></span>Lates <span class="legend-val">236</span>
+                                    </li>
+                                    <li><span class="legend-dot legend-dot-red"></span>Absents <span class="legend-val">259</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="visual-row visual-row-bars">
+                            <div class="bar-chart-container">
+                                <canvas id="presentBar"></canvas>
+                            </div>
+                            <div class="bar-chart-container">
+                                <canvas id="absentBar"></canvas>
+                            </div>
+                        </div>
+                        <div class="visual-row">
                             <div class="bar-chart-container">
                                 <canvas id="lateBar"></canvas>
                             </div>
