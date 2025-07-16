@@ -42,6 +42,10 @@
     flex-wrap: wrap;
 }
 
+.student-count-container {
+    margin-left: auto;
+}
+
 .filter-select {
     padding: 10px 15px;
     font-size: 14px;
@@ -56,6 +60,33 @@
 
 .filter-select:focus {
     border-color: #4A90E2;
+}
+
+.download-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.download-button:hover {
+    background: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.download-button svg {
+    flex-shrink: 0;
 }
 
 .student-count {
@@ -231,7 +262,18 @@
     .donut-chart-container {padding: 10px 6px 15px 6px;}
     .bar-chart-container {min-width: 181px; max-width: 380px;}
     .students-summary {height: 140px;}
+    
+    .filter-dropdowns {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .download-button {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
 }
+
 @media (max-width: 700px) {
     .overview-header {padding-bottom: 0;}
     .longLogo {height: 55px;}
@@ -242,4 +284,20 @@
     .donut-chart-container {padding: 12px 2px 9px 2px;}
     .bar-chart-container {min-width: 123px; max-width: 240px;}
     .students-summary {height: 70px;}
+    
+    .filter-section {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .student-count-container {
+        margin-left: 0;
+        align-self: center;
+    }
+    
+    .download-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
 }

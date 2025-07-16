@@ -116,3 +116,78 @@ new Chart(document.getElementById('lateBar').getContext('2d'), {
         }
     }
 });
+
+// Download attendance data as CSV
+function downloadAttendanceData() {
+    // Get current filter values (you can expand this to use actual filter values)
+    const subject = document.querySelector('.filter-select').value || 'All Subjects';
+    const grade = document.querySelectorAll('.filter-select')[1].value || 'All Grades';
+    const section = document.querySelectorAll('.filter-select')[2].value || 'All Sections';
+    const term = document.querySelectorAll('.filter-select')[3].value || 'All Terms';
+    
+    // Sample attendance data based on the visualizations
+    const attendanceData = [
+        // Header row
+        ['Period', 'Present', 'Late', 'Absent', 'Total', 'Percentage'],
+        
+        // Daily data
+        ['Daily Class Attendance', '25', '1', '0', '26', '81.25%'],
+        
+        // Term data  
+        ['Class Term Attendance', '204', '103', '27', '334', '76.5%'],
+        
+        // Semester data
+        ['Class Semester Attendance', '548', '236', '259', '1043', '63.85%'],
+        
+        // Weekly breakdown (from bar charts)
+        ['Week 1 - Present', '83.45%', '', '', '', ''],
+        ['Week 1 - Late', '97.62%', '', '', '', ''],
+        ['Week 2 - Present', '94.44%', '', '', '', ''],
+        ['Week 2 - Late', '29.82%', '', '', '', ''],
+        ['Week 3 - Present', '78.17%', '', '', '', ''],
+        ['Week 3 - Late', '24.11%', '', '', '', ''],
+        ['Week 4 - Present', '80.81%', '', '', '', ''],
+        ['Week 4 - Late', '27.86%', '', '', '', ''],
+    ];
+    
+    // Add filter information at the top
+    const headerInfo = [
+        ['SAMS Attendance Report'],
+        ['Generated on:', new Date().toLocaleDateString()],
+        ['Subject:', subject],
+        ['Grade:', grade], 
+        ['Section:', section],
+        ['Term:', term],
+        [''], // Empty row for spacing
+    ];
+    
+    // Combine header info with attendance data
+    const fullData = [...headerInfo, ...attendanceData];
+    
+    // Convert to CSV format
+    const csvContent = fullData.map(row => 
+        row.map(cell => `"${cell}"`).join(',')
+    ).join('\n');
+    
+    // Create and download the file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        
+        // Generate filename with current date and filters
+        const date = new Date().toISOString().split('T')[0];
+        const filename = `SAMS_Attendance_Report_${date}.csv`;
+        
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+// Make function globally available
+window.downloadAttendanceData = downloadAttendanceData;
