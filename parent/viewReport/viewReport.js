@@ -140,14 +140,22 @@ function getAttendanceColorClass(attendanceCode) {
 
 // Generate calendar with dynamic attendance data
 function generateCalendar(month, year) {
+    // Only generate calendar if a student is selected
+    if (!selectedStudent) return;
+
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    document.getElementById('monthYear').textContent = `${monthNames[month]} ${year}`;
+    const monthYearElement = document.getElementById('monthYear');
+    if (monthYearElement) {
+        monthYearElement.textContent = `${monthNames[month]} ${year}`;
+    }
 
     const calendarGrid = document.querySelector('.calendar-grid');
+    if (!calendarGrid) return;
+
     const days = calendarGrid.querySelectorAll('.calendar-day, .other-month');
     days.forEach(day => day.remove());
 
@@ -259,17 +267,55 @@ function createStudentCard(student) {
     // Add click handler for student selection
     card.addEventListener('click', (e) => {
         if (e.target.classList.contains('profile-button')) return;
-
-        const isMobile = window.matchMedia("(max-width: 750px)").matches;
-
-        if (isMobile) {
-            handleMobileStudentSelection(card, student);
-        } else {
-            handleDesktopStudentSelection(student);
+        
+        // Determine attendance status for the card
+        const todaysAttendance = getTodaysAttendanceForStudent(student.fullName);
+        let status = 'absent';
+        
+        if (todaysAttendance.length > 0) {
+            const worstAttendance = Math.min(...todaysAttendance.map(a => a.attendance));
+            status = getAttendanceStatus(worstAttendance);
         }
+
+        showStudentDetails(status, card);
     });
 
     return card;
+}
+
+// Get today's attendance for a specific student (used for card status)
+function getTodaysAttendanceForStudent(studentName) {
+    const today = new Date().toISOString().split('T')[0];
+    const studentRecords = allStudentRecords.filter(record => 
+        `${record.firstname} ${record.lastname}` === studentName
+    );
+    
+    return studentRecords.filter(record => {
+        const recordDate = new Date(record.sent).toISOString().split('T')[0];
+        return recordDate === today;
+    });
+}
+
+// PRESERVED ORIGINAL FUNCTION - Handle student selection (both mobile and desktop)
+function showStudentDetails(status, element) {
+    // Find the student data from the clicked element
+    const studentId = element.getAttribute('data-student-id');
+    const student = students.find(s => s.id.toString() === studentId);
+    
+    if (!student) return;
+
+    selectedStudent = student;
+
+    // Process attendance data for this student
+    attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
+
+    const isMobile = window.matchMedia("(max-width: 750px)").matches;
+
+    if (isMobile) {
+        handleMobileStudentSelection(element, student);
+    } else {
+        handleDesktopStudentSelection(student);
+    }
 }
 
 // Handle student selection on mobile
@@ -288,20 +334,16 @@ async function handleMobileStudentSelection(cardElement, student) {
         cardElement.classList.remove('student-card');
         cardElement.classList.add('student-card_picked');
 
-        selectedStudent = student;
-
         // Load attendance data and display
         await loadStudentDetails(cardElement, student);
+    } else {
+        // If clicking the same card again, deselect
+        selectedStudent = null;
     }
 }
 
 // Handle student selection on desktop
 async function handleDesktopStudentSelection(student) {
-    selectedStudent = student;
-
-    // Process attendance data for this student
-    attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
-
     const leftPanel = document.querySelector(".students-left");
     const todaysAttendance = getTodaysAttendance(student.fullName);
     
@@ -343,7 +385,6 @@ async function handleDesktopStudentSelection(student) {
 
 // Load student details for mobile view
 async function loadStudentDetails(cardElement, student) {
-    attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
     const chartsHTML = await generateChartsHTML(student);
 
     cardElement.insertAdjacentHTML("beforeend", chartsHTML);
@@ -496,6 +537,9 @@ window.addEventListener('resize', () => {
             `;
         }
 
+        // Clear selected student
+        selectedStudent = null;
+
         // Refresh student display
         displayStudents();
     }
@@ -505,9 +549,6 @@ window.addEventListener('resize', () => {
 
 // Initialize everything when page loads
 document.addEventListener('DOMContentLoaded', function () {
-    // Generate initial calendar
-    generateCalendar(currentMonth, currentYear);
-
     // Load and display students
     displayStudents();
 
@@ -515,16 +556,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.previousMonth = previousMonth;
     window.nextMonth = nextMonth;
     window.viewStudentProfile = viewStudentProfile;
-    window.showStudentDetails = (status, element) => {
-        if (selectedStudent) {
-            const isMobile = window.matchMedia("(max-width: 750px)").matches;
-            if (isMobile) {
-                handleMobileStudentSelection(element, selectedStudent);
-            } else {
-                handleDesktopStudentSelection(selectedStudent);
-            }
-        }
-    };
 });
 
 // Export functions for global access
