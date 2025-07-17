@@ -287,9 +287,9 @@ function addChildForm() {
                 <label for="childGrade${childCounter}">Grade Level *</label>
                 <select id="childGrade${childCounter}" required>
                     <option value="">Select Grade</option>
-                    <option value="10">Grade 10</option>
-                    <option value="11">Grade 11</option>
-                    <option value="12">Grade 12</option>
+                    <option value="Grade 10">Grade 10</option>
+                    <option value="Grade 11">Grade 11</option>
+                    <option value="Grade 12">Grade 12</option>
                 </select>
             </div>
             <div class="form-group">
@@ -315,14 +315,14 @@ function removeChildForm(childId) {
 }
 
 async function confirmAddParent() {
-    // Validate parent fields
+    // Validate required parent fields
     const parentFirstName = document.getElementById('parentFirstName').value.trim();
     const parentLastName = document.getElementById('parentLastName').value.trim();
     const parentEmail = document.getElementById('parentEmail').value.trim();
     const parentPhone = document.getElementById('parentPhone').value.trim();
     
     if (!parentFirstName || !parentLastName || !parentEmail || !parentPhone) {
-        alert('Please fill in all parent information fields.');
+        alert('Please fill in all required parent information fields (First Name, Last Name, Email, Phone).');
         return;
     }
     
@@ -333,7 +333,7 @@ async function confirmAddParent() {
         return;
     }
     
-    // Validate children fields
+    // Validate and collect children data
     const childForms = document.querySelectorAll('.child-form');
     const children = [];
     
@@ -346,7 +346,7 @@ async function confirmAddParent() {
         const childGrade = document.getElementById(`childGrade${childId}`).value;
         
         if (!childFirstName || !childLastName || !childGrade) {
-            alert(`Please fill in all required fields for Child ${parseInt(childId)} (First Name, Last Name, Grade Level).`);
+            alert(`Please fill in all required fields for Child ${i + 1} (First Name, Last Name, Grade Level).`);
             return;
         }
         
@@ -357,7 +357,7 @@ async function confirmAddParent() {
         });
     }
     
-    // Prepare data for API
+    // Prepare data for addParent.php API
     const parentData = {
         firstname: parentFirstName,
         lastname: parentLastName,
@@ -367,13 +367,13 @@ async function confirmAddParent() {
     };
     
     // Show loading state
-    const confirmBtn = document.querySelector('#addParentModal .confirm-btn');
+    const confirmBtn = document.querySelector('.confirm-btn');
     const originalText = confirmBtn.textContent;
     confirmBtn.disabled = true;
     confirmBtn.textContent = 'Adding Parent...';
     
     try {
-        // Call the API
+        // Call the addParent.php API
         const response = await fetch('https://sams-backend-u79d.onrender.com/api/addParent.php', {
             method: 'POST',
             credentials: 'include',
@@ -387,28 +387,33 @@ async function confirmAddParent() {
         
         const result = await response.json();
         
+        // Check for authentication errors
         if (!window.verifyToken(result)) return;
         
-        if (result.success) {
+        if (result.success === true) {
             // Show success message
-            let successMessage = `Successfully added parent: ${result.parent.firstname} ${result.parent.lastname}`;
+            let successMessage = `✅ Successfully added parent: ${result.parent.firstname} ${result.parent.lastname}`;
             if (result.children_count > 0) {
-                successMessage += `\nAdded ${result.children_count} child(ren)`;
+                successMessage += `\n👶 Added ${result.children_count} child(ren)`;
             }
             alert(successMessage);
             
             // Close modal and clear form
             closeAddParentModal();
             
-            // Reload the page to show the new parent
+            // Reload the page to show the new parent from database
             location.reload();
             
         } else {
-            // Handle API errors
-            let errorMessage = 'Failed to add parent: ' + (result.error || 'Unknown error');
+            // Handle API errors with detailed messages
+            let errorMessage = '❌ Failed to add parent: ' + (result.error || 'Unknown error');
             
             if (result.missing_fields) {
-                errorMessage += '\nMissing fields: ' + result.missing_fields.join(', ');
+                errorMessage += '\n📝 Missing fields: ' + result.missing_fields.join(', ');
+            }
+            
+            if (result.details) {
+                errorMessage += '\n🔍 Details: ' + result.details;
             }
             
             alert(errorMessage);
@@ -416,7 +421,7 @@ async function confirmAddParent() {
         
     } catch (error) {
         console.error('Error adding parent:', error);
-        alert('An error occurred while adding the parent. Please try again.');
+        alert('❌ Network error occurred while adding the parent. Please check your connection and try again.');
         
     } finally {
         // Reset button state
@@ -649,9 +654,9 @@ function addUpdateChildForm(childData = null) {
                 <label for="updateChildGrade${updateChildCounter}">Grade Level *</label>
                 <select id="updateChildGrade${updateChildCounter}" required>
                     <option value="">Select Grade</option>
-                    <option value="10" ${childData?.grade === '10' ? 'selected' : ''}>Grade 10</option>
-                    <option value="11" ${childData?.grade === '11' ? 'selected' : ''}>Grade 11</option>
-                    <option value="12" ${childData?.grade === '12' ? 'selected' : ''}>Grade 12</option>
+                    <option value="Grade 10" ${childData?.grade === 'Grade 10' ? 'selected' : ''}>Grade 10</option>
+                    <option value="Grade 11" ${childData?.grade === 'Grade 11' ? 'selected' : ''}>Grade 11</option>
+                    <option value="Grade 12" ${childData?.grade === 'Grade 12' ? 'selected' : ''}>Grade 12</option>
                 </select>
             </div>
             <div class="form-group">
