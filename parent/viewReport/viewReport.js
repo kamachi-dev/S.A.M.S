@@ -44,7 +44,7 @@ function nextMonth() {
 // Fetch all student records from your API
 async function fetchStudentRecords() {
     try {
-        const response = await fetch('https://sams-backend-u79d.onrender.com/api/getStudentsRecords.php', {
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/getStudentsProfiles.php', {
             credentials: 'include',
             method: 'GET',
             headers: {
