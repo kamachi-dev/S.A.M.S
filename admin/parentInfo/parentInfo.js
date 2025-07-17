@@ -498,6 +498,8 @@ function showAddedParentDetails(parentId) {
         childrenDetails += `
             <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
                 <h4 style="margin: 0 0 8px 0; color: #333;">Child ${index + 1}: ${child.firstName} ${child.lastName}</h4>
+                <p style="margin: 3px 0;"><strong>Email:</strong> ${child.email}</p>
+                <p style="margin: 3px 0;"><strong>Phone:</strong> ${child.phone}</p>
                 <p style="margin: 3px 0;"><strong>Grade:</strong> Grade ${child.grade}</p>
             </div>
         `;
@@ -630,6 +632,16 @@ function addUpdateChildForm(childData = null) {
             <div class="form-group">
                 <label for="updateChildLastName${updateChildCounter}">Last Name *</label>
                 <input type="text" id="updateChildLastName${updateChildCounter}" value="${childData?.lastName || ''}" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="updateChildEmail${updateChildCounter}">Email *</label>
+                <input type="email" id="updateChildEmail${updateChildCounter}" value="${childData?.email || ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="updateChildPhone${updateChildCounter}">Phone Number *</label>
+                <input type="tel" id="updateChildPhone${updateChildCounter}" value="${childData?.phone || ''}" required>
             </div>
         </div>
         <div class="form-row">
