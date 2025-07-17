@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
     padding: 20px;
 }
 
@@ -18,14 +18,16 @@
 
 .filter-select {
     padding: 10px 15px;
-    font-size: 14px;
-    border: 2px solid #ddd;
+    font-size: 24px;
     border-radius: 8px;
     background: white;
+    border: none;
     cursor: pointer;
     outline: none;
     min-width: 150px;
     font-family: inherit;
+    height: 50px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2)
 }
 
 .filter-select:focus {
@@ -37,7 +39,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 24px;
     font-weight: 600;
     background: #28a745;
     color: white;
@@ -47,7 +49,7 @@
     transition: all 0.2s ease;
     font-family: inherit;
     white-space: nowrap;
-    margin-left: 20px;
+    margin-left: auto;
 }
 
 .download-button:hover {
@@ -64,11 +66,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #f8f9fa;
+    background: #dad8d8;
     padding: 15px 25px;
     border-radius: 10px;
-    border: 2px solid #e9ecef;
-    margin-left: auto;
+    border: 2px solid #b6b6b6;
 }
 
 .student-count span:first-child {
@@ -87,14 +88,22 @@
 
 /* ====== VISUALIZATIONS IN ROWS/BOXES ====== */
 .overview-visuals {
-    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 .visual-row {
     display: flex;
     gap: 24px;
-    justify-content: flex-start;
-    margin-bottom: 27px;
+    justify-content: center;
     flex-wrap: wrap;
+    box-sizing: content-box;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 .donut-chart-container {
     flex: 1 1 260px;
@@ -107,8 +116,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 4px;
-    border: 1.5px solid #e1e3ef;
 }
 .chart-title {
     font-size: 1.10em;
@@ -202,35 +209,45 @@
 /* ========== BAR CHARTS ROW ========== */
 .visual-row-bars {
     margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    background: none;
+    align-content: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+    gap:10px;
+    padding-right: 20px;
+    padding-left: 20px;
 }
 .bar-chart-container {
     background: #fff;
     border-radius: 13px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.10);
     flex: 1 1 220px;
-    min-width: 230px;
-    max-width: 410px;
-    padding: 12px 15px 10px 15px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    min-height: 235px;
+    min-height: 16em;
     border: 1.1px solid #e5e5ea;
     font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
 }
+
 .bar-chart-container canvas {
     width: 100% !important;
     max-width: 370px;
-    height: 170px !important;
+    height: 220px !important;
 }
 
-.visual-row:last-child {
+/* .visual-row:last-child {
     justify-content: flex-start;
-}
+} */
 
 .visual-row:last-child .bar-chart-container {
     max-width: 48%;
+    height: 100%;
 }
 
 /* ===== RESPONSIVENESS ===== */

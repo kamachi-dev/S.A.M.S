@@ -51,7 +51,7 @@ button:hover {
     z-index: 1;
 }
 .headerPicture {
-    height: 13em;
+    height: 8em;
     width: 100%;
     filter: brightness(0.7);
     object-fit: cover;
@@ -61,9 +61,9 @@ button:hover {
 
 .longLogo {
     position: relative;
-    top: -11em;
+    top: -7.5em;
     left: 0;
-    height: 8em;
+    height: 6em;
     width: 100%;
     object-fit: contain;
     /* filter: drop-shadow(0 4px 6px rgb(255, 255, 255)); */
@@ -108,7 +108,7 @@ nav > ul > li > a {
 }
 .navBar {
     position: relative;
-    top: -15em;
+    top: -12.5em;
 }
 .navBar > ul > li{
     height: 6em;
@@ -143,9 +143,9 @@ nav > ul > li > a {
 .content-border {
     display: block;
     background-color: rgb(122, 22, 22);
-    height: calc(100.5vh - 13em);
+    height: calc(100.5vh - 8.4em);
     position: fixed;
-    top: 13.1em;
+    top: 8.1em;
     width: 100%;
     z-index: 3;
     padding: 0;
@@ -157,15 +157,22 @@ nav > ul > li > a {
 .content {
     display: block;
     background-color: #dad8d8;
-    overflow-y: scroll;
-    position: static; /* make it stretch over content */
+    overflow-y: scroll; /* keep scrolling */
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE and Edge */
+    position: static;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: -1; /* stays behind any actual content */
-    border: 2px solid #757575; /* Adds a ridge-style border */
-    box-sizing: border-box; /* Ensures the border is included in sizing */
+    z-index: -1;
+    border: 2px solid #757575;
+    box-sizing: border-box;
+}
+
+/* For WebKit browsers (Chrome, Safari, Edge) */
+.content::-webkit-scrollbar {
+    display: none;
 }
 
 .content > * {
@@ -257,6 +264,21 @@ nav > ul > li > a {
     opacity: 0;
     visibility: hidden;
 }
+
+.filter-select {
+    padding: 10px 15px;
+    font-size: 24px;
+    border-radius: 8px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    min-width: 150px;
+    font-family: inherit;
+    height: 50px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
 /*responsiveness##############################################################*/
 @media only screen and (max-width: 750px) {
     .navBar {

@@ -17,19 +17,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    padding: 0 10px;
 }
 
 .search-container {
     flex: 1;
     max-width: 300px;
+    height: 50px;
 }
 
 .search-input {
     width: 100%;
     padding: 12px 20px;
-    font-size: 16px;
+    font-size: 24px;
     border: 2px solid #ddd;
     border-radius: 25px;
     outline: none;
@@ -44,17 +43,6 @@
     display: flex;
     align-items: center;
     gap: 15px;
-}
-
-.filter-select {
-    padding: 10px 15px;
-    font-size: 14px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background: white;
-    cursor: pointer;
-    outline: none;
-    min-width: 120px;
 }
 
 .filter-select:focus {
