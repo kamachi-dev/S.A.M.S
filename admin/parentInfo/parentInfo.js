@@ -284,6 +284,16 @@ function addChildForm() {
         </div>
         <div class="form-row">
             <div class="form-group">
+                <label for="childEmail${childCounter}">Email *</label>
+                <input type="email" id="childEmail${childCounter}" required>
+            </div>
+            <div class="form-group">
+                <label for="childPhone${childCounter}">Phone Number *</label>
+                <input type="tel" id="childPhone${childCounter}" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
                 <label for="childGrade${childCounter}">Grade Level *</label>
                 <select id="childGrade${childCounter}" required>
                     <option value="">Select Grade</option>
@@ -636,6 +646,16 @@ function addUpdateChildForm(childData = null) {
         </div>
         <div class="form-row">
             <div class="form-group">
+                <label for="updateChildEmail${updateChildCounter}">Email *</label>
+                <input type="email" id="updateChildEmail${updateChildCounter}" value="${childData?.email || ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="updateChildPhone${updateChildCounter}">Phone Number *</label>
+                <input type="tel" id="updateChildPhone${updateChildCounter}" value="${childData?.phone || ''}" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
                 <label for="updateChildGrade${updateChildCounter}">Grade Level *</label>
                 <select id="updateChildGrade${updateChildCounter}" required>
                     <option value="">Select Grade</option>
@@ -688,16 +708,20 @@ function saveParentChanges() {
         
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
+        const childEmail = document.getElementById(`updateChildEmail${childId}`).value.trim();
+        const childPhone = document.getElementById(`updateChildPhone${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
         
-        if (!childFirstName || !childLastName || !childGrade) {
-            alert(`Please fill in all required fields for Child ${parseInt(childId)} (First Name, Last Name, Grade Level).`);
+        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
+            alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
             return;
         }
         
         children.push({
             firstName: childFirstName,
             lastName: childLastName,
+            email: childEmail,
+            phone: childPhone,
             grade: childGrade
         });
     }
