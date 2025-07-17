@@ -27,7 +27,7 @@ function clearAddTeacherForm() {
     document.getElementById('courseCode').value = '';
 }
 
-function confirmAddTeacher() {
+async function confirmAddTeacher() {
     // Validate required fields
     const firstName = document.getElementById('teacherFirstName').value.trim();
     const lastName = document.getElementById('teacherLastName').value.trim();
@@ -39,34 +39,96 @@ function confirmAddTeacher() {
         return;
     }
     
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+    
     // Get optional fields
     const department = document.getElementById('teacherDepartment').value.trim() || 'Unassigned';
     const courseName = document.getElementById('courseName').value.trim() || 'Unassigned';
     const courseCode = document.getElementById('courseCode').value.trim() || 'Unassigned';
     
-    // Create teacher object
-    const newTeacher = {
-        id: Date.now(), // Simple ID generation
-        firstName: firstName,
-        lastName: lastName,
+    // Prepare data for API
+    const teacherData = {
+        firstname: firstName,
+        lastname: lastName,
         email: email,
-        phone: phone,
-        department: department,
-        courseName: courseName,
-        courseCode: courseCode
+        phone: phone
     };
     
-    // Add to stored teachers
-    addedTeachers.push(newTeacher);
+    // Add optional fields only if they're not "Unassigned"
+    if (department !== 'Unassigned' && department !== '') {
+        teacherData.department = department;
+    }
     
-    // Create and add teacher card to the page
-    addTeacherCardToPage(newTeacher);
+    if (courseName !== 'Unassigned' && courseName !== '') {
+        teacherData.course_name = courseName;
+    }
     
-    // Close modal and clear form
-    closeAddTeacherModal();
+    if (courseCode !== 'Unassigned' && courseCode !== '') {
+        teacherData.course_code = courseCode;
+    }
     
-    // Update teacher count
-    updateTeacherCount();
+    // Show loading state
+    const confirmBtn = document.querySelector('.confirm-btn');
+    const originalText = confirmBtn.textContent;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Adding Teacher...';
+    
+    try {
+        // Call the API
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/addTeacher.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            },
+            body: JSON.stringify(teacherData)
+        });
+        
+        const result = await response.json();
+        
+        if (!window.verifyToken(result)) return;
+        
+        if (result.success) {
+            // Show success message
+            let successMessage = `Successfully added teacher: ${result.teacher.firstname} ${result.teacher.lastname}`;
+            if (result.course) {
+                successMessage += `\nCourse created: ${result.course.name} (${result.course.code})`;
+            }
+            alert(successMessage);
+            
+            // Close modal and clear form
+            closeAddTeacherModal();
+            
+            // Reload the page to show the new teacher
+            location.reload();
+            
+        } else {
+            // Handle API errors
+            let errorMessage = 'Failed to add teacher: ' + (result.error || 'Unknown error');
+            
+            if (result.missing_fields) {
+                errorMessage += '\nMissing fields: ' + result.missing_fields.join(', ');
+            }
+            
+            alert(errorMessage);
+        }
+        
+    } catch (error) {
+        console.error('Error adding teacher:', error);
+        alert('An error occurred while adding the teacher. Please try again.');
+        
+    } finally {
+        // Reset button state
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
+    }
 }
 
 function addTeacherCardToPage(teacher) {
