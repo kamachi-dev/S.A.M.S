@@ -5,6 +5,7 @@ let currentYear = currentDate.getFullYear();
 let students = [];
 let selectedStudent = null;
 let attendanceData = {};
+let allStudentRecords = [];
 
 function TogglePopup() {
     const popup = document.getElementById("popup");
@@ -40,10 +41,10 @@ function nextMonth() {
     generateCalendar(currentMonth, currentYear);
 }
 
-// Fetch students data from API
-async function fetchStudents() {
+// Fetch all student records from your API
+async function fetchStudentRecords() {
     try {
-        const response = await fetch('https://sams-backend-u79d.onrender.com/api/getStudents.php', {
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/getStudentsRecords.php', {
             credentials: 'include',
             method: 'GET',
             headers: {
@@ -57,90 +58,84 @@ async function fetchStudents() {
 
         if (!window.verifyToken(data)) return [];
 
-        students = data.map(student => ({
-            id: student.id,
-            firstName: student.firstname,
-            lastName: student.lastname,
-            fullName: `${student.firstname} ${student.lastname}`,
-            gradeLevel: student.grade_level,
-            email: student.email || `${student.firstname.toLowerCase()}.${student.lastname.toLowerCase()}@student.mmcl.edu.ph`,
-            phone: student.phone || '(555) 0000',
-            pfp: student.pfp || '/assets/icons/placeholder-parent.jpeg',
-            parentId: student.parent
-        }));
-
-        return students;
+        allStudentRecords = data;
+        return data;
     } catch (error) {
-        console.error('Error fetching students:', error);
+        console.error('Error fetching student records:', error);
         return [];
     }
 }
 
-// Fetch attendance data for a specific student
-async function fetchStudentAttendance(studentId) {
-    try {
-        const response = await fetch(`https://sams-backend-u79d.onrender.com/api/getStudentAttendance.php?student_id=${studentId}`, {
-            credentials: 'include',
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
+// Process attendance data for calendar display
+function processAttendanceForCalendar(records, studentName) {
+    const attendanceMap = {};
+    const dailyAttendance = {};
+
+    records.forEach(record => {
+        if (`${record.firstname} ${record.lastname}` === studentName) {
+            const date = new Date(record.sent);
+            const dateStr = date.toISOString().split('T')[0];
+            const attendance = parseInt(record.attendance);
+
+            // Store attendance for this date and course
+            if (!dailyAttendance[dateStr]) {
+                dailyAttendance[dateStr] = [];
             }
-        });
+            
+            dailyAttendance[dateStr].push({
+                courseName: record.name,
+                attendance: attendance,
+                time: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
 
-        const data = await response.json();
+            // Determine overall day status (worst case scenario)
+            if (!attendanceMap[dateStr] || attendance < attendanceMap[dateStr]) {
+                attendanceMap[dateStr] = attendance;
+            }
+        }
+    });
 
-        if (!window.verifyToken(data)) return {};
+    // Convert attendance codes to CSS classes
+    const processedData = {};
+    Object.keys(attendanceMap).forEach(date => {
+        const status = getAttendanceStatus(attendanceMap[date]);
+        processedData[date] = status;
+    });
 
-        // Process attendance data into a format suitable for calendar
-        const processedData = {};
-        data.forEach(record => {
-            const date = new Date(record.date).toISOString().split('T')[0];
-            const attendanceStatus = getAttendanceStatus(record.attendance);
-            processedData[date] = attendanceStatus;
-        });
-
-        return processedData;
-    } catch (error) {
-        console.error('Error fetching attendance:', error);
-        return {};
-    }
+    return { calendarData: processedData, dailyData: dailyAttendance };
 }
 
 // Convert attendance number to status string
 function getAttendanceStatus(attendanceCode) {
     const statusMap = {
         0: 'excused',
-        1: 'absent',
+        1: 'absent', 
         2: 'late',
         3: 'present'
     };
     return statusMap[attendanceCode] || 'absent';
 }
 
-// Fetch course records for attendance timeline
-async function fetchCourseRecords(studentId) {
-    try {
-        const response = await fetch(`https://sams-backend-u79d.onrender.com/api/getStudentCourseRecords.php?student_id=${studentId}`, {
-            credentials: 'include',
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
-            }
-        });
+// Get attendance status display name
+function getAttendanceDisplayName(attendanceCode) {
+    const statusMap = {
+        0: 'Excused',
+        1: 'Absent',
+        2: 'Late', 
+        3: 'Present'
+    };
+    return statusMap[attendanceCode] || 'Absent';
+}
 
-        const data = await response.json();
-
-        if (!window.verifyToken(data)) return [];
-
-        return data;
-    } catch (error) {
-        console.error('Error fetching course records:', error);
-        return [];
-    }
+// Get attendance color class
+function getAttendanceColorClass(attendanceCode) {
+    const colorMap = {
+        0: 'excused',
+        1: 'absent',
+        2: 'late',
+        3: 'present'
+    };
+    return colorMap[attendanceCode] || 'absent';
 }
 
 // Generate calendar with dynamic attendance data
@@ -179,8 +174,8 @@ function generateCalendar(month, year) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
         // Add attendance class if data exists
-        if (attendanceData[dateStr]) {
-            dayElement.classList.add(attendanceData[dateStr]);
+        if (attendanceData.calendarData && attendanceData.calendarData[dateStr]) {
+            dayElement.classList.add(attendanceData.calendarData[dateStr]);
         }
 
         // Highlight today
@@ -188,6 +183,9 @@ function generateCalendar(month, year) {
         if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
             dayElement.classList.add('today');
         }
+
+        // Add click handler to show daily attendance details
+        dayElement.addEventListener('click', () => showDayAttendance(dateStr));
 
         calendarGrid.appendChild(dayElement);
     }
@@ -204,18 +202,52 @@ function generateCalendar(month, year) {
     }
 }
 
+// Show attendance details for a specific day
+function showDayAttendance(dateStr) {
+    if (!attendanceData.dailyData || !attendanceData.dailyData[dateStr]) {
+        alert('No attendance data available for this date.');
+        return;
+    }
+
+    const dayData = attendanceData.dailyData[dateStr];
+    const date = new Date(dateStr);
+    const formattedDate = date.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+
+    let attendanceDetails = `Attendance for ${formattedDate}:\n\n`;
+    
+    dayData.forEach(record => {
+        const status = getAttendanceDisplayName(record.attendance);
+        attendanceDetails += `${record.time} - ${record.courseName}: ${status}\n`;
+    });
+
+    alert(attendanceDetails);
+}
+
+// Get today's attendance for display
+function getTodaysAttendance(studentName) {
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (!attendanceData.dailyData || !attendanceData.dailyData[today]) {
+        return [];
+    }
+
+    return attendanceData.dailyData[today];
+}
+
 // Create student card element
 function createStudentCard(student) {
     const card = document.createElement('div');
     card.className = 'student-card';
     card.setAttribute('data-student-id', student.id);
 
-    // Determine attendance status (you can enhance this with real-time data)
-    const attendanceStatus = Math.random() > 0.7 ? 'present' : Math.random() > 0.5 ? 'late' : 'absent';
-
     card.innerHTML = `
         <div class="student-avatar">
-            <img src="${student.pfp}" alt="Student Photo" />
+            <img src="${student.pfp || '/assets/Sample.png'}" alt="Student Photo" />
         </div>
         <div class="student-details">
             <div class="student-name">${student.fullName}</div>
@@ -226,14 +258,14 @@ function createStudentCard(student) {
 
     // Add click handler for student selection
     card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('profile-button')) return; // Don't trigger on button click
+        if (e.target.classList.contains('profile-button')) return;
 
         const isMobile = window.matchMedia("(max-width: 750px)").matches;
 
         if (isMobile) {
-            handleMobileStudentSelection(card, student, attendanceStatus);
+            handleMobileStudentSelection(card, student);
         } else {
-            handleDesktopStudentSelection(student, attendanceStatus);
+            handleDesktopStudentSelection(student);
         }
     });
 
@@ -241,7 +273,7 @@ function createStudentCard(student) {
 }
 
 // Handle student selection on mobile
-async function handleMobileStudentSelection(cardElement, student, status) {
+async function handleMobileStudentSelection(cardElement, student) {
     const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
 
     // Reset all other cards
@@ -258,34 +290,45 @@ async function handleMobileStudentSelection(cardElement, student, status) {
 
         selectedStudent = student;
 
-        // Fetch and display student details
-        await loadStudentDetails(cardElement, student, status);
+        // Load attendance data and display
+        await loadStudentDetails(cardElement, student);
     }
 }
 
 // Handle student selection on desktop
-async function handleDesktopStudentSelection(student, status) {
+async function handleDesktopStudentSelection(student) {
     selectedStudent = student;
 
-    // Load attendance data for this student
-    attendanceData = await fetchStudentAttendance(student.id);
+    // Process attendance data for this student
+    attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
 
     const leftPanel = document.querySelector(".students-left");
-    const statusIcon = status === 'present' ? '🔵' : status === 'late' ? '🟠' : '🔴';
-    const statusColor = status === 'present' ? 'blue' : status === 'late' ? 'orange' : 'red';
+    const todaysAttendance = getTodaysAttendance(student.fullName);
+    
+    // Determine overall status for today
+    let overallStatus = 'absent';
+    let statusIcon = '🔴';
+    let statusColor = 'red';
+    
+    if (todaysAttendance.length > 0) {
+        const worstAttendance = Math.min(...todaysAttendance.map(a => a.attendance));
+        overallStatus = getAttendanceStatus(worstAttendance);
+        statusIcon = worstAttendance === 3 ? '🔵' : worstAttendance === 2 ? '🟠' : worstAttendance === 1 ? '🔴' : '⚪';
+        statusColor = getAttendanceColorClass(worstAttendance);
+    }
 
     leftPanel.innerHTML = `
         <div class="student-card_picked">
             <div class="test">
                 <div class="student-avatar_picked">
-                    <img src="${student.pfp}" alt="Student Photo" />
+                    <img src="${student.pfp || '/assets/Sample.png'}" alt="Student Photo" />
                 </div>
                 <div class="student-details_picked">
                     <div class="student-name_picked">${student.fullName}</div>
                     <div class="student-id_picked">${student.id.toString().padStart(10, '0')}</div>
                     <div class="attendance-indicator ${statusColor}">
                         <span class="attendance-icon">${statusIcon}</span>
-                        <span>${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                        <span>${overallStatus.charAt(0).toUpperCase() + overallStatus.slice(1)}</span>
                     </div>
                 </div>
             </div>
@@ -296,25 +339,23 @@ async function handleDesktopStudentSelection(student, status) {
     // Initialize calendar and charts
     generateCalendar(currentMonth, currentYear);
     setupCalendarNavigation(leftPanel);
-    drawCharts();
 }
 
 // Load student details for mobile view
-async function loadStudentDetails(cardElement, student, status) {
-    attendanceData = await fetchStudentAttendance(student.id);
+async function loadStudentDetails(cardElement, student) {
+    attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
     const chartsHTML = await generateChartsHTML(student);
 
     cardElement.insertAdjacentHTML("beforeend", chartsHTML);
 
     generateCalendar(currentMonth, currentYear);
     setupCalendarNavigation(cardElement);
-    drawCharts();
 }
 
-// Generate charts HTML
+// Generate charts HTML with today's attendance
 async function generateChartsHTML(student) {
-    const courseRecords = await fetchCourseRecords(student.id);
-    const timeBlocks = generateTimeBlocks(courseRecords);
+    const todaysAttendance = getTodaysAttendance(student.fullName);
+    const timeBlocks = generateTimeBlocks(todaysAttendance);
 
     return `
         <div class="charts-top-bottom">
@@ -348,31 +389,21 @@ async function generateChartsHTML(student) {
     `;
 }
 
-// Generate time blocks based on course records
-function generateTimeBlocks(courseRecords) {
-    if (!courseRecords || courseRecords.length === 0) {
-        return `
-            <div class="time-block time-7"><div class="subject">Math Class</div><div class="time">7:00</div></div>
-            <div class="time-block time-8"><div class="subject">English Literature</div><div class="time">8:00</div></div>
-            <div class="time-block time-9"><div class="subject">History</div><div class="time">9:00</div></div>
-            <div class="time-block time-10"><div class="subject">Chemistry Lab</div><div class="time">10:00</div></div>
-            <div class="time-block time-11"><div class="subject">Lunch</div><div class="time">11:00</div></div>
-            <div class="time-block time-12"><div class="subject">Physics</div><div class="time">12:00</div></div>
-            <div class="time-block time-1"><div class="subject">Computer Science</div><div class="time">1:00</div></div>
-            <div class="time-block time-2"><div class="subject">Music</div><div class="time">2:00</div></div>
-            <div class="time-block time-3"><div class="subject">Sports</div><div class="time">3:00</div></div>
-        `;
+// Generate time blocks based on today's attendance
+function generateTimeBlocks(todaysAttendance) {
+    if (!todaysAttendance || todaysAttendance.length === 0) {
+        return '<div class="no-attendance">No classes today</div>';
     }
 
-    return courseRecords.map(record => {
-        const time = new Date(record.start_time).toLocaleTimeString([], { hour: 'numeric' });
-        const timeClass = `time-${new Date(record.start_time).getHours()}`;
-        const attendanceClass = getAttendanceStatus(record.attendance);
+    return todaysAttendance.map(record => {
+        const attendanceClass = getAttendanceColorClass(record.attendance);
+        const attendanceText = getAttendanceDisplayName(record.attendance);
 
         return `
-            <div class="time-block ${timeClass} ${attendanceClass}">
-                <div class="subject">${record.course_name}</div>
-                <div class="time">${time}</div>
+            <div class="time-block ${attendanceClass}">
+                <div class="subject">${record.courseName}</div>
+                <div class="time">${record.time}</div>
+                <div class="status">${attendanceText}</div>
             </div>
         `;
     }).join('');
@@ -387,43 +418,25 @@ function setupCalendarNavigation(container) {
     if (nextBtn) nextBtn.addEventListener("click", nextMonth);
 }
 
-// Draw donut charts
-function drawCharts() {
-    // Sample data - you can replace with real attendance statistics
-    drawDonutChart('dailyDonut', [5, 1, 2], ['#0093ff', '#ffcd03', '#ef2722']);
-    drawDonutChart('termDonut', [20, 4, 3], ['#0093ff', '#ffcd03', '#ef2722']);
-}
+// Extract unique students from records
+function extractStudentsFromRecords(records) {
+    const studentMap = new Map();
 
-function drawDonutChart(canvasId, data, colors) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const outerRadius = 60;
-    const innerRadius = 35;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const total = data.reduce((a, b) => a + b, 0);
-    let startAngle = -Math.PI / 2;
-
-    data.forEach((value, index) => {
-        const angle = (value / total) * 2 * Math.PI;
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, outerRadius, startAngle, startAngle + angle);
-        ctx.closePath();
-        ctx.fillStyle = colors[index];
-        ctx.fill();
-        startAngle += angle;
+    records.forEach(record => {
+        const studentKey = `${record.firstname}_${record.lastname}`;
+        
+        if (!studentMap.has(studentKey)) {
+            studentMap.set(studentKey, {
+                id: record.id || Math.random().toString(36).substr(2, 9),
+                firstName: record.firstname,
+                lastName: record.lastname,
+                fullName: `${record.firstname} ${record.lastname}`,
+                pfp: record.picture || '/assets/Sample.png'
+            });
+        }
     });
 
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = 'white';
-    ctx.fill();
+    return Array.from(studentMap.values());
 }
 
 // Display students in the grid
@@ -435,12 +448,15 @@ async function displayStudents() {
     studentsGrid.innerHTML = '<div class="loading">Loading students...</div>';
 
     try {
-        const students = await fetchStudents();
+        const records = await fetchStudentRecords();
 
-        if (students.length === 0) {
+        if (records.length === 0) {
             studentsGrid.innerHTML = '<div class="no-students">No students found.</div>';
             return;
         }
+
+        // Extract unique students from records
+        students = extractStudentsFromRecords(records);
 
         // Clear loading state
         studentsGrid.innerHTML = '';
@@ -503,9 +519,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedStudent) {
             const isMobile = window.matchMedia("(max-width: 750px)").matches;
             if (isMobile) {
-                handleMobileStudentSelection(element, selectedStudent, status);
+                handleMobileStudentSelection(element, selectedStudent);
             } else {
-                handleDesktopStudentSelection(selectedStudent, status);
+                handleDesktopStudentSelection(selectedStudent);
             }
         }
     };
