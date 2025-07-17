@@ -52,11 +52,11 @@ async function fetchStudents() {
                 'Token': window.token,
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (!window.verifyToken(data)) return [];
-        
+
         students = data.map(student => ({
             id: student.id,
             firstName: student.firstname,
@@ -68,7 +68,7 @@ async function fetchStudents() {
             pfp: student.pfp || '/assets/icons/placeholder-parent.jpeg',
             parentId: student.parent
         }));
-        
+
         return students;
     } catch (error) {
         console.error('Error fetching students:', error);
@@ -88,11 +88,11 @@ async function fetchStudentAttendance(studentId) {
                 'Token': window.token,
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (!window.verifyToken(data)) return {};
-        
+
         // Process attendance data into a format suitable for calendar
         const processedData = {};
         data.forEach(record => {
@@ -100,7 +100,7 @@ async function fetchStudentAttendance(studentId) {
             const attendanceStatus = getAttendanceStatus(record.attendance);
             processedData[date] = attendanceStatus;
         });
-        
+
         return processedData;
     } catch (error) {
         console.error('Error fetching attendance:', error);
@@ -112,7 +112,7 @@ async function fetchStudentAttendance(studentId) {
 function getAttendanceStatus(attendanceCode) {
     const statusMap = {
         0: 'excused',
-        1: 'absent', 
+        1: 'absent',
         2: 'late',
         3: 'present'
     };
@@ -131,11 +131,11 @@ async function fetchCourseRecords(studentId) {
                 'Token': window.token,
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (!window.verifyToken(data)) return [];
-        
+
         return data;
     } catch (error) {
         console.error('Error fetching course records:', error);
@@ -209,10 +209,10 @@ function createStudentCard(student) {
     const card = document.createElement('div');
     card.className = 'student-card';
     card.setAttribute('data-student-id', student.id);
-    
+
     // Determine attendance status (you can enhance this with real-time data)
     const attendanceStatus = Math.random() > 0.7 ? 'present' : Math.random() > 0.5 ? 'late' : 'absent';
-    
+
     card.innerHTML = `
         <div class="student-avatar">
             <img src="${student.pfp}" alt="Student Photo" />
@@ -223,27 +223,27 @@ function createStudentCard(student) {
             <button class="profile-button" onclick="viewStudentProfile('${student.id}')">PROFILE</button>
         </div>
     `;
-    
+
     // Add click handler for student selection
     card.addEventListener('click', (e) => {
         if (e.target.classList.contains('profile-button')) return; // Don't trigger on button click
-        
+
         const isMobile = window.matchMedia("(max-width: 750px)").matches;
-        
+
         if (isMobile) {
             handleMobileStudentSelection(card, student, attendanceStatus);
         } else {
             handleDesktopStudentSelection(student, attendanceStatus);
         }
     });
-    
+
     return card;
 }
 
 // Handle student selection on mobile
 async function handleMobileStudentSelection(cardElement, student, status) {
     const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
-    
+
     // Reset all other cards
     document.querySelectorAll('.student-card_picked').forEach(card => {
         card.classList.remove('student-card_picked');
@@ -251,13 +251,13 @@ async function handleMobileStudentSelection(cardElement, student, status) {
         const charts = card.querySelector(".charts-top-bottom");
         if (charts) charts.remove();
     });
-    
+
     if (!isAlreadyPicked) {
         cardElement.classList.remove('student-card');
         cardElement.classList.add('student-card_picked');
-        
+
         selectedStudent = student;
-        
+
         // Fetch and display student details
         await loadStudentDetails(cardElement, student, status);
     }
@@ -266,14 +266,14 @@ async function handleMobileStudentSelection(cardElement, student, status) {
 // Handle student selection on desktop
 async function handleDesktopStudentSelection(student, status) {
     selectedStudent = student;
-    
+
     // Load attendance data for this student
     attendanceData = await fetchStudentAttendance(student.id);
-    
+
     const leftPanel = document.querySelector(".students-left");
     const statusIcon = status === 'present' ? '🔵' : status === 'late' ? '🟠' : '🔴';
     const statusColor = status === 'present' ? 'blue' : status === 'late' ? 'orange' : 'red';
-    
+
     leftPanel.innerHTML = `
         <div class="student-card_picked">
             <div class="test">
@@ -292,7 +292,7 @@ async function handleDesktopStudentSelection(student, status) {
             ${await generateChartsHTML(student)}
         </div>
     `;
-    
+
     // Initialize calendar and charts
     generateCalendar(currentMonth, currentYear);
     setupCalendarNavigation(leftPanel);
@@ -303,9 +303,9 @@ async function handleDesktopStudentSelection(student, status) {
 async function loadStudentDetails(cardElement, student, status) {
     attendanceData = await fetchStudentAttendance(student.id);
     const chartsHTML = await generateChartsHTML(student);
-    
+
     cardElement.insertAdjacentHTML("beforeend", chartsHTML);
-    
+
     generateCalendar(currentMonth, currentYear);
     setupCalendarNavigation(cardElement);
     drawCharts();
@@ -315,7 +315,7 @@ async function loadStudentDetails(cardElement, student, status) {
 async function generateChartsHTML(student) {
     const courseRecords = await fetchCourseRecords(student.id);
     const timeBlocks = generateTimeBlocks(courseRecords);
-    
+
     return `
         <div class="charts-top-bottom">
             <div class="charts-container">
@@ -363,12 +363,12 @@ function generateTimeBlocks(courseRecords) {
             <div class="time-block time-3"><div class="subject">Sports</div><div class="time">3:00</div></div>
         `;
     }
-    
+
     return courseRecords.map(record => {
-        const time = new Date(record.start_time).toLocaleTimeString([], {hour: 'numeric'});
+        const time = new Date(record.start_time).toLocaleTimeString([], { hour: 'numeric' });
         const timeClass = `time-${new Date(record.start_time).getHours()}`;
         const attendanceClass = getAttendanceStatus(record.attendance);
-        
+
         return `
             <div class="time-block ${timeClass} ${attendanceClass}">
                 <div class="subject">${record.course_name}</div>
@@ -382,7 +382,7 @@ function generateTimeBlocks(courseRecords) {
 function setupCalendarNavigation(container) {
     const prevBtn = container.querySelector(".nav-button.prev");
     const nextBtn = container.querySelector(".nav-button.next");
-    
+
     if (prevBtn) prevBtn.addEventListener("click", previousMonth);
     if (nextBtn) nextBtn.addEventListener("click", nextMonth);
 }
@@ -430,33 +430,33 @@ function drawDonutChart(canvasId, data, colors) {
 async function displayStudents() {
     const studentsGrid = document.querySelector('.students-right');
     if (!studentsGrid) return;
-    
+
     // Show loading state
     studentsGrid.innerHTML = '<div class="loading">Loading students...</div>';
-    
+
     try {
         const students = await fetchStudents();
-        
+
         if (students.length === 0) {
             studentsGrid.innerHTML = '<div class="no-students">No students found.</div>';
             return;
         }
-        
+
         // Clear loading state
         studentsGrid.innerHTML = '';
-        
+
         // Create and append student cards
         students.forEach(student => {
             const card = createStudentCard(student);
             studentsGrid.appendChild(card);
         });
-        
+
         // Update student count if element exists
         const countElement = document.querySelector('.count-number');
         if (countElement) {
             countElement.textContent = students.length;
         }
-        
+
     } catch (error) {
         console.error('Error displaying students:', error);
         studentsGrid.innerHTML = '<div class="error">Error loading students. Please try again.</div>';
@@ -479,7 +479,7 @@ window.addEventListener('resize', () => {
                 </div>
             `;
         }
-        
+
         // Refresh student display
         displayStudents();
     }
@@ -488,13 +488,13 @@ window.addEventListener('resize', () => {
 });
 
 // Initialize everything when page loads
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Generate initial calendar
     generateCalendar(currentMonth, currentYear);
-    
+
     // Load and display students
     displayStudents();
-    
+
     // Set up global navigation functions
     window.previousMonth = previousMonth;
     window.nextMonth = nextMonth;
@@ -515,4 +515,3 @@ document.addEventListener('DOMContentLoaded', function() {
 window.previousMonth = previousMonth;
 window.nextMonth = nextMonth;
 window.viewStudentProfile = viewStudentProfile;
-window.showStudentDetails = showStudentDetails;
