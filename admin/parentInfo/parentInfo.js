@@ -698,16 +698,20 @@ function saveParentChanges() {
         
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
+        const childEmail = document.getElementById(`updateChildEmail${childId}`).value.trim();
+        const childPhone = document.getElementById(`updateChildPhone${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
         
-        if (!childFirstName || !childLastName || !childGrade) {
-            alert(`Please fill in all required fields for Child ${parseInt(childId)} (First Name, Last Name, Grade Level).`);
+        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
+            alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
             return;
         }
         
         children.push({
             firstName: childFirstName,
             lastName: childLastName,
+            email: childEmail,
+            phone: childPhone,
             grade: childGrade
         });
     }
