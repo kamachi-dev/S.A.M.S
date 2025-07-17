@@ -445,14 +445,71 @@ function saveTeacherChanges() {
     const courseCode = document.getElementById('updateCourseCode').value.trim() || 'Unassigned';
     
     if (currentUpdatingTeacher.isExisting) {
-        // For existing teachers, just show success message (no actual update to DOM)
-        alert('Teacher information updated successfully!');
+        // For existing teachers, send update to backend
+        const updateBtn = document.querySelector('.save-update-btn');
+        const originalText = updateBtn ? updateBtn.textContent : '';
+        if (updateBtn) {
+            updateBtn.disabled = true;
+            updateBtn.textContent = 'Updating...';
+        }
+
+        // Prepare data for API
+        const teacherData = {
+            firstname: firstName,
+            lastname: lastName,
+            email: email,
+            phone: phone
+        };
+        // Add department, courseName, courseCode if not Unassigned
+        if (department !== 'Unassigned' && department !== '') {
+            teacherData.department = department;
+        }
+        if (courseName !== 'Unassigned' && courseName !== '') {
+            teacherData.course_name = courseName;
+        }
+        if (courseCode !== 'Unassigned' && courseCode !== '') {
+            teacherData.course_code = courseCode;
+        }
+
+        // Use email as identifier (or use id if available)
+        teacherData.email = currentUpdatingTeacher.email;
+
+        fetch('https://sams-backend-u79d.onrender.com/api/updateTeacher.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            },
+            body: JSON.stringify(teacherData)
+        })
+        .then(res => res.json())
+        .then(result => {
+            if (!window.verifyToken(result)) return;
+            if (result.success) {
+                alert('Teacher information updated successfully!');
+                closeUpdateTeacherModal();
+                location.reload();
+            } else {
+                alert('Failed to update teacher: ' + (result.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error updating teacher:', error);
+            alert('An error occurred while updating the teacher. Please try again.');
+        })
+        .finally(() => {
+            if (updateBtn) {
+                updateBtn.disabled = false;
+                updateBtn.textContent = originalText;
+            }
+        });
     } else {
         // For added teachers, update the stored data and card
         const teacherIndex = addedTeachers.findIndex(t => t.id === currentUpdatingTeacher.id);
         if (teacherIndex !== -1) {
             const oldDepartment = addedTeachers[teacherIndex].department;
-            
             // Update stored data
             addedTeachers[teacherIndex] = {
                 ...addedTeachers[teacherIndex],
@@ -464,7 +521,6 @@ function saveTeacherChanges() {
                 courseName: courseName,
                 courseCode: courseCode
             };
-            
             // If department changed, move the card
             if (oldDepartment !== department) {
                 // Remove old card
@@ -472,13 +528,11 @@ function saveTeacherChanges() {
                 if (oldCard && oldCard.querySelector('.teacher-name').textContent.includes(currentUpdatingTeacher.firstName)) {
                     const oldSection = oldCard.closest('.subject-section');
                     oldCard.remove();
-                    
                     // Clean up empty section
                     if (oldSection && oldSection.querySelectorAll('.teacher-card').length === 0) {
                         oldSection.remove();
                     }
                 }
-                
                 // Add new card in correct department
                 addTeacherCardToPage(addedTeachers[teacherIndex]);
             } else {
@@ -489,12 +543,10 @@ function saveTeacherChanges() {
                     card.querySelector('.teacher-id').textContent = courseCode;
                 }
             }
-            
             alert('Teacher information updated successfully!');
         }
+        closeUpdateTeacherModal();
     }
-    
-    closeUpdateTeacherModal();
 }
 
 // Close modal when clicking outside of it
