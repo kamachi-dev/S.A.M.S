@@ -380,24 +380,20 @@ function deleteTeacher(button) {
 }
 
 // Update Teacher Modal Functions
-function updateTeacher(name, phone, email) {
-    // For existing teachers (not added ones), create mock data
-    const nameParts = name.split(' ');
-    const firstName = nameParts[0];
-    const lastName = nameParts.slice(1).join(' ');
-    
+function updateTeacher(teacherObj) {
+    // teacherObj should contain all real data for the teacher
     currentUpdatingTeacher = {
         isExisting: true,
-        originalName: name,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        phone: phone,
-        department: 'Sample Department',
-        courseName: 'Sample Course',
-        courseCode: 'SAM001'
+        originalName: `${teacherObj.firstname} ${teacherObj.lastname}`,
+        firstName: teacherObj.firstname,
+        lastName: teacherObj.lastname,
+        email: teacherObj.email,
+        phone: teacherObj.phone,
+        department: teacherObj.department || 'Unassigned',
+        courseName: teacherObj.courseName || 'Unassigned',
+        courseCode: teacherObj.courseCode || 'Unassigned',
+        id: teacherObj.id // if available
     };
-    
     openUpdateTeacherModal();
 }
 
@@ -613,7 +609,19 @@ async function init() {
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
+                // Attach Update button handler with all real data
+                const teacherObj = {
+                    id: row['id'],
+                    firstname: row['firstname'],
+                    lastname: row['lastname'],
+                    email: row['email'],
+                    phone: row['phone'],
+                    department: row['department'] ?? 'Unassigned',
+                    courseName: (JSON.parse(row['course'])[0] ?? 'Unassigned'),
+                    courseCode: (JSON.parse(row['code'])[0] ?? 'Unassigned')
+                };
                 clone.querySelector('.details-btn').onclick = () => showTeacherDetails(`${row['firstname']} ${row['lastname']}`, `${row['phone']}`, `${row['email']}`);
+                clone.querySelector('.update-btn').onclick = () => updateTeacher(teacherObj);
                 grid.appendChild(clone)
             })
             document.querySelector('.loader').remove();
