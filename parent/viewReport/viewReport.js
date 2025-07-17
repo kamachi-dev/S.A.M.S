@@ -81,7 +81,7 @@ function processAttendanceForCalendar(records, studentName) {
             if (!dailyAttendance[dateStr]) {
                 dailyAttendance[dateStr] = [];
             }
-            
+
             dailyAttendance[dateStr].push({
                 courseName: record.name,
                 attendance: attendance,
@@ -109,7 +109,7 @@ function processAttendanceForCalendar(records, studentName) {
 function getAttendanceStatus(attendanceCode) {
     const statusMap = {
         0: 'excused',
-        1: 'absent', 
+        1: 'absent',
         2: 'late',
         3: 'present'
     };
@@ -121,7 +121,7 @@ function getAttendanceDisplayName(attendanceCode) {
     const statusMap = {
         0: 'Excused',
         1: 'Absent',
-        2: 'Late', 
+        2: 'Late',
         3: 'Present'
     };
     return statusMap[attendanceCode] || 'Absent';
@@ -219,15 +219,15 @@ function showDayAttendance(dateStr) {
 
     const dayData = attendanceData.dailyData[dateStr];
     const date = new Date(dateStr);
-    const formattedDate = date.toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+    const formattedDate = date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     });
 
     let attendanceDetails = `Attendance for ${formattedDate}:\n\n`;
-    
+
     dayData.forEach(record => {
         const status = getAttendanceDisplayName(record.attendance);
         attendanceDetails += `${record.time} - ${record.courseName}: ${status}\n`;
@@ -239,7 +239,7 @@ function showDayAttendance(dateStr) {
 // Get today's attendance for display
 function getTodaysAttendance(studentName) {
     const today = new Date().toISOString().split('T')[0];
-    
+
     if (!attendanceData.dailyData || !attendanceData.dailyData[today]) {
         return [];
     }
@@ -255,7 +255,7 @@ function createStudentCard(student) {
 
     card.innerHTML = `
         <div class="student-avatar">
-            <img src="${student.pfp || '/assets/Sample.png'}" alt="Student Photo" />
+            <img src="${student.pfp || '/assets/icons/placeholder-parent.jpeg'}" alt="Student Photo" />
         </div>
         <div class="student-details">
             <div class="student-name">${student.fullName}</div>
@@ -267,11 +267,11 @@ function createStudentCard(student) {
     // Add click handler for student selection
     card.addEventListener('click', (e) => {
         if (e.target.classList.contains('profile-button')) return;
-        
+
         // Determine attendance status for the card
         const todaysAttendance = getTodaysAttendanceForStudent(student.fullName);
         let status = 'absent';
-        
+
         if (todaysAttendance.length > 0) {
             const worstAttendance = Math.min(...todaysAttendance.map(a => a.attendance));
             status = getAttendanceStatus(worstAttendance);
@@ -286,10 +286,10 @@ function createStudentCard(student) {
 // Get today's attendance for a specific student (used for card status)
 function getTodaysAttendanceForStudent(studentName) {
     const today = new Date().toISOString().split('T')[0];
-    const studentRecords = allStudentRecords.filter(record => 
+    const studentRecords = allStudentRecords.filter(record =>
         `${record.firstname} ${record.lastname}` === studentName
     );
-    
+
     return studentRecords.filter(record => {
         const recordDate = new Date(record.sent).toISOString().split('T')[0];
         return recordDate === today;
@@ -301,7 +301,7 @@ function showStudentDetails(status, element) {
     // Find the student data from the clicked element
     const studentId = element.getAttribute('data-student-id');
     const student = students.find(s => s.id.toString() === studentId);
-    
+
     if (!student) return;
 
     selectedStudent = student;
@@ -346,12 +346,12 @@ async function handleMobileStudentSelection(cardElement, student) {
 async function handleDesktopStudentSelection(student) {
     const leftPanel = document.querySelector(".students-left");
     const todaysAttendance = getTodaysAttendance(student.fullName);
-    
+
     // Determine overall status for today
     let overallStatus = 'absent';
     let statusIcon = '🔴';
     let statusColor = 'red';
-    
+
     if (todaysAttendance.length > 0) {
         const worstAttendance = Math.min(...todaysAttendance.map(a => a.attendance));
         overallStatus = getAttendanceStatus(worstAttendance);
@@ -363,7 +363,7 @@ async function handleDesktopStudentSelection(student) {
         <div class="student-card_picked">
             <div class="test">
                 <div class="student-avatar_picked">
-                    <img src="${student.pfp || '/assets/Sample.png'}" alt="Student Photo" />
+                    <img src="${student.pfp || '/assets/icons/placeholder-parent.jpeg'}" alt="Student Photo" />
                 </div>
                 <div class="student-details_picked">
                     <div class="student-name_picked">${student.fullName}</div>
@@ -465,14 +465,14 @@ function extractStudentsFromRecords(records) {
 
     records.forEach(record => {
         const studentKey = `${record.firstname}_${record.lastname}`;
-        
+
         if (!studentMap.has(studentKey)) {
             studentMap.set(studentKey, {
                 id: record.id || Math.random().toString(36).substr(2, 9),
                 firstName: record.firstname,
                 lastName: record.lastname,
                 fullName: `${record.firstname} ${record.lastname}`,
-                pfp: record.picture || '/assets/Sample.png'
+                pfp: record.picture || '/assets/icons/placeholder-parent.jpeg'
             });
         }
     });
