@@ -388,6 +388,11 @@ body {
     color: white;
 }
 
+.calendar-day.excused {
+    background: #95a5a6;
+    color: white;
+}
+
 .calendar-day.today {
     border: 2px solid #2ecc71;
     color: white;
@@ -475,6 +480,10 @@ body {
 
 .legend-color.absent {
     background: #e74c3c;
+}
+
+.legend-color.excused {
+    background: #95a5a6;
 }
 
 /* Info Section */
