@@ -337,11 +337,12 @@ function updateTeacherCount() {
 }
 
 // Helper functions for updating existing teacher details
-function showTeacherDetails(name, phone, email, courseName = 'N/A') {
-    document.getElementById('modalName').textContent = name;
-    document.getElementById('modalPhone').textContent = phone;
-    document.getElementById('modalEmail').textContent = email;
-    document.getElementById('modalCourse').textContent = courseName;
+
+function showTeacherDetails(teacherObj) {
+    document.getElementById('modalName').textContent = `${teacherObj.firstname} ${teacherObj.lastname}`;
+    document.getElementById('modalPhone').textContent = teacherObj.phone;
+    document.getElementById('modalEmail').textContent = teacherObj.email;
+    document.getElementById('modalCourse').textContent = teacherObj.courseName || 'N/A';
     document.getElementById('detailsModal').style.display = 'block';
 }
 
@@ -619,7 +620,8 @@ async function init() {
                     courseName: (JSON.parse(row['course'])[0] ?? 'Unassigned'),
                     courseCode: (JSON.parse(row['code'])[0] ?? 'Unassigned')
                 };
-                clone.querySelector('.details-btn').onclick = () => showTeacherDetails(`${row['firstname']} ${row['lastname']}`, `${row['phone']}`, `${row['email']}`);
+                // Attach Details button handler with all real data for this card
+                clone.querySelector('.details-btn').onclick = () => showTeacherDetails(teacherObj);
                 clone.querySelector('.update-btn').onclick = () => updateTeacher(teacherObj);
                 grid.appendChild(clone)
             })
