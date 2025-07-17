@@ -284,16 +284,6 @@ function addChildForm() {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="childEmail${childCounter}">Email *</label>
-                <input type="email" id="childEmail${childCounter}" required>
-            </div>
-            <div class="form-group">
-                <label for="childPhone${childCounter}">Phone Number *</label>
-                <input type="tel" id="childPhone${childCounter}" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
                 <label for="childGrade${childCounter}">Grade Level *</label>
                 <select id="childGrade${childCounter}" required>
                     <option value="">Select Grade</option>
@@ -324,7 +314,7 @@ function removeChildForm(childId) {
     }
 }
 
-function confirmAddParent() {
+async function confirmAddParent() {
     // Validate parent fields
     const parentFirstName = document.getElementById('parentFirstName').value.trim();
     const parentLastName = document.getElementById('parentLastName').value.trim();
@@ -333,6 +323,13 @@ function confirmAddParent() {
     
     if (!parentFirstName || !parentLastName || !parentEmail || !parentPhone) {
         alert('Please fill in all parent information fields.');
+        return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(parentEmail)) {
+        alert('Please enter a valid email address.');
         return;
     }
     
@@ -346,39 +343,87 @@ function confirmAddParent() {
         
         const childFirstName = document.getElementById(`childFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`childLastName${childId}`).value.trim();
-        const childEmail = document.getElementById(`childEmail${childId}`).value.trim();
-        const childPhone = document.getElementById(`childPhone${childId}`).value.trim();
         const childGrade = document.getElementById(`childGrade${childId}`).value;
         
-        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
-            alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
+        if (!childFirstName || !childLastName || !childGrade) {
+            alert(`Please fill in all required fields for Child ${parseInt(childId)} (First Name, Last Name, Grade Level).`);
             return;
         }
         
         children.push({
-            firstName: childFirstName,
-            lastName: childLastName,
-            email: childEmail,
-            phone: childPhone,
-            grade: childGrade
+            firstname: childFirstName,
+            lastname: childLastName,
+            grade_level: childGrade
         });
     }
     
-    // Create parent object
-    const newParent = {
-        id: Date.now(), // Simple ID generation
-        firstName: parentFirstName,
-        lastName: parentLastName,
+    // Prepare data for API
+    const parentData = {
+        firstname: parentFirstName,
+        lastname: parentLastName,
         email: parentEmail,
         phone: parentPhone,
         children: children
     };
     
-    // Add to stored parents
-    addedParents.push(newParent);
+    // Show loading state
+    const confirmBtn = document.querySelector('#addParentModal .confirm-btn');
+    const originalText = confirmBtn.textContent;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Adding Parent...';
     
-    // Create and add parent card to the page
-    addParentCardToPage(newParent);
+    try {
+        // Call the API
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/addParent.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            },
+            body: JSON.stringify(parentData)
+        });
+        
+        const result = await response.json();
+        
+        if (!window.verifyToken(result)) return;
+        
+        if (result.success) {
+            // Show success message
+            let successMessage = `Successfully added parent: ${result.parent.firstname} ${result.parent.lastname}`;
+            if (result.children_count > 0) {
+                successMessage += `\nAdded ${result.children_count} child(ren)`;
+            }
+            alert(successMessage);
+            
+            // Close modal and clear form
+            closeAddParentModal();
+            
+            // Reload the page to show the new parent
+            location.reload();
+            
+        } else {
+            // Handle API errors
+            let errorMessage = 'Failed to add parent: ' + (result.error || 'Unknown error');
+            
+            if (result.missing_fields) {
+                errorMessage += '\nMissing fields: ' + result.missing_fields.join(', ');
+            }
+            
+            alert(errorMessage);
+        }
+        
+    } catch (error) {
+        console.error('Error adding parent:', error);
+        alert('An error occurred while adding the parent. Please try again.');
+        
+    } finally {
+        // Reset button state
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
+    }
+}
     
     // Close modal and clear form
     closeAddParentModal();
@@ -460,8 +505,6 @@ function showAddedParentDetails(parentId) {
         childrenDetails += `
             <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
                 <h4 style="margin: 0 0 8px 0; color: #333;">Child ${index + 1}: ${child.firstName} ${child.lastName}</h4>
-                <p style="margin: 3px 0;"><strong>Email:</strong> ${child.email}</p>
-                <p style="margin: 3px 0;"><strong>Phone:</strong> ${child.phone}</p>
                 <p style="margin: 3px 0;"><strong>Grade:</strong> Grade ${child.grade}</p>
             </div>
         `;
@@ -598,16 +641,6 @@ function addUpdateChildForm(childData = null) {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="updateChildEmail${updateChildCounter}">Email *</label>
-                <input type="email" id="updateChildEmail${updateChildCounter}" value="${childData?.email || ''}" required>
-            </div>
-            <div class="form-group">
-                <label for="updateChildPhone${updateChildCounter}">Phone Number *</label>
-                <input type="tel" id="updateChildPhone${updateChildCounter}" value="${childData?.phone || ''}" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
                 <label for="updateChildGrade${updateChildCounter}">Grade Level *</label>
                 <select id="updateChildGrade${updateChildCounter}" required>
                     <option value="">Select Grade</option>
@@ -660,20 +693,16 @@ function saveParentChanges() {
         
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
-        const childEmail = document.getElementById(`updateChildEmail${childId}`).value.trim();
-        const childPhone = document.getElementById(`updateChildPhone${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
         
-        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
-            alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
+        if (!childFirstName || !childLastName || !childGrade) {
+            alert(`Please fill in all required fields for Child ${parseInt(childId)} (First Name, Last Name, Grade Level).`);
             return;
         }
         
         children.push({
             firstName: childFirstName,
             lastName: childLastName,
-            email: childEmail,
-            phone: childPhone,
             grade: childGrade
         });
     }
