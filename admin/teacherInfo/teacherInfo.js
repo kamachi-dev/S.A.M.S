@@ -449,12 +449,14 @@ function saveTeacherChanges() {
             updateBtn.textContent = 'Updating...';
         }
 
+
         // Prepare data for API
         const teacherData = {
             firstname: firstName,
             lastname: lastName,
-            email: email,
-            phone: phone
+            email: email, // new email (may be changed)
+            phone: phone,
+            original_email: currentUpdatingTeacher.email // always send original email for lookup
         };
         // Add department, courseName, courseCode if not Unassigned
         if (department !== 'Unassigned' && department !== '') {
@@ -466,9 +468,6 @@ function saveTeacherChanges() {
         if (courseCode !== 'Unassigned' && courseCode !== '') {
             teacherData.course_code = courseCode;
         }
-
-        // Use email as identifier (or use id if available)
-        teacherData.email = currentUpdatingTeacher.email;
 
         fetch('https://sams-backend-u79d.onrender.com/api/updateTeacher.php', {
             method: 'POST',
