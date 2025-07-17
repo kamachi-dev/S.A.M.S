@@ -165,25 +165,72 @@ function updateFetchedParent(firstName, lastName, phone, email, parentData = nul
 }
 
 // Function to delete fetched parents
-function deleteFetchedParent(email, button) {
+async function deleteFetchedParent(email, button) {
     if (confirm('Are you sure you want to delete this parent? This will remove them from the database.')) {
-        // Here you would typically make an API call to delete the parent
-        // For now, just remove from UI
-        const parentCard = button.closest('.parent-card');
-        const letterSection = parentCard.closest('.letter-section');
-        parentCard.remove();
-        
-        // If letter section is now empty, remove it
-        const remainingCards = letterSection.querySelectorAll('.parent-card');
-        if (remainingCards.length === 0) {
-            letterSection.remove();
+        try {
+            // Show loading state
+            button.disabled = true;
+            button.textContent = 'Deleting...';
+            
+            const response = await fetch('https://sams-backend-u79d.onrender.com/api/deleteParent.php', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Provider': window.provider,
+                    'Token': window.token,
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (!window.verifyToken(data)) return;
+            
+            if (data.success) {
+                // Show success message with details
+                let successMessage = `Successfully deleted parent: ${data.deleted_parent.name}`;
+                if (data.children_count > 0) {
+                    successMessage += `\nAlso deleted ${data.children_count} associated student(s).`;
+                }
+                alert(successMessage);
+                
+                // Remove from UI
+                const parentCard = button.closest('.parent-card');
+                const letterSection = parentCard.closest('.letter-section');
+                parentCard.remove();
+                
+                // If letter section is now empty, remove it
+                const remainingCards = letterSection.querySelectorAll('.parent-card');
+                if (remainingCards.length === 0) {
+                    letterSection.remove();
+                }
+                
+                // Update parent count
+                updateParentCount();
+                
+                // Remove from fetchedParents array if it exists
+                fetchedParents = fetchedParents.filter(parent => parent.email !== email);
+                
+            } else {
+                // Show error message
+                alert(`Failed to delete parent: ${data.error || 'Unknown error occurred'}`);
+                
+                // Reset button state
+                button.disabled = false;
+                button.textContent = 'Delete';
+            }
+            
+        } catch (error) {
+            console.error('Error deleting parent:', error);
+            alert('An error occurred while deleting the parent. Please try again.');
+            
+            // Reset button state
+            button.disabled = false;
+            button.textContent = 'Delete';
         }
-        
-        // Update parent count
-        updateParentCount();
-        
-        // Note: In a real implementation, you'd want to make an API call here
-        console.log('Would delete parent with email:', email);
     }
 }
 
