@@ -278,19 +278,6 @@ window.addEventListener('click', function (event) {
 
 // Initialize everything when page loads
 document.addEventListener('DOMContentLoaded', function () {
-    // Add loading indicator
-    const content = document.querySelector('.content');
-    const filterSection = content.querySelector('.filter-section');
-
-    const loader = document.createElement('h2');
-    loader.className = 'loader';
-    loader.textContent = 'Please wait while the data is being fetched...';
-    loader.style.textAlign = 'center';
-    loader.style.color = '#666';
-    loader.style.marginTop = '50px';
-
-    content.appendChild(loader);
-
     // Fetch students and initialize filters
     fetchStudents().then(() => {
         initializeFilters();
