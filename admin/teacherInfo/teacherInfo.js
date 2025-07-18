@@ -559,6 +559,11 @@ function openUpdateTeacherModal() {
     // Populate dropdowns first
     populateUpdateDropdowns();
     
+    // Setup input/dropdown synchronization
+    setTimeout(() => {
+        setupUpdateInputDropdownSync();
+    }, 600);
+    
     // Pre-fill teacher information
     document.getElementById('updateTeacherFirstName').value = currentUpdatingTeacher.firstName;
     document.getElementById('updateTeacherLastName').value = currentUpdatingTeacher.lastName;
@@ -655,33 +660,73 @@ function populateUpdateDropdowns() {
         });
 }
 
+// Add input/dropdown synchronization for update modal
+function setupUpdateInputDropdownSync() {
+    // Department sync
+    const depInput = document.getElementById('updateTeacherDepartment');
+    const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
+    
+    if (depInput && depDropdown) {
+        depInput.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                depDropdown.selectedIndex = 0; // Reset dropdown to default
+            }
+        });
+        
+        depDropdown.addEventListener('change', function() {
+            if (this.value !== '') {
+                depInput.value = ''; // Clear input field
+            }
+        });
+    }
+    
+    // Course name sync
+    const nameInput = document.getElementById('updateCourseName');
+    const nameDropdown = document.getElementById('updateCourseNameDropdown');
+    
+    if (nameInput && nameDropdown) {
+        nameInput.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                nameDropdown.selectedIndex = 0; // Reset dropdown to default
+            }
+        });
+        
+        nameDropdown.addEventListener('change', function() {
+            if (this.value !== '') {
+                nameInput.value = ''; // Clear input field
+            }
+        });
+    }
+    
+    // Course code sync
+    const codeInput = document.getElementById('updateCourseCode');
+    const codeDropdown = document.getElementById('updateCourseCodeDropdown');
+    
+    if (codeInput && codeDropdown) {
+        codeInput.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                codeDropdown.selectedIndex = 0; // Reset dropdown to default
+            }
+        });
+        
+        codeDropdown.addEventListener('change', function() {
+            if (this.value !== '') {
+                codeInput.value = ''; // Clear input field
+            }
+        });
+    }
+}
+
 function preSelectUpdateDropdowns(department, courseName, courseCode) {
-    // Pre-select department dropdown if there's a match
+    // Don't pre-select dropdowns - let user choose between input or dropdown
+    // All dropdowns should start at default "Select... (optional)" state
     const departmentDropdown = document.getElementById('updateTeacherDepartmentDropdown');
-    if (departmentDropdown && department) {
-        const departmentOption = Array.from(departmentDropdown.options).find(option => option.value === department);
-        if (departmentOption) {
-            departmentDropdown.value = department;
-        }
-    }
-    
-    // Pre-select course name dropdown if there's a match
     const courseNameDropdown = document.getElementById('updateCourseNameDropdown');
-    if (courseNameDropdown && courseName) {
-        const courseNameOption = Array.from(courseNameDropdown.options).find(option => option.value === courseName);
-        if (courseNameOption) {
-            courseNameDropdown.value = courseName;
-        }
-    }
-    
-    // Pre-select course code dropdown if there's a match
     const courseCodeDropdown = document.getElementById('updateCourseCodeDropdown');
-    if (courseCodeDropdown && courseCode) {
-        const courseCodeOption = Array.from(courseCodeDropdown.options).find(option => option.value === courseCode);
-        if (courseCodeOption) {
-            courseCodeDropdown.value = courseCode;
-        }
-    }
+    
+    if (departmentDropdown) departmentDropdown.selectedIndex = 0;
+    if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
+    if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
 }
 
 function closeUpdateTeacherModal() {
@@ -701,13 +746,15 @@ function saveTeacherChanges() {
         return;
     }
     
-    // Dual input: prioritize input field, fallback to dropdown, default to Unassigned
+    // Clear either/or logic: input field OR dropdown, not both
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
     
     const depInput = document.getElementById('updateTeacherDepartment');
     const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
+    
+    // Department logic: input field takes priority, then dropdown, then Unassigned
     if (depInput && depInput.value.trim() !== '') {
         department = depInput.value.trim();
     } else if (depDropdown && depDropdown.value) {
@@ -716,6 +763,8 @@ function saveTeacherChanges() {
     
     const nameInput = document.getElementById('updateCourseName');
     const nameDropdown = document.getElementById('updateCourseNameDropdown');
+    
+    // Course name logic: input field takes priority, then dropdown, then Unassigned
     if (nameInput && nameInput.value.trim() !== '') {
         courseName = nameInput.value.trim();
     } else if (nameDropdown && nameDropdown.value) {
@@ -724,16 +773,20 @@ function saveTeacherChanges() {
     
     const codeInput = document.getElementById('updateCourseCode');
     const codeDropdown = document.getElementById('updateCourseCodeDropdown');
+    
+    // Course code logic: input field takes priority, then dropdown, then Unassigned
     if (codeInput && codeInput.value.trim() !== '') {
         courseCode = codeInput.value.trim();
     } else if (codeDropdown && codeDropdown.value) {
         courseCode = codeDropdown.value;
     }
     
+    console.log('Update values:', { department, courseName, courseCode }); // Debug log
+    
     if (currentUpdatingTeacher.isExisting) {
         // For existing teachers, send update to backend
-        const updateBtn = document.querySelector('.save-update-btn');
-        const originalText = updateBtn ? updateBtn.textContent : '';
+        const updateBtn = document.querySelector('#updateTeacherModal .confirm-btn');
+        const originalText = updateBtn ? updateBtn.textContent : 'Save Changes';
         if (updateBtn) {
             updateBtn.disabled = true;
             updateBtn.textContent = 'Updating...';
@@ -758,6 +811,8 @@ function saveTeacherChanges() {
         if (courseCode !== 'Unassigned' && courseCode !== '') {
             teacherData.course_code = courseCode;
         }
+
+        console.log('Sending to API:', teacherData); // Debug log
 
         fetch('https://sams-backend-u79d.onrender.com/api/updateTeacher.php', {
             method: 'POST',
