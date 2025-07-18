@@ -28,17 +28,33 @@ function openAddTeacherModal() {
     fetch('https://sams-backend-u79d.onrender.com/api/populateDepartmentDropdown.php')
         .then(response => response.json())
         .then(data => {
-            if (data.success && departmentDropdown) {
+            if (departmentDropdown) {
                 departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
-                data.departments.forEach(dep => {
+                if (data.success && Array.isArray(data.departments) && data.departments.length > 0) {
+                    data.departments.forEach(dep => {
+                        const option = document.createElement('option');
+                        option.value = dep;
+                        option.textContent = dep;
+                        departmentDropdown.appendChild(option);
+                    });
+                } else {
                     const option = document.createElement('option');
-                    option.value = dep;
-                    option.textContent = dep;
+                    option.value = '';
+                    option.textContent = 'No departments found';
+                    option.disabled = true;
                     departmentDropdown.appendChild(option);
-                });
+                }
             }
         })
         .catch(err => {
+            if (departmentDropdown) {
+                departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Error loading departments';
+                option.disabled = true;
+                departmentDropdown.appendChild(option);
+            }
             console.error('Failed to fetch department dropdown data:', err);
         });
 
@@ -46,28 +62,58 @@ function openAddTeacherModal() {
     fetch('https://sams-backend-u79d.onrender.com/api/populateCourseDropdown.php')
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                if (courseNameDropdown) {
-                    courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+            if (courseNameDropdown) {
+                courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
                     data.course_names.forEach(name => {
                         const option = document.createElement('option');
                         option.value = name;
                         option.textContent = name;
                         courseNameDropdown.appendChild(option);
                     });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No unassigned courses';
+                    option.disabled = true;
+                    courseNameDropdown.appendChild(option);
                 }
-                if (courseCodeDropdown) {
-                    courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+            }
+            if (courseCodeDropdown) {
+                courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
                     data.course_codes.forEach(code => {
                         const option = document.createElement('option');
                         option.value = code;
                         option.textContent = code;
                         courseCodeDropdown.appendChild(option);
                     });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No unassigned courses';
+                    option.disabled = true;
+                    courseCodeDropdown.appendChild(option);
                 }
             }
         })
         .catch(err => {
+            if (courseNameDropdown) {
+                courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Error loading courses';
+                option.disabled = true;
+                courseNameDropdown.appendChild(option);
+            }
+            if (courseCodeDropdown) {
+                courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Error loading courses';
+                option.disabled = true;
+                courseCodeDropdown.appendChild(option);
+            }
             console.error('Failed to fetch course dropdown data:', err);
         });
 }
