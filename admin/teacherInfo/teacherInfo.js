@@ -10,26 +10,56 @@ let addedTeachers = []; // Store added teachers data
 
 function openAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'block';
-    // Reset dropdowns and inputs to default
-    const courseNameDropdown = document.getElementById('courseNameDropdown');
-    const courseCodeDropdown = document.getElementById('courseCodeDropdown');
-    const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
-    const courseNameInput = document.getElementById('courseName');
-    const courseCodeInput = document.getElementById('courseCode');
-    const departmentInput = document.getElementById('teacherDepartment');
-    if (courseNameInput) courseNameInput.value = '';
-    if (courseCodeInput) courseCodeInput.value = '';
-    if (departmentInput) departmentInput.value = '';
-    if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
-    if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
-    if (departmentDropdown) departmentDropdown.selectedIndex = 0;
+    
+    // Clear form inputs
+    clearAddTeacherForm();
+    
+    // Populate dropdowns
+    populateDropdowns();
+}
 
-    // Fetch departments (all)
-    fetch('https://sams-backend-u79d.onrender.com/api/populateDepartmentDropdown.php')
+function clearAddTeacherForm() {
+    // Clear all input fields
+    document.getElementById('teacherFirstName').value = '';
+    document.getElementById('teacherLastName').value = '';
+    document.getElementById('teacherEmail').value = '';
+    document.getElementById('teacherPhone').value = '';
+    document.getElementById('teacherDepartment').value = '';
+    document.getElementById('courseName').value = '';
+    document.getElementById('courseCode').value = '';
+    
+    // Reset dropdowns to default
+    const dropdowns = [
+        'teacherDepartmentDropdown',
+        'courseNameDropdown', 
+        'courseCodeDropdown'
+    ];
+    
+    dropdowns.forEach(id => {
+        const dropdown = document.getElementById(id);
+        if (dropdown) {
+            dropdown.selectedIndex = 0;
+        }
+    });
+}
+
+function populateDropdowns() {
+    // Populate departments dropdown
+    fetch('https://sams-backend-u79d.onrender.com/api/populateDepartmentDropdown.php', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then(data => {
+            console.log('Department API Response:', data);
+            const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
+            
             if (departmentDropdown) {
                 departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
+                
                 if (data.success && Array.isArray(data.departments) && data.departments.length > 0) {
                     data.departments.forEach(dep => {
                         const option = document.createElement('option');
@@ -40,13 +70,15 @@ function openAddTeacherModal() {
                 } else {
                     const option = document.createElement('option');
                     option.value = '';
-                    option.textContent = 'No departments found';
+                    option.textContent = data.error || 'No departments found';
                     option.disabled = true;
                     departmentDropdown.appendChild(option);
                 }
             }
         })
         .catch(err => {
+            console.error('Error fetching departments:', err);
+            const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
             if (departmentDropdown) {
                 departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
                 const option = document.createElement('option');
@@ -55,15 +87,25 @@ function openAddTeacherModal() {
                 option.disabled = true;
                 departmentDropdown.appendChild(option);
             }
-            console.error('Failed to fetch department dropdown data:', err);
         });
 
-    // Fetch courses (only unassigned)
-    fetch('https://sams-backend-u79d.onrender.com/api/populateCourseDropdown.php')
+    // Populate courses dropdown
+    fetch('https://sams-backend-u79d.onrender.com/api/populateCourseDropdown.php', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then(data => {
+            console.log('Course API Response:', data);
+            const courseNameDropdown = document.getElementById('courseNameDropdown');
+            const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+            
             if (courseNameDropdown) {
                 courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                
                 if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
                     data.course_names.forEach(name => {
                         const option = document.createElement('option');
@@ -74,13 +116,15 @@ function openAddTeacherModal() {
                 } else {
                     const option = document.createElement('option');
                     option.value = '';
-                    option.textContent = 'No unassigned courses';
+                    option.textContent = data.error || 'No unassigned courses';
                     option.disabled = true;
                     courseNameDropdown.appendChild(option);
                 }
             }
+            
             if (courseCodeDropdown) {
                 courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                
                 if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
                     data.course_codes.forEach(code => {
                         const option = document.createElement('option');
@@ -91,13 +135,17 @@ function openAddTeacherModal() {
                 } else {
                     const option = document.createElement('option');
                     option.value = '';
-                    option.textContent = 'No unassigned courses';
+                    option.textContent = data.error || 'No unassigned courses';
                     option.disabled = true;
                     courseCodeDropdown.appendChild(option);
                 }
             }
         })
         .catch(err => {
+            console.error('Error fetching courses:', err);
+            const courseNameDropdown = document.getElementById('courseNameDropdown');
+            const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+            
             if (courseNameDropdown) {
                 courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
                 const option = document.createElement('option');
@@ -106,6 +154,7 @@ function openAddTeacherModal() {
                 option.disabled = true;
                 courseNameDropdown.appendChild(option);
             }
+            
             if (courseCodeDropdown) {
                 courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
                 const option = document.createElement('option');
@@ -114,7 +163,6 @@ function openAddTeacherModal() {
                 option.disabled = true;
                 courseCodeDropdown.appendChild(option);
             }
-            console.error('Failed to fetch course dropdown data:', err);
         });
 }
 
@@ -160,6 +208,7 @@ async function confirmAddTeacher() {
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
+    
     const depInput = document.getElementById('teacherDepartment');
     const depDropdown = document.getElementById('teacherDepartmentDropdown');
     if (depInput && depInput.value.trim() !== '') {
@@ -167,6 +216,7 @@ async function confirmAddTeacher() {
     } else if (depDropdown && depDropdown.value) {
         department = depDropdown.value;
     }
+    
     const nameInput = document.getElementById('courseName');
     const nameDropdown = document.getElementById('courseNameDropdown');
     if (nameInput && nameInput.value.trim() !== '') {
@@ -174,6 +224,7 @@ async function confirmAddTeacher() {
     } else if (nameDropdown && nameDropdown.value) {
         courseName = nameDropdown.value;
     }
+    
     const codeInput = document.getElementById('courseCode');
     const codeDropdown = document.getElementById('courseCodeDropdown');
     if (codeInput && codeInput.value.trim() !== '') {
@@ -182,39 +233,82 @@ async function confirmAddTeacher() {
         courseCode = codeDropdown.value;
     }
     
-    // Prepare data for API
+    // Show loading state
+    const confirmBtn = document.querySelector('#addTeacherModal .confirm-btn');
+    const originalText = confirmBtn.textContent;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Adding Teacher...';
+    
+    // Prepare data for addTeacher API
     const teacherData = {
         firstname: firstName,
-        // ...existing code...
+        lastname: lastName,
+        email: email,
+        phone: phone,
+        department: department !== 'Unassigned' ? department : null,
+        course_name: courseName !== 'Unassigned' ? courseName : null,
+        course_code: courseCode !== 'Unassigned' ? courseCode : null
     };
     
-    // If department section doesn't exist, create it
-    if (!departmentSection) {
-        departmentSection = createDepartmentSection(teacher.department);
+    try {
+        // Call the addTeacher.php API
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/addTeacher.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            },
+            body: JSON.stringify(teacherData)
+        });
+        
+        const result = await response.json();
+        
+        // Check for authentication errors
+        if (!window.verifyToken(result)) return;
+        
+        if (result.success === true) {
+            // Show success message
+            let successMessage = `✅ Successfully added teacher: ${result.teacher.firstname} ${result.teacher.lastname}`;
+            if (result.teacher.course_name) {
+                successMessage += `\n📚 Assigned to course: ${result.teacher.course_name}`;
+            }
+            if (result.teacher.department) {
+                successMessage += `\n🏢 Department: ${result.teacher.department}`;
+            }
+            alert(successMessage);
+            
+            // Close modal and clear form
+            closeAddTeacherModal();
+            
+            // Reload the page to show the new teacher from database
+            location.reload();
+            
+        } else {
+            // Handle API errors with detailed messages
+            let errorMessage = '❌ Failed to add teacher: ' + (result.error || 'Unknown error');
+            
+            if (result.missing_fields) {
+                errorMessage += '\n📝 Missing fields: ' + result.missing_fields.join(', ');
+            }
+            
+            if (result.details) {
+                errorMessage += '\n🔍 Details: ' + result.details;
+            }
+            
+            alert(errorMessage);
+        }
+        
+    } catch (error) {
+        console.error('Error adding teacher:', error);
+        alert('❌ Network error occurred while adding the teacher. Please check your connection and try again.');
+        
+    } finally {
+        // Reset button state
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
     }
-    
-    // Create teacher card
-    const teacherCard = document.createElement('div');
-    teacherCard.className = 'teacher-card';
-    teacherCard.setAttribute('data-subject', JSON.stringify([teacher.courseCode]));
-    teacherCard.setAttribute('data-added', 'true');
-    
-    teacherCard.innerHTML = `
-        <img src="/assets/Sample.png" alt="Teacher" class="teacher-photo">
-        <div class="teacher-info">
-            <div class="teacher-name">${teacher.firstName} ${teacher.lastName}</div>
-            <div class="teacher-id">${teacher.courseCode}</div>
-        </div>
-        <div class="action-buttons">
-            <button class="details-btn" onclick="showAddedTeacherDetails(${teacher.id})">Details</button>
-            <button class="update-btn" onclick="updateAddedTeacher(${teacher.id})">Update</button>
-            <button class="delete-btn" onclick="deleteAddedTeacher(${teacher.id}, this)">Delete</button>
-        </div>
-    `;
-    
-    // Add to the appropriate grid
-    const teachersGrid = departmentSection.querySelector('.teachers-grid');
-    teachersGrid.appendChild(teacherCard);
 }
 
 function createDepartmentSection(department) {
