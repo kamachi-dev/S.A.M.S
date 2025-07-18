@@ -66,7 +66,7 @@ function displayStudents(students) {
         }
 
         // For now, we'll use a default section since the API might not provide section info
-        const section = 'Main Section'; // You can modify this based on your data structure
+        const section = student.department ?? 'unassigned'; // You can modify this based on your data structure
         if (!groupedStudents[gradeLevel][section]) {
             groupedStudents[gradeLevel][section] = [];
         }
@@ -124,7 +124,7 @@ function createStudentCard(student) {
     const studentCard = document.createElement('div');
     studentCard.className = 'student-card';
     studentCard.setAttribute('data-grade', extractGradeNumber(student.grade_level));
-    studentCard.setAttribute('data-section', student.name ?? 'unassigned'); // Default section
+    studentCard.setAttribute('data-section', 'main'); // Default section
 
     const fullName = `${student.firstname} ${student.lastname}`;
     const studentId = student.id ? student.id.toString().padStart(10, '0') : 'N/A';
