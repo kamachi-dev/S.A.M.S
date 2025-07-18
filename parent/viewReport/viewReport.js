@@ -286,8 +286,7 @@ function createStudentCard(student) {
 // Get today's attendance for a specific student (used for card status)
 function getTodaysAttendanceForStudent(studentName) {
     const today = new Date().toISOString().split('T')[0];
-    // Use detailedStudentRecords instead of allStudentRecords
-    const studentRecords = detailedStudentRecords.filter(record =>
+    const studentRecords = allStudentRecords.filter(record =>
         `${record.firstname} ${record.lastname}` === studentName
     );
 
