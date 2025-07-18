@@ -9,6 +9,13 @@ let addedTeachers = []; // Store added teachers data
 // Add Teacher Modal Functions
 function openAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'block';
+    // Reset dropdowns to default
+    const courseNameDropdown = document.getElementById('courseNameDropdown');
+    const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+    const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
+    if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
+    if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
+    if (departmentDropdown) departmentDropdown.selectedIndex = 0;
 }
 
 function closeAddTeacherModal() {
@@ -22,9 +29,12 @@ function clearAddTeacherForm() {
     document.getElementById('teacherLastName').value = '';
     document.getElementById('teacherEmail').value = '';
     document.getElementById('teacherPhone').value = '';
-    document.getElementById('teacherDepartment').value = '';
-    document.getElementById('courseName').value = '';
-    document.getElementById('courseCode').value = '';
+    if (document.getElementById('teacherDepartmentDropdown')) document.getElementById('teacherDepartmentDropdown').selectedIndex = 0;
+    if (document.getElementById('courseNameDropdown')) document.getElementById('courseNameDropdown').selectedIndex = 0;
+    if (document.getElementById('courseCodeDropdown')) document.getElementById('courseCodeDropdown').selectedIndex = 0;
+    if (document.getElementById('teacherDepartmentInput')) document.getElementById('teacherDepartmentInput').value = '';
+    if (document.getElementById('courseNameInput')) document.getElementById('courseNameInput').value = '';
+    if (document.getElementById('courseCodeInput')) document.getElementById('courseCodeInput').value = '';
 }
 
 async function confirmAddTeacher() {
@@ -46,10 +56,31 @@ async function confirmAddTeacher() {
         return;
     }
     
-    // Get optional fields
-    const department = document.getElementById('teacherDepartment').value.trim() || 'Unassigned';
-    const courseName = document.getElementById('courseName').value.trim() || 'Unassigned';
-    const courseCode = document.getElementById('courseCode').value.trim() || 'Unassigned';
+    // Dual input: prioritize manual input, fallback to dropdown
+    let department = 'Unassigned';
+    let courseName = 'Unassigned';
+    let courseCode = 'Unassigned';
+    const depInput = document.getElementById('teacherDepartmentInput');
+    const depDropdown = document.getElementById('teacherDepartmentDropdown');
+    if (depInput && depInput.value.trim() !== '') {
+        department = depInput.value.trim();
+    } else if (depDropdown) {
+        department = depDropdown.value || 'Unassigned';
+    }
+    const nameInput = document.getElementById('courseNameInput');
+    const nameDropdown = document.getElementById('courseNameDropdown');
+    if (nameInput && nameInput.value.trim() !== '') {
+        courseName = nameInput.value.trim();
+    } else if (nameDropdown) {
+        courseName = nameDropdown.value || 'Unassigned';
+    }
+    const codeInput = document.getElementById('courseCodeInput');
+    const codeDropdown = document.getElementById('courseCodeDropdown');
+    if (codeInput && codeInput.value.trim() !== '') {
+        courseCode = codeInput.value.trim();
+    } else if (codeDropdown) {
+        courseCode = codeDropdown.value || 'Unassigned';
+    }
     
     // Prepare data for API
     const teacherData = {
@@ -677,10 +708,12 @@ async function init() {
             });
 
             teacherGrid(data);
-            // --- Add orphaned course dropdowns to Add Teacher modal ---
-            // Find all courses with teacher == null (unassigned)
+            // --- Add orphaned course and department dropdowns to Add Teacher modal ---
+            // Find all orphaned courses and departments
             const orphanedCourses = [];
+            const departmentsSet = new Set();
             data.forEach(row => {
+                if (row['department']) departmentsSet.add(row['department']);
                 if (row['course'] && row['code']) {
                     const courseArr = JSON.parse(row['course']);
                     const codeArr = JSON.parse(row['code']);
@@ -699,10 +732,11 @@ async function init() {
             // Populate dropdowns in Add Teacher modal
             const courseNameDropdown = document.getElementById('courseNameDropdown');
             const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+            const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
             if (courseNameDropdown && courseCodeDropdown) {
                 // Clear previous options
-                courseNameDropdown.innerHTML = '<option value="">Select Orphaned Course Name</option>';
-                courseCodeDropdown.innerHTML = '<option value="">Select Orphaned Course Code</option>';
+                courseNameDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
+                courseCodeDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
                 orphanedCourses.forEach(course => {
                     const nameOption = document.createElement('option');
                     nameOption.value = course.name;
@@ -712,6 +746,15 @@ async function init() {
                     codeOption.value = course.code;
                     codeOption.textContent = `${course.code} (${course.department})`;
                     courseCodeDropdown.appendChild(codeOption);
+                });
+            }
+            if (departmentDropdown) {
+                departmentDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
+                Array.from(departmentsSet).sort().forEach(dep => {
+                    const depOption = document.createElement('option');
+                    depOption.value = dep;
+                    depOption.textContent = dep;
+                    departmentDropdown.appendChild(depOption);
                 });
             }
         });
