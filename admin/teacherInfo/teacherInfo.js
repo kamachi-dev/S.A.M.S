@@ -156,25 +156,25 @@ async function confirmAddTeacher() {
         return;
     }
     
-    // Dual input: prioritize manual input, fallback to dropdown, default to Unassigned
+    // Dual input: prioritize input field, fallback to dropdown, default to Unassigned
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
-    const depInput = document.getElementById('teacherDepartmentInput');
+    const depInput = document.getElementById('teacherDepartment');
     const depDropdown = document.getElementById('teacherDepartmentDropdown');
     if (depInput && depInput.value.trim() !== '') {
         department = depInput.value.trim();
     } else if (depDropdown && depDropdown.value) {
         department = depDropdown.value;
     }
-    const nameInput = document.getElementById('courseNameInput');
+    const nameInput = document.getElementById('courseName');
     const nameDropdown = document.getElementById('courseNameDropdown');
     if (nameInput && nameInput.value.trim() !== '') {
         courseName = nameInput.value.trim();
     } else if (nameDropdown && nameDropdown.value) {
         courseName = nameDropdown.value;
     }
-    const codeInput = document.getElementById('courseCodeInput');
+    const codeInput = document.getElementById('courseCode');
     const codeDropdown = document.getElementById('courseCodeDropdown');
     if (codeInput && codeInput.value.trim() !== '') {
         courseCode = codeInput.value.trim();
