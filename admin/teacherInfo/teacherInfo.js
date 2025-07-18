@@ -609,7 +609,7 @@ async function init() {
                 clone.querySelector('.teacher-photo').src = row['pfp'];
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
-                // Attach Update button handler with all real data
+                // Attach Update and Details button handler with all real data for this card
                 const teacherObj = {
                     id: row['id'],
                     firstname: row['firstname'],
@@ -620,9 +620,43 @@ async function init() {
                     courseName: (JSON.parse(row['course'])[0] ?? 'Unassigned'),
                     courseCode: (JSON.parse(row['code'])[0] ?? 'Unassigned')
                 };
-                // Attach Details button handler with all real data for this card
                 clone.querySelector('.details-btn').onclick = () => showTeacherDetails(teacherObj);
                 clone.querySelector('.update-btn').onclick = () => updateTeacher(teacherObj);
+                clone.querySelector('.delete-btn').onclick = function() {
+                    if (confirm('Are you sure you want to delete this teacher? This will preserve all their courses, which will become unassigned.')) {
+                        // Call backend API
+                        fetch('https://sams-backend-u79d.onrender.com/api/deleteTeacher.php', {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Provider': window.provider,
+                                'Token': window.token,
+                            },
+                            body: JSON.stringify({ email: teacherObj.email })
+                        })
+                        .then(res => res.json())
+                        .then(result => {
+                            if (!window.verifyToken(result)) return;
+                            if (result.success) {
+                                alert('Teacher deleted. Courses are preserved and now unassigned.');
+                                // Remove card from UI
+                                clone.remove();
+                                // Remove empty section if needed
+                                if (grid.querySelectorAll('.teacher-card').length === 0) {
+                                    grid.closest('.subject-section').remove();
+                                }
+                                updateTeacherCount();
+                            } else {
+                                alert('Failed to delete teacher: ' + (result.error || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error deleting teacher:', error);
+                            alert('An error occurred while deleting the teacher. Please try again.');
+                        });
+                    }
+                };
                 grid.appendChild(clone)
             })
             document.querySelector('.loader').remove();
