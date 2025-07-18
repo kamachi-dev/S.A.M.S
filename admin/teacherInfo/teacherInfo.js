@@ -642,9 +642,10 @@ async function init() {
                                 alert('Teacher deleted. Courses are preserved and now unassigned.');
                                 // Remove card from UI
                                 clone.remove();
-                                // Remove empty section if needed
+                                // Remove empty section if needed (robust)
+                                const section = grid.closest('.subject-section');
                                 if (grid.querySelectorAll('.teacher-card').length === 0) {
-                                    grid.closest('.subject-section').remove();
+                                    section.remove();
                                 }
                                 updateTeacherCount();
                             } else {
@@ -676,6 +677,43 @@ async function init() {
             });
 
             teacherGrid(data);
+            // --- Add orphaned course dropdowns to Add Teacher modal ---
+            // Find all courses with teacher == null (unassigned)
+            const orphanedCourses = [];
+            data.forEach(row => {
+                if (row['course'] && row['code']) {
+                    const courseArr = JSON.parse(row['course']);
+                    const codeArr = JSON.parse(row['code']);
+                    for (let i = 0; i < courseArr.length; i++) {
+                        // If course is unassigned (teacher is null)
+                        if ((row['teacher'] == null || row['teacher'] === '' || row['teacher'] === undefined) && courseArr[i] && codeArr[i]) {
+                            orphanedCourses.push({
+                                name: courseArr[i],
+                                code: codeArr[i],
+                                department: row['department'] ?? 'Unassigned'
+                            });
+                        }
+                    }
+                }
+            });
+            // Populate dropdowns in Add Teacher modal
+            const courseNameDropdown = document.getElementById('courseNameDropdown');
+            const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+            if (courseNameDropdown && courseCodeDropdown) {
+                // Clear previous options
+                courseNameDropdown.innerHTML = '<option value="">Select Orphaned Course Name</option>';
+                courseCodeDropdown.innerHTML = '<option value="">Select Orphaned Course Code</option>';
+                orphanedCourses.forEach(course => {
+                    const nameOption = document.createElement('option');
+                    nameOption.value = course.name;
+                    nameOption.textContent = `${course.name} (${course.department})`;
+                    courseNameDropdown.appendChild(nameOption);
+                    const codeOption = document.createElement('option');
+                    codeOption.value = course.code;
+                    codeOption.textContent = `${course.code} (${course.department})`;
+                    courseCodeDropdown.appendChild(codeOption);
+                });
+            }
         });
 }
 
