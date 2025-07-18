@@ -194,6 +194,21 @@ function initializeFilters() {
         });
     }
 
+    // Populate section filter with available sections
+    if (sectionFilter && allStudents.length > 0) {
+        // Use department as section, fallback to 'unassigned'
+        const sections = [...new Set(allStudents.map(s => s.department ?? 'unassigned'))].sort();
+        sectionFilter.innerHTML = '<option value="all">All Sections</option>';
+        sections.forEach(section => {
+            if (section && section !== 'unassigned') {
+                const option = document.createElement('option');
+                option.value = section;
+                option.textContent = section;
+                sectionFilter.appendChild(option);
+            }
+        });
+    }
+
     // Search functionality
     if (searchInput) {
         searchInput.addEventListener('input', function () {
@@ -209,26 +224,16 @@ function initializeFilters() {
                 });
             }
 
-            displayStudents(filteredStudents);
-            updateStudentCount();
+            // Apply grade and section filters after search
+            applyGradeAndSectionFilters();
         });
     }
 
     // Grade filter functionality
     if (gradeFilter) {
         gradeFilter.addEventListener('change', function () {
-            const selectedGrade = this.value;
-
-            if (selectedGrade === 'all') {
-                filteredStudents = [...allStudents];
-            } else {
-                filteredStudents = allStudents.filter(student =>
-                    extractGradeNumber(student.grade_level) === selectedGrade
-                );
-            }
-
-            displayStudents(filteredStudents);
-            updateStudentCount();
+            // Apply grade and section filters
+            applyGradeAndSectionFilters();
 
             // Clear search when filter changes
             if (searchInput) {
@@ -237,12 +242,42 @@ function initializeFilters() {
         });
     }
 
-    // Section filter functionality (placeholder for future use)
+    // Section filter functionality
     if (sectionFilter) {
         sectionFilter.addEventListener('change', function () {
-            // This can be implemented when section data is available
-            console.log('Section filter selected:', this.value);
+            // Apply grade and section filters
+            applyGradeAndSectionFilters();
+
+            // Clear search when filter changes
+            if (searchInput) {
+                searchInput.value = '';
+            }
         });
+    }
+
+    // Helper to apply both grade and section filters
+    function applyGradeAndSectionFilters() {
+        let students = [...allStudents];
+
+        // Grade filter
+        const selectedGrade = gradeFilter ? gradeFilter.value : 'all';
+        if (selectedGrade !== 'all') {
+            students = students.filter(student =>
+                extractGradeNumber(student.grade_level) === selectedGrade
+            );
+        }
+
+        // Section filter
+        const selectedSection = sectionFilter ? sectionFilter.value : 'all';
+        if (selectedSection !== 'all') {
+            students = students.filter(student =>
+                (student.department ?? 'unassigned') == selectedSection
+            );
+        }
+
+        filteredStudents = students;
+        displayStudents(filteredStudents);
+        updateStudentCount();
     }
 }
 
