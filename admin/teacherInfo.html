@@ -95,7 +95,10 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="teacherDepartment">Department</label>
-                            <input type="text" id="teacherDepartment" placeholder="Leave empty for Unassigned">
+                            <input type="text" id="teacherDepartment" placeholder="Type department or leave empty">
+                            <select id="teacherDepartmentDropdown" style="margin-top: 5px; width: 100%;">
+                                <option value="">Select department (optional)</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <!-- Empty space for layout -->
@@ -108,11 +111,17 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="courseName">Course Name</label>
-                            <input type="text" id="courseName" placeholder="Leave empty for Unassigned">
+                            <input type="text" id="courseName" placeholder="Type course name or leave empty">
+                            <select id="courseNameDropdown" style="margin-top: 5px; width: 100%;">
+                                <option value="">Select course name (optional)</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="courseCode">Course Code</label>
-                            <input type="text" id="courseCode" placeholder="Leave empty for Unassigned">
+                            <input type="text" id="courseCode" placeholder="Type course code or leave empty">
+                            <select id="courseCodeDropdown" style="margin-top: 5px; width: 100%;">
+                                <option value="">Select course code (optional)</option>
+                            </select>
                         </div>
                     </div>
                 </div>

@@ -9,13 +9,19 @@ let addedTeachers = []; // Store added teachers data
 // Add Teacher Modal Functions
 function openAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'block';
-    // Reset dropdowns to default
+    // Reset dropdowns and inputs to default
     const courseNameDropdown = document.getElementById('courseNameDropdown');
     const courseCodeDropdown = document.getElementById('courseCodeDropdown');
     const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
+    const courseNameInput = document.getElementById('courseNameInput');
+    const courseCodeInput = document.getElementById('courseCodeInput');
+    const departmentInput = document.getElementById('teacherDepartmentInput');
     if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
     if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
     if (departmentDropdown) departmentDropdown.selectedIndex = 0;
+    if (courseNameInput) courseNameInput.value = '';
+    if (courseCodeInput) courseCodeInput.value = '';
+    if (departmentInput) departmentInput.value = '';
 }
 
 function closeAddTeacherModal() {
@@ -56,7 +62,7 @@ async function confirmAddTeacher() {
         return;
     }
     
-    // Dual input: prioritize manual input, fallback to dropdown
+    // Dual input: prioritize manual input, fallback to dropdown, default to Unassigned
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
@@ -64,22 +70,22 @@ async function confirmAddTeacher() {
     const depDropdown = document.getElementById('teacherDepartmentDropdown');
     if (depInput && depInput.value.trim() !== '') {
         department = depInput.value.trim();
-    } else if (depDropdown) {
-        department = depDropdown.value || 'Unassigned';
+    } else if (depDropdown && depDropdown.value) {
+        department = depDropdown.value;
     }
     const nameInput = document.getElementById('courseNameInput');
     const nameDropdown = document.getElementById('courseNameDropdown');
     if (nameInput && nameInput.value.trim() !== '') {
         courseName = nameInput.value.trim();
-    } else if (nameDropdown) {
-        courseName = nameDropdown.value || 'Unassigned';
+    } else if (nameDropdown && nameDropdown.value) {
+        courseName = nameDropdown.value;
     }
     const codeInput = document.getElementById('courseCodeInput');
     const codeDropdown = document.getElementById('courseCodeDropdown');
     if (codeInput && codeInput.value.trim() !== '') {
         courseCode = codeInput.value.trim();
-    } else if (codeDropdown) {
-        courseCode = codeDropdown.value || 'Unassigned';
+    } else if (codeDropdown && codeDropdown.value) {
+        courseCode = codeDropdown.value;
     }
     
     // Prepare data for API
