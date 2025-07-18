@@ -25,7 +25,7 @@ function openAddTeacherModal() {
     if (departmentDropdown) departmentDropdown.selectedIndex = 0;
 
     // Fetch departments (all)
-    fetch('/SAMS-Backend/api/populateDepartmentDropdown.php')
+    fetch('https://sams-backend-u79d.onrender.com/api/populateDepartmentDropdown.php')
         .then(response => response.json())
         .then(data => {
             if (data.success && departmentDropdown) {
@@ -43,7 +43,7 @@ function openAddTeacherModal() {
         });
 
     // Fetch courses (only unassigned)
-    fetch('/SAMS-Backend/api/populateCourseDropdown.php')
+    fetch('https://sams-backend-u79d.onrender.com/api/populateCourseDropdown.php')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
