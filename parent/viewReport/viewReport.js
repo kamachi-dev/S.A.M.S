@@ -436,7 +436,7 @@ function generateTimeBlocks(todaysAttendance) {
         return '<div class="no-attendance">No classes today</div>';
     }
     return todaysAttendance.map(record => {
-        return `<div class="time-block ${record.attendance}">
+        return `<div class="time-block ${getAttendanceColorClass(record.attendance)}">
             <div class="subject">${record.courseName}</div>
             <div class="time">${record.time}</div>
         </div>`;

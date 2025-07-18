@@ -532,24 +532,19 @@ body {
     transform: scale(1.05);
 }
 
-.time-block.time-7 {
+.time-block.absent {
     background: #e74c3c;
 }
 
-.time-block.time-8 {
+.time-block.late {
     background: #f39c12;
 }
 
-.time-block.time-9,
-.time-block.time-10,
-.time-block.time-12,
-.time-block.time-1,
-.time-block.time-2,
-.time-block.time-3 {
+.time-block.present {
     background: #3498db;
 }
 
-.time-block.time-11 {
+.time-block.excused {
     background: #95a5a6;
 }
 
