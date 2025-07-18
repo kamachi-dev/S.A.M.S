@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SAMS : Teacher - Student Info</title>
+    <link rel="shortcut icon" type="image/png" href="/assets/HatLogo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/general/general.css">
+    <link rel="stylesheet" type="text/css" href="/teacher/studentInfo/studentInfo.css">
+    <script defer src="/general/general.js"></script>
+    <script defer src="/teacher/studentInfo/studentInfo.js"></script>
+</head>
+
+<body>
+    <!-- Signout Icon -->
+    <div class="signout-icon" onclick="signOut()" title="Sign Out">
+        <img src="/assets/logout_icon.png" alt="Sign Out" />
+    </div>
+    
+    <img src="/assets/School1.jpg" alt="background" class="background" />
+    <div class="slip">
+        <img src="/assets/School1.jpg" alt="headerPicture" class="headerPicture" />
+        <img src="/assets/MMCL_Logo_Horizontal.webp" alt="longLogo" class="longLogo" />
+        <nav class="navBar">
+            <ul>
+                <li class="ReportTab">
+                    <img src="/assets/icons/View Report.png" />
+                    <a href="overview.html">Overview</a>
+                </li>
+                <li class="ProfileTab currentTab">
+                    <img src="/assets/icons/User Profile.png" />
+                    <a href="studentInfo.html">Student Info</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="content-wrapper">
+            <div class="content-border">
+                <div class="content">
+                    <div class="filter-section">
+                        <div class="search-container">
+                            <input type="text" placeholder="Search students..." class="search-input">
+                        </div>
+                        <div class="filter-dropdowns">
+                            <select class="filter-select" id="gradeFilter">
+                                <option value="all">All Grades</option>
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                            <select class="filter-select" id="sectionFilter">
+                                <option value="all">All Sections</option>
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                            <div class="student-count">
+                                <span>No. of Students</span>
+                                <span class="count-number">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="loader">Please wait while the data is being fetched...</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDetailsModal()">&times;</span>
+            <h2 id="modalName">Student Details</h2>
+            <div class="modal-info">
+                <p><strong>Student ID:</strong> <span id="modalStudentId"></span></p>
+                <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Grade & Section:</strong> <span id="modalGradeSection"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <button class="menu" onclick="TogglePopup()">
+        <img src="/assets/icons/Hamburger.png" alt="menu" />
+    </button>
+    <div class="hiddenMenu">
+        <section class="popup" id="popup">
+            <div class="menuNav">
+                <div class="menuItem">
+                    <img src="/assets/icons/View Report.png" />
+                    <a href="overview.html"><label for="overview">Overview</label></a>
+                </div>
+                <div class="menuItem">
+                    <img src="/assets/icons/User Profile.png" />
+                    <a href="studentInfo.html"><label for="student_info">Student Info</label></a>
+                </div>
+                <div class="menuItem">
+                    <img src="/assets/icons/message.png" />
+                    <a href="messages.html"><label for="message">Messages</label></a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

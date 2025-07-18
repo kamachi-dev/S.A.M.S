@@ -216,6 +216,26 @@
 .student-card.hidden {
     display: none;
 }
+
+/* Loading and error states */
+.loader {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+    font-size: 18px;
+}
+
+.no-students {
+    text-align: center;
+    color: #666;
+    margin-top: 50px;
+}
+
+.error-message {
+    text-align: center;
+    margin-top: 50px;
+}
+
 /* Mobile Responsiveness */
 @media only screen and (max-width: 1200px) {
     .students-grid {
