@@ -7,6 +7,7 @@ let currentUpdatingTeacher = null;
 let addedTeachers = []; // Store added teachers data
 
 // Add Teacher Modal Functions
+
 function openAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'block';
     // Reset dropdowns and inputs to default
@@ -22,8 +23,8 @@ function openAddTeacherModal() {
     if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
     if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
     if (departmentDropdown) departmentDropdown.selectedIndex = 0;
-}
-    // Fetch unassigned options from backend
+
+    // Fetch unassigned options from backend API
     fetch('/SAMS-Backend/api/populateAddTeacherDropdown.php')
         .then(response => response.json())
         .then(data => {
