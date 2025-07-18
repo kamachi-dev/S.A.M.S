@@ -686,55 +686,6 @@ async function init() {
             });
 
             teacherGrid(data);
-            // --- Add orphaned course and department dropdowns to Add Teacher modal ---
-            // Find all orphaned courses and departments
-            const orphanedCourses = [];
-            const departmentsSet = new Set();
-            data.forEach(row => {
-                if (row['department']) departmentsSet.add(row['department']);
-                if (row['course'] && row['code']) {
-                    const courseArr = JSON.parse(row['course']);
-                    const codeArr = JSON.parse(row['code']);
-                    for (let i = 0; i < courseArr.length; i++) {
-                        // If course is unassigned (teacher is null)
-                        if ((row['teacher'] == null || row['teacher'] === '' || row['teacher'] === undefined) && courseArr[i] && codeArr[i]) {
-                            orphanedCourses.push({
-                                name: courseArr[i],
-                                code: codeArr[i],
-                                department: row['department'] ?? 'Unassigned'
-                            });
-                        }
-                    }
-                }
-            });
-            // Populate dropdowns in Add Teacher modal
-            const courseNameDropdown = document.getElementById('courseNameDropdown');
-            const courseCodeDropdown = document.getElementById('courseCodeDropdown');
-            const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
-            if (courseNameDropdown && courseCodeDropdown) {
-                // Clear previous options
-                courseNameDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
-                courseCodeDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
-                orphanedCourses.forEach(course => {
-                    const nameOption = document.createElement('option');
-                    nameOption.value = course.name;
-                    nameOption.textContent = `${course.name} (${course.department})`;
-                    courseNameDropdown.appendChild(nameOption);
-                    const codeOption = document.createElement('option');
-                    codeOption.value = course.code;
-                    codeOption.textContent = `${course.code} (${course.department})`;
-                    courseCodeDropdown.appendChild(codeOption);
-                });
-            }
-            if (departmentDropdown) {
-                departmentDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
-                Array.from(departmentsSet).sort().forEach(dep => {
-                    const depOption = document.createElement('option');
-                    depOption.value = dep;
-                    depOption.textContent = dep;
-                    departmentDropdown.appendChild(depOption);
-                });
-            }
         });
 }
 
