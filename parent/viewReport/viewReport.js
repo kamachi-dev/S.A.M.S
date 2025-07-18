@@ -6,7 +6,6 @@ let students = [];
 let selectedStudent = null;
 let attendanceData = {};
 let allStudentRecords = [];
-let detailedStudentRecords = [];
 
 function TogglePopup() {
     const popup = document.getElementById("popup");
@@ -54,23 +53,12 @@ async function fetchStudentRecords() {
                 'Token': window.token,
             }
         });
-        const response2 = await fetch('https://sams-backend-u79d.onrender.com/api/getStudentProfile.php', {
-            credentials: 'include',
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
-            }
-        });
 
         const data = await response.json();
-        const data2 = await response2.json();
 
         if (!window.verifyToken(data)) return [];
 
         allStudentRecords = data;
-        detailedStudentRecords = data2;
         return data;
     } catch (error) {
         console.error('Error fetching student records:', error);
@@ -79,7 +67,7 @@ async function fetchStudentRecords() {
 }
 
 // Process attendance data for calendar display
-async function processAttendanceForCalendar(records, studentName) {
+function processAttendanceForCalendar(records, studentName) {
     const attendanceMap = {};
     const dailyAttendance = {};
 
@@ -320,7 +308,7 @@ function showStudentDetails(status, element) {
     selectedStudent = student;
 
     // Process attendance data for this student
-    attendanceData = processAttendanceForCalendar(detailedStudentRecords, student.fullName);
+    attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
 
     const isMobile = window.matchMedia("(max-width: 750px)").matches;
 
