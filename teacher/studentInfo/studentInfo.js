@@ -124,7 +124,7 @@ function createStudentCard(student) {
     const studentCard = document.createElement('div');
     studentCard.className = 'student-card';
     studentCard.setAttribute('data-grade', extractGradeNumber(student.grade_level));
-    studentCard.setAttribute('data-section', student.name ?? 'unassigned'); // Default section
+    studentCard.setAttribute('data-section', student.department ?? 'unassigned'); // Default section
 
     const fullName = `${student.firstname} ${student.lastname}`;
     const studentId = student.id ? student.id.toString().padStart(10, '0') : 'N/A';
@@ -135,7 +135,7 @@ function createStudentCard(student) {
             <div class="student-name">${fullName}</div>
         </div>
         <div class="action-buttons">
-            <button class="details-btn" onclick="showStudentDetails('${fullName}', '${studentId}', '${student.phone || 'N/A'}', '${student.email || 'N/A'}', '${student.grade_level || 'N/A'}')">Details</button>
+            <button class="details-btn" onclick="showStudentDetails('${fullName}', '${studentId}', '${student.grade_level || 'N/A'}')">Details</button>
         </div>
     `;
 
@@ -255,11 +255,9 @@ function updateStudentCount() {
 }
 
 // Modal functionality
-function showStudentDetails(name, studentId, phone, email, gradeSection) {
+function showStudentDetails(name, studentId, gradeSection) {
     document.getElementById('modalName').textContent = name;
     document.getElementById('modalStudentId').textContent = studentId;
-    document.getElementById('modalPhone').textContent = phone;
-    document.getElementById('modalEmail').textContent = email;
     document.getElementById('modalGradeSection').textContent = gradeSection;
     document.getElementById('detailsModal').style.display = 'block';
 }
