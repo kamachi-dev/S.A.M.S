@@ -435,18 +435,21 @@ function generateTimeBlocks(todaysAttendance) {
     if (!todaysAttendance || todaysAttendance.length === 0) {
         return '<div class="no-attendance">No classes today</div>';
     }
-
     return todaysAttendance.map(record => {
-        const attendanceClass = getAttendanceColorClass(record.attendance);
-        const attendanceText = getAttendanceDisplayName(record.attendance);
-
-        return `
-            <div class="time-block ${attendanceClass}">
-                <div class="subject">${record.courseName}</div>
-                <div class="time">${record.time}</div>
-                <div class="status">${attendanceText}</div>
-            </div>
-        `;
+        // Extract hour for class, e.g. "7:00" => "7", "13:00" => "1"
+        let hour = '';
+        if (record.time) {
+            const match = record.time.match(/^(\d{1,2})/);
+            if (match) {
+                hour = parseInt(match[1], 10);
+                // Convert 13+ to 1-12 for PM
+                if (hour > 12) hour -= 12;
+            }
+        }
+        return `<div class="time-block time-${hour}">
+            <div class="subject">${record.courseName}</div>
+            <div class="time">${record.time}</div>
+        </div>`;
     }).join('');
 }
 
