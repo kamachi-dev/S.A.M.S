@@ -124,7 +124,7 @@ function createStudentCard(student) {
     const studentCard = document.createElement('div');
     studentCard.className = 'student-card';
     studentCard.setAttribute('data-grade', extractGradeNumber(student.grade_level));
-    studentCard.setAttribute('data-section', 'main'); // Default section
+    studentCard.setAttribute('data-section', student.name ?? 'unassigned'); // Default section
 
     const fullName = `${student.firstname} ${student.lastname}`;
     const studentId = student.id ? student.id.toString().padStart(10, '0') : 'N/A';
