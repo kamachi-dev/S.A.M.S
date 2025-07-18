@@ -9,22 +9,120 @@ let addedTeachers = []; // Store added teachers data
 // Add Teacher Modal Functions
 function openAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'block';
+    // Reset dropdowns and inputs to default
+    const courseNameDropdown = document.getElementById('courseNameDropdown');
+    const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+    const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
+    const courseNameInput = document.getElementById('courseName');
+    const courseCodeInput = document.getElementById('courseCode');
+    const departmentInput = document.getElementById('teacherDepartment');
+    if (courseNameInput) courseNameInput.value = '';
+    if (courseCodeInput) courseCodeInput.value = '';
+    if (departmentInput) departmentInput.value = '';
+    if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
+    if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
+    if (departmentDropdown) departmentDropdown.selectedIndex = 0;
 }
+    // Fetch unassigned options from backend
+    fetch('/SAMS-Backend/api/populateAddTeacherDropdown.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Populate department dropdown
+                if (departmentDropdown) {
+                    departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
+                    data.departments.forEach(dep => {
+                        const option = document.createElement('option');
+                        option.value = dep;
+                        option.textContent = dep;
+                        departmentDropdown.appendChild(option);
+                    });
+                }
+                // Populate course name dropdown
+                if (courseNameDropdown) {
+                    courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                    data.course_names.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        courseNameDropdown.appendChild(option);
+                    });
+                }
+                // Populate course code dropdown
+                if (courseCodeDropdown) {
+                    courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                    data.course_codes.forEach(code => {
+                        const option = document.createElement('option');
+                        option.value = code;
+                        option.textContent = code;
+                        courseCodeDropdown.appendChild(option);
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            // Optionally show error to user
+            console.error('Failed to fetch dropdown data:', err);
+        });
 
 function closeAddTeacherModal() {
-    document.getElementById('addTeacherModal').style.display = 'none';
-    // Clear form
-    clearAddTeacherForm();
-}
+    document.getElementById('addTeacherModal').style.display = 'block';
+    // Reset dropdowns and inputs to default
+    const courseNameDropdown = document.getElementById('courseNameDropdown');
+    const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+    const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
+    const courseNameInput = document.getElementById('courseName');
+    const courseCodeInput = document.getElementById('courseCode');
+    const departmentInput = document.getElementById('teacherDepartment');
 
-function clearAddTeacherForm() {
-    document.getElementById('teacherFirstName').value = '';
-    document.getElementById('teacherLastName').value = '';
-    document.getElementById('teacherEmail').value = '';
-    document.getElementById('teacherPhone').value = '';
-    document.getElementById('teacherDepartment').value = '';
-    document.getElementById('courseName').value = '';
-    document.getElementById('courseCode').value = '';
+    if (courseNameInput) courseNameInput.value = '';
+    if (courseCodeInput) courseCodeInput.value = '';
+    if (courseNameInput) courseNameInput.value = ''; // This line is removed
+    if (courseCodeInput) courseCodeInput.value = ''; // This line is removed
+    if (departmentInput) departmentInput.value = ''; // This line is removed
+    fetch('/SAMS-Backend/api/populateAddTeacherDropdown.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Populate department dropdown
+                if (departmentDropdown) {
+                    departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
+                    data.departments.forEach(dep => {
+                        const option = document.createElement('option');
+                        option.value = dep;
+                        option.textContent = dep;
+                        departmentDropdown.appendChild(option);
+                    });
+                }
+                // Populate course name dropdown
+                if (courseNameDropdown) {
+                    courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                    data.course_names.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        courseNameDropdown.appendChild(option);
+                    });
+                }
+                // Populate course code dropdown
+                if (courseCodeDropdown) {
+                    courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                    data.course_codes.forEach(code => {
+                        const option = document.createElement('option');
+                        option.value = code;
+                        option.textContent = code;
+                        courseCodeDropdown.appendChild(option);
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            // Optionally show error to user
+            console.error('Failed to fetch dropdown data:', err);
+        });
+}
+    if (document.getElementById('courseNameInput')) document.getElementById('courseNameInput').value = '';
+    if (document.getElementById('courseCodeInput')) document.getElementById('courseCodeInput').value = '';
 }
 
 async function confirmAddTeacher() {
@@ -46,10 +144,31 @@ async function confirmAddTeacher() {
         return;
     }
     
-    // Get optional fields
-    const department = document.getElementById('teacherDepartment').value.trim() || 'Unassigned';
-    const courseName = document.getElementById('courseName').value.trim() || 'Unassigned';
-    const courseCode = document.getElementById('courseCode').value.trim() || 'Unassigned';
+    // Dual input: prioritize manual input, fallback to dropdown, default to Unassigned
+    let department = 'Unassigned';
+    let courseName = 'Unassigned';
+    let courseCode = 'Unassigned';
+    const depInput = document.getElementById('teacherDepartmentInput');
+    const depDropdown = document.getElementById('teacherDepartmentDropdown');
+    if (depInput && depInput.value.trim() !== '') {
+        department = depInput.value.trim();
+    } else if (depDropdown && depDropdown.value) {
+        department = depDropdown.value;
+    }
+    const nameInput = document.getElementById('courseNameInput');
+    const nameDropdown = document.getElementById('courseNameDropdown');
+    if (nameInput && nameInput.value.trim() !== '') {
+        courseName = nameInput.value.trim();
+    } else if (nameDropdown && nameDropdown.value) {
+        courseName = nameDropdown.value;
+    }
+    const codeInput = document.getElementById('courseCodeInput');
+    const codeDropdown = document.getElementById('courseCodeDropdown');
+    if (codeInput && codeInput.value.trim() !== '') {
+        courseCode = codeInput.value.trim();
+    } else if (codeDropdown && codeDropdown.value) {
+        courseCode = codeDropdown.value;
+    }
     
     // Prepare data for API
     const teacherData = {
@@ -677,10 +796,12 @@ async function init() {
             });
 
             teacherGrid(data);
-            // --- Add orphaned course dropdowns to Add Teacher modal ---
-            // Find all courses with teacher == null (unassigned)
+            // --- Add orphaned course and department dropdowns to Add Teacher modal ---
+            // Find all orphaned courses and departments
             const orphanedCourses = [];
+            const departmentsSet = new Set();
             data.forEach(row => {
+                if (row['department']) departmentsSet.add(row['department']);
                 if (row['course'] && row['code']) {
                     const courseArr = JSON.parse(row['course']);
                     const codeArr = JSON.parse(row['code']);
@@ -699,10 +820,11 @@ async function init() {
             // Populate dropdowns in Add Teacher modal
             const courseNameDropdown = document.getElementById('courseNameDropdown');
             const courseCodeDropdown = document.getElementById('courseCodeDropdown');
+            const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
             if (courseNameDropdown && courseCodeDropdown) {
                 // Clear previous options
-                courseNameDropdown.innerHTML = '<option value="">Select Orphaned Course Name</option>';
-                courseCodeDropdown.innerHTML = '<option value="">Select Orphaned Course Code</option>';
+                courseNameDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
+                courseCodeDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
                 orphanedCourses.forEach(course => {
                     const nameOption = document.createElement('option');
                     nameOption.value = course.name;
@@ -712,6 +834,15 @@ async function init() {
                     codeOption.value = course.code;
                     codeOption.textContent = `${course.code} (${course.department})`;
                     courseCodeDropdown.appendChild(codeOption);
+                });
+            }
+            if (departmentDropdown) {
+                departmentDropdown.innerHTML = '<option value="">Leave empty for Unassigned</option>';
+                Array.from(departmentsSet).sort().forEach(dep => {
+                    const depOption = document.createElement('option');
+                    depOption.value = dep;
+                    depOption.textContent = dep;
+                    departmentDropdown.appendChild(depOption);
                 });
             }
         });
