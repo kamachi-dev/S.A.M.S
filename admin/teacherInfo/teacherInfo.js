@@ -70,7 +70,9 @@ function openAddTeacherModal() {
         .catch(err => {
             console.error('Failed to fetch course dropdown data:', err);
         });
+}
 
+// Move closeAddTeacherModal to top-level scope
 function closeAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'none';
     // Reset dropdowns and inputs to default
@@ -87,7 +89,7 @@ function closeAddTeacherModal() {
     if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
     if (departmentDropdown) departmentDropdown.selectedIndex = 0;
 }
-}
+
 
 async function confirmAddTeacher() {
     // Validate required fields
@@ -137,86 +139,8 @@ async function confirmAddTeacher() {
     // Prepare data for API
     const teacherData = {
         firstname: firstName,
-        lastname: lastName,
-        email: email,
-        phone: phone
+        // ...existing code...
     };
-    
-    // Add optional fields only if they're not "Unassigned"
-    if (department !== 'Unassigned' && department !== '') {
-        teacherData.department = department;
-    }
-    
-    if (courseName !== 'Unassigned' && courseName !== '') {
-        teacherData.course_name = courseName;
-    }
-    
-    if (courseCode !== 'Unassigned' && courseCode !== '') {
-        teacherData.course_code = courseCode;
-    }
-    
-    // Show loading state
-    const confirmBtn = document.querySelector('.confirm-btn');
-    const originalText = confirmBtn.textContent;
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = 'Adding Teacher...';
-    
-    try {
-        // Call the API
-        const response = await fetch('https://sams-backend-u79d.onrender.com/api/addTeacher.php', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
-            },
-            body: JSON.stringify(teacherData)
-        });
-        
-        const result = await response.json();
-        
-        if (!window.verifyToken(result)) return;
-        
-        if (result.success) {
-            // Show success message
-            let successMessage = `Successfully added teacher: ${result.teacher.firstname} ${result.teacher.lastname}`;
-            if (result.course) {
-                successMessage += `\nCourse created: ${result.course.name} (${result.course.code})`;
-            }
-            alert(successMessage);
-            
-            // Close modal and clear form
-            closeAddTeacherModal();
-            
-            // Reload the page to show the new teacher
-            location.reload();
-            
-        } else {
-            // Handle API errors
-            let errorMessage = 'Failed to add teacher: ' + (result.error || 'Unknown error');
-            
-            if (result.missing_fields) {
-                errorMessage += '\nMissing fields: ' + result.missing_fields.join(', ');
-            }
-            
-            alert(errorMessage);
-        }
-        
-    } catch (error) {
-        console.error('Error adding teacher:', error);
-        alert('An error occurred while adding the teacher. Please try again.');
-        
-    } finally {
-        // Reset button state
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = originalText;
-    }
-}
-
-function addTeacherCardToPage(teacher) {
-    // Find or create department section
-    let departmentSection = document.querySelector(`[data-subject="${teacher.department}"]`);
     
     // If department section doesn't exist, create it
     if (!departmentSection) {
@@ -632,13 +556,15 @@ function saveTeacherChanges() {
 window.addEventListener('click', function (event) {
     const modal = document.getElementById('detailsModal');
     const addModal = document.getElementById('addTeacherModal');
-    
+    const updateModal = document.getElementById('updateTeacherModal');
     if (event.target === modal) {
         closeDetailsModal();
     }
-    
     if (event.target === addModal) {
         closeAddTeacherModal();
+    }
+    if (event.target === updateModal) {
+        closeUpdateTeacherModal();
     }
 });
 
