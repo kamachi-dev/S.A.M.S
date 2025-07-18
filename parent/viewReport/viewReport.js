@@ -210,25 +210,10 @@ function generateCalendar(month, year) {
     }
 }
 
-// Update the info-section time-blocks with attendance records
-function updateInfoSectionTimeBlocks(attendanceRecords) {
-    const container = document.querySelector('.info-section .time-blocks');
-    if (!container) return;
-    if (!attendanceRecords || attendanceRecords.length === 0) {
-        container.innerHTML = '<div class="no-attendance">No classes today</div>';
-        return;
-    }
-    container.innerHTML = attendanceRecords.map(record =>
-        `<div class="time-block">${record.time} - ${record.courseName}</div>`
-    ).join('');
-}
-
 // Show attendance details for a specific day
 function showDayAttendance(dateStr) {
     if (!attendanceData.dailyData || !attendanceData.dailyData[dateStr]) {
         alert('No attendance data available for this date.');
-        // Also clear info-section for this day
-        updateInfoSectionTimeBlocks([]);
         return;
     }
 
@@ -249,9 +234,6 @@ function showDayAttendance(dateStr) {
     });
 
     alert(attendanceDetails);
-
-    // Update info-section with this day's attendance
-    updateInfoSectionTimeBlocks(dayData);
 }
 
 // Get today's attendance for display
@@ -354,14 +336,9 @@ async function handleMobileStudentSelection(cardElement, student) {
 
         // Load attendance data and display
         await loadStudentDetails(cardElement, student);
-
-        // Update info-section with today's attendance
-        const todaysAttendance = getTodaysAttendance(student.fullName);
-        updateInfoSectionTimeBlocks(todaysAttendance);
     } else {
         // If clicking the same card again, deselect
         selectedStudent = null;
-        updateInfoSectionTimeBlocks([]);
     }
 }
 
@@ -404,9 +381,6 @@ async function handleDesktopStudentSelection(student) {
     // Initialize calendar and charts
     generateCalendar(currentMonth, currentYear);
     setupCalendarNavigation(leftPanel);
-
-    // Update info-section with today's attendance
-    updateInfoSectionTimeBlocks(todaysAttendance);
 }
 
 // Load student details for mobile view
@@ -421,52 +395,37 @@ async function loadStudentDetails(cardElement, student) {
 
 // Generate charts HTML with today's attendance
 async function generateChartsHTML(student) {
-    // No time-blocks here; only charts and calendar
+    const todaysAttendance = getTodaysAttendance(student.fullName);
+    const timeBlocks = generateTimeBlocks(todaysAttendance);
+
     return `
         <div class="charts-top-bottom">
             <div class="charts-container">
                 <div class="chart-section">
-                    <h4>Student's Current Attendance</h4>
+                    <h4>Today's Attendance</h4>
                     <div class="chart-wrapper">
-                        <canvas id="currentChart" width="150px" height="150px"></canvas>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <div class="legend-color present"></div>
-                                <span>Presents</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color late"></div>
-                                <span>Lates</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color absent"></div>
-                                <span>Absents</span>
-                            </div>
+                        <div class="time-blocks">
+                            ${timeBlocks}
                         </div>
                     </div>
                 </div>
-                <div class="chart-section">
-                    <h4>Student's Term Attendance</h4>
-                    <div class="chart-wrapper">
-                        <canvas id="termChart" width="150px" height="150px"></canvas>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <div class="legend-color present"></div>
-                                <span>Presents</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color late"></div>
-                                <span>Lates</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color absent"></div>
-                                <span>Absents</span>
-                            </div>
-                        </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="nav-button prev" onclick="previousMonth()"><</button>
+                        <h3 id="monthYear">December 2026</h3>
+                        <button class="nav-button next" onclick="nextMonth()">></button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-header">Mo</div>
+                        <div class="day-header">Tu</div>
+                        <div class="day-header">We</div>
+                        <div class="day-header">Th</div>
+                        <div class="day-header">Fr</div>
+                        <div class="day-header">Sa</div>
+                        <div class="day-header">Su</div>
                     </div>
                 </div>
             </div>
-            <!-- Info Section is outside this HTML, updated dynamically -->
         </div>
     `;
 }
@@ -476,9 +435,19 @@ function generateTimeBlocks(todaysAttendance) {
     if (!todaysAttendance || todaysAttendance.length === 0) {
         return '<div class="no-attendance">No classes today</div>';
     }
-    return todaysAttendance.map(record =>
-        `<div class="time-block">${record.time} - ${record.courseName}</div>`
-    ).join('');
+
+    return todaysAttendance.map(record => {
+        const attendanceClass = getAttendanceColorClass(record.attendance);
+        const attendanceText = getAttendanceDisplayName(record.attendance);
+
+        return `
+            <div class="time-block ${attendanceClass}">
+                <div class="subject">${record.courseName}</div>
+                <div class="time">${record.time}</div>
+                <div class="status">${attendanceText}</div>
+            </div>
+        `;
+    }).join('');
 }
 
 // Setup calendar navigation
