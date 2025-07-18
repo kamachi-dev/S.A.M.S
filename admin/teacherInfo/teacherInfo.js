@@ -630,7 +630,7 @@ function populateUpdateDropdowns() {
             const courseCodeDropdown = document.getElementById('updateCourseCodeDropdown');
             
             if (courseNameDropdown) {
-                courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                courseNameDropdown.innerHTML = '<option value="">Select unassigned course name (optional)</option>';
                 
                 if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
                     data.course_names.forEach(name => {
@@ -643,7 +643,7 @@ function populateUpdateDropdowns() {
             }
             
             if (courseCodeDropdown) {
-                courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                courseCodeDropdown.innerHTML = '<option value="">Select unassigned course code (optional)</option>';
                 
                 if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
                     data.course_codes.forEach(code => {
