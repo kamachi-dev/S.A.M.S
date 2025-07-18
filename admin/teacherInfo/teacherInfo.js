@@ -556,14 +556,132 @@ function updateAddedTeacher(teacherId) {
 function openUpdateTeacherModal() {
     document.getElementById('updateTeacherModal').style.display = 'block';
     
+    // Populate dropdowns first
+    populateUpdateDropdowns();
+    
     // Pre-fill teacher information
     document.getElementById('updateTeacherFirstName').value = currentUpdatingTeacher.firstName;
     document.getElementById('updateTeacherLastName').value = currentUpdatingTeacher.lastName;
     document.getElementById('updateTeacherEmail').value = currentUpdatingTeacher.email;
     document.getElementById('updateTeacherPhone').value = currentUpdatingTeacher.phone;
-    document.getElementById('updateTeacherDepartment').value = currentUpdatingTeacher.department === 'Unassigned' ? '' : currentUpdatingTeacher.department;
-    document.getElementById('updateCourseName').value = currentUpdatingTeacher.courseName === 'Unassigned' ? '' : currentUpdatingTeacher.courseName;
-    document.getElementById('updateCourseCode').value = currentUpdatingTeacher.courseCode === 'Unassigned' ? '' : currentUpdatingTeacher.courseCode;
+    
+    // Pre-fill department
+    const department = currentUpdatingTeacher.department === 'Unassigned' ? '' : currentUpdatingTeacher.department;
+    document.getElementById('updateTeacherDepartment').value = department;
+    
+    // Pre-fill course information
+    const courseName = currentUpdatingTeacher.courseName === 'Unassigned' ? '' : currentUpdatingTeacher.courseName;
+    const courseCode = currentUpdatingTeacher.courseCode === 'Unassigned' ? '' : currentUpdatingTeacher.courseCode;
+    document.getElementById('updateCourseName').value = courseName;
+    document.getElementById('updateCourseCode').value = courseCode;
+    
+    // Pre-select dropdowns after they are populated
+    setTimeout(() => {
+        preSelectUpdateDropdowns(department, courseName, courseCode);
+    }, 500);
+}
+
+function populateUpdateDropdowns() {
+    // Populate departments dropdown
+    fetch('https://sams-backend-u79d.onrender.com/api/populateDepartmentDropdown.php', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            const departmentDropdown = document.getElementById('updateTeacherDepartmentDropdown');
+            
+            if (departmentDropdown) {
+                departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
+                
+                if (data.success && Array.isArray(data.departments) && data.departments.length > 0) {
+                    data.departments.forEach(dep => {
+                        const option = document.createElement('option');
+                        option.value = dep;
+                        option.textContent = dep;
+                        departmentDropdown.appendChild(option);
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching departments for update:', err);
+        });
+
+    // Populate courses dropdown
+    fetch('https://sams-backend-u79d.onrender.com/api/populateCourseDropdown.php', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            const courseNameDropdown = document.getElementById('updateCourseNameDropdown');
+            const courseCodeDropdown = document.getElementById('updateCourseCodeDropdown');
+            
+            if (courseNameDropdown) {
+                courseNameDropdown.innerHTML = '<option value="">Select course name (optional)</option>';
+                
+                if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
+                    data.course_names.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = name;
+                        courseNameDropdown.appendChild(option);
+                    });
+                }
+            }
+            
+            if (courseCodeDropdown) {
+                courseCodeDropdown.innerHTML = '<option value="">Select course code (optional)</option>';
+                
+                if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
+                    data.course_codes.forEach(code => {
+                        const option = document.createElement('option');
+                        option.value = code;
+                        option.textContent = code;
+                        courseCodeDropdown.appendChild(option);
+                    });
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching courses for update:', err);
+        });
+}
+
+function preSelectUpdateDropdowns(department, courseName, courseCode) {
+    // Pre-select department dropdown if there's a match
+    const departmentDropdown = document.getElementById('updateTeacherDepartmentDropdown');
+    if (departmentDropdown && department) {
+        const departmentOption = Array.from(departmentDropdown.options).find(option => option.value === department);
+        if (departmentOption) {
+            departmentDropdown.value = department;
+        }
+    }
+    
+    // Pre-select course name dropdown if there's a match
+    const courseNameDropdown = document.getElementById('updateCourseNameDropdown');
+    if (courseNameDropdown && courseName) {
+        const courseNameOption = Array.from(courseNameDropdown.options).find(option => option.value === courseName);
+        if (courseNameOption) {
+            courseNameDropdown.value = courseName;
+        }
+    }
+    
+    // Pre-select course code dropdown if there's a match
+    const courseCodeDropdown = document.getElementById('updateCourseCodeDropdown');
+    if (courseCodeDropdown && courseCode) {
+        const courseCodeOption = Array.from(courseCodeDropdown.options).find(option => option.value === courseCode);
+        if (courseCodeOption) {
+            courseCodeDropdown.value = courseCode;
+        }
+    }
 }
 
 function closeUpdateTeacherModal() {
@@ -583,10 +701,34 @@ function saveTeacherChanges() {
         return;
     }
     
-    // Get optional fields
-    const department = document.getElementById('updateTeacherDepartment').value.trim() || 'Unassigned';
-    const courseName = document.getElementById('updateCourseName').value.trim() || 'Unassigned';
-    const courseCode = document.getElementById('updateCourseCode').value.trim() || 'Unassigned';
+    // Dual input: prioritize input field, fallback to dropdown, default to Unassigned
+    let department = 'Unassigned';
+    let courseName = 'Unassigned';
+    let courseCode = 'Unassigned';
+    
+    const depInput = document.getElementById('updateTeacherDepartment');
+    const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
+    if (depInput && depInput.value.trim() !== '') {
+        department = depInput.value.trim();
+    } else if (depDropdown && depDropdown.value) {
+        department = depDropdown.value;
+    }
+    
+    const nameInput = document.getElementById('updateCourseName');
+    const nameDropdown = document.getElementById('updateCourseNameDropdown');
+    if (nameInput && nameInput.value.trim() !== '') {
+        courseName = nameInput.value.trim();
+    } else if (nameDropdown && nameDropdown.value) {
+        courseName = nameDropdown.value;
+    }
+    
+    const codeInput = document.getElementById('updateCourseCode');
+    const codeDropdown = document.getElementById('updateCourseCodeDropdown');
+    if (codeInput && codeInput.value.trim() !== '') {
+        courseCode = codeInput.value.trim();
+    } else if (codeDropdown && codeDropdown.value) {
+        courseCode = codeDropdown.value;
+    }
     
     if (currentUpdatingTeacher.isExisting) {
         // For existing teachers, send update to backend
