@@ -10,7 +10,7 @@ let filteredStudents = [];
 // Fetch students from backend
 async function fetchStudents() {
     try {
-        const response = await fetch('https://sams-backend-u79d.onrender.com/api/getStudentsTeachers.php', {
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/getStudentTeachers.php', {
             credentials: 'include',
             method: 'GET',
             headers: {
