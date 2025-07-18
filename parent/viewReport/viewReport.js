@@ -436,17 +436,7 @@ function generateTimeBlocks(todaysAttendance) {
         return '<div class="no-attendance">No classes today</div>';
     }
     return todaysAttendance.map(record => {
-        // Extract hour for class, e.g. "7:00" => "7", "13:00" => "1"
-        let hour = '';
-        if (record.time) {
-            const match = record.time.match(/^(\d{1,2})/);
-            if (match) {
-                hour = parseInt(match[1], 10);
-                // Convert 13+ to 1-12 for PM
-                if (hour > 12) hour -= 12;
-            }
-        }
-        return `<div class="time-block time-${hour}">
+        return `<div class="time-block ${record.attendance}">
             <div class="subject">${record.courseName}</div>
             <div class="time">${record.time}</div>
         </div>`;
