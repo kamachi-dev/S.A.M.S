@@ -197,7 +197,7 @@ window.downloadAttendanceData = downloadAttendanceData;
 // Adding Actual Attendance
 
 // Helper function to get token from cookies
-fetch(`${base}/api/getTeacherCourses.php`, {
+fetch(`${base_url}/api/getTeacherCourses.php`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
