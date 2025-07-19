@@ -243,7 +243,7 @@ async function deleteFetchedParent(email, button) {
 
 // Add Parent Modal Functions
 function openAddParentModal() {
-    document.getElementById('addParentModal').style.display = 'block';
+    document.getElementById('addParentModal').style.display = 'flex';
     // Add first child form by default
     addChildForm();
 }
@@ -532,7 +532,7 @@ function showAddedParentDetails(parentId) {
         </div>
     `;
     
-    document.getElementById('detailsModal').style.display = 'block';
+    document.getElementById('detailsModal').style.display = 'flex';
 }
 
 function deleteAddedParent(parentId, button) {
@@ -593,7 +593,7 @@ function updateAddedParent(parentId) {
 }
 
 function openUpdateParentModal() {
-    document.getElementById('updateParentModal').style.display = 'block';
+    document.getElementById('updateParentModal').style.display = 'flex';
     
     // Pre-fill parent information
     document.getElementById('updateParentFirstName').value = currentUpdatingParent.firstName;
@@ -832,7 +832,7 @@ function showUpdatedParentDetails(firstName, lastName, phone, email, children) {
         </div>
     `;
     
-    document.getElementById('detailsModal').style.display = 'block';
+    document.getElementById('detailsModal').style.display = 'flex';
 }
 
 function updateExistingParent(firstName, lastName, phone, email, children) {
@@ -889,7 +889,7 @@ function initializeSearchAndFilters() {
                 if (searchTerm && visibleCardsInSection.length === 0) {
                     section.style.display = 'none';
                 } else {
-                    section.style.display = 'block';
+                    section.style.display = 'flex';
                 }
             });
             
@@ -930,7 +930,7 @@ function showParentDetails(name, phone, email) {
     document.getElementById('modalName').textContent = name;
     document.getElementById('modalPhone').textContent = phone;
     document.getElementById('modalEmail').textContent = email;
-    document.getElementById('detailsModal').style.display = 'block';
+    document.getElementById('detailsModal').style.display = 'flex';
 }
 
 function closeDetailsModal() {

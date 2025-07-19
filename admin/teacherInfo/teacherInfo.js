@@ -9,7 +9,7 @@ let addedTeachers = []; // Store added teachers data
 // Add Teacher Modal Functions
 
 function openAddTeacherModal() {
-    document.getElementById('addTeacherModal').style.display = 'block';
+    document.getElementById('addTeacherModal').style.display = 'flex';
 
     // Clear form inputs
     clearAddTeacherForm();
@@ -362,7 +362,7 @@ function showAddedTeacherDetails(teacherId) {
     document.getElementById('modalEmail').textContent = teacher.email;
     document.getElementById('modalCourse').textContent = teacher.courseName;
 
-    document.getElementById('detailsModal').style.display = 'block';
+    document.getElementById('detailsModal').style.display = 'flex';
 }
 
 function deleteAddedTeacher(teacherId, button) {
@@ -416,7 +416,7 @@ function teacherGrid(data) {
                 if (searchTerm && visibleCardsInSection.length === 0) {
                     section.style.display = 'none';
                 } else {
-                    section.style.display = 'block';
+                    section.style.display = 'flex';
                 }
             });
 
@@ -490,7 +490,7 @@ function showTeacherDetails(teacherObj) {
     document.getElementById('modalPhone').textContent = teacherObj.phone;
     document.getElementById('modalEmail').textContent = teacherObj.email;
     document.getElementById('modalCourse').textContent = teacherObj.courseName || 'N/A';
-    document.getElementById('detailsModal').style.display = 'block';
+    document.getElementById('detailsModal').style.display = 'flex';
 }
 
 function updateExistingTeacher(firstName, lastName, phone, email, department, courseName, courseCode) {
@@ -554,7 +554,7 @@ function updateAddedTeacher(teacherId) {
 }
 
 function openUpdateTeacherModal() {
-    document.getElementById('updateTeacherModal').style.display = 'block';
+    document.getElementById('updateTeacherModal').style.display = 'flex';
 
     // Populate dropdowns first
     populateUpdateDropdowns();
