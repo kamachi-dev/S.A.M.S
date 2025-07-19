@@ -10,10 +10,10 @@ let addedTeachers = []; // Store added teachers data
 
 function openAddTeacherModal() {
     document.getElementById('addTeacherModal').style.display = 'block';
-    
+
     // Clear form inputs
     clearAddTeacherForm();
-    
+
     // Populate dropdowns
     populateDropdowns();
 }
@@ -27,14 +27,14 @@ function clearAddTeacherForm() {
     document.getElementById('teacherDepartment').value = '';
     document.getElementById('courseName').value = '';
     document.getElementById('courseCode').value = '';
-    
+
     // Reset dropdowns to default
     const dropdowns = [
         'teacherDepartmentDropdown',
-        'courseNameDropdown', 
+        'courseNameDropdown',
         'courseCodeDropdown'
     ];
-    
+
     dropdowns.forEach(id => {
         const dropdown = document.getElementById(id);
         if (dropdown) {
@@ -56,10 +56,10 @@ function populateDropdowns() {
         .then(data => {
             console.log('Department API Response:', data);
             const departmentDropdown = document.getElementById('teacherDepartmentDropdown');
-            
+
             if (departmentDropdown) {
                 departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
-                
+
                 if (data.success && Array.isArray(data.departments) && data.departments.length > 0) {
                     data.departments.forEach(dep => {
                         const option = document.createElement('option');
@@ -102,10 +102,10 @@ function populateDropdowns() {
             console.log('Course API Response:', data);
             const courseNameDropdown = document.getElementById('courseNameDropdown');
             const courseCodeDropdown = document.getElementById('courseCodeDropdown');
-            
+
             if (courseNameDropdown) {
                 courseNameDropdown.innerHTML = '<option value="">Select unassigned course name (optional)</option>';
-                
+
                 if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
                     data.course_names.forEach(name => {
                         const option = document.createElement('option');
@@ -121,10 +121,10 @@ function populateDropdowns() {
                     courseNameDropdown.appendChild(option);
                 }
             }
-            
+
             if (courseCodeDropdown) {
                 courseCodeDropdown.innerHTML = '<option value="">Select unassigned course code (optional)</option>';
-                
+
                 if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
                     data.course_codes.forEach(code => {
                         const option = document.createElement('option');
@@ -145,7 +145,7 @@ function populateDropdowns() {
             console.error('Error fetching courses:', err);
             const courseNameDropdown = document.getElementById('courseNameDropdown');
             const courseCodeDropdown = document.getElementById('courseCodeDropdown');
-            
+
             if (courseNameDropdown) {
                 courseNameDropdown.innerHTML = '<option value="">Select unassigned course name (optional)</option>';
                 const option = document.createElement('option');
@@ -154,7 +154,7 @@ function populateDropdowns() {
                 option.disabled = true;
                 courseNameDropdown.appendChild(option);
             }
-            
+
             if (courseCodeDropdown) {
                 courseCodeDropdown.innerHTML = '<option value="">Select unassigned course code (optional)</option>';
                 const option = document.createElement('option');
@@ -191,24 +191,24 @@ async function confirmAddTeacher() {
     const lastName = document.getElementById('teacherLastName').value.trim();
     const email = document.getElementById('teacherEmail').value.trim();
     const phone = document.getElementById('teacherPhone').value.trim();
-    
+
     if (!firstName || !lastName || !email || !phone) {
         alert('Please fill in all required teacher information fields (First Name, Last Name, Email, Phone).');
         return;
     }
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         alert('Please enter a valid email address.');
         return;
     }
-    
+
     // Dual input: prioritize input field, fallback to dropdown, default to Unassigned
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
-    
+
     const depInput = document.getElementById('teacherDepartment');
     const depDropdown = document.getElementById('teacherDepartmentDropdown');
     if (depInput && depInput.value.trim() !== '') {
@@ -216,7 +216,7 @@ async function confirmAddTeacher() {
     } else if (depDropdown && depDropdown.value) {
         department = depDropdown.value;
     }
-    
+
     const nameInput = document.getElementById('courseName');
     const nameDropdown = document.getElementById('courseNameDropdown');
     if (nameInput && nameInput.value.trim() !== '') {
@@ -224,7 +224,7 @@ async function confirmAddTeacher() {
     } else if (nameDropdown && nameDropdown.value) {
         courseName = nameDropdown.value;
     }
-    
+
     const codeInput = document.getElementById('courseCode');
     const codeDropdown = document.getElementById('courseCodeDropdown');
     if (codeInput && codeInput.value.trim() !== '') {
@@ -232,13 +232,13 @@ async function confirmAddTeacher() {
     } else if (codeDropdown && codeDropdown.value) {
         courseCode = codeDropdown.value;
     }
-    
+
     // Show loading state
     const confirmBtn = document.querySelector('#addTeacherModal .confirm-btn');
     const originalText = confirmBtn.textContent;
     confirmBtn.disabled = true;
     confirmBtn.textContent = 'Adding Teacher...';
-    
+
     // Prepare data for addTeacher API
     const teacherData = {
         firstname: firstName,
@@ -249,7 +249,7 @@ async function confirmAddTeacher() {
         course_name: courseName !== 'Unassigned' ? courseName : null,
         course_code: courseCode !== 'Unassigned' ? courseCode : null
     };
-    
+
     try {
         // Call the addTeacher.php API
         const response = await fetch('https://sams-backend-u79d.onrender.com/api/addTeacher.php', {
@@ -262,12 +262,12 @@ async function confirmAddTeacher() {
             },
             body: JSON.stringify(teacherData)
         });
-        
+
         const result = await response.json();
-        
+
         // Check for authentication errors
         if (!window.verifyToken(result)) return;
-        
+
         if (result.success === true) {
             // Show success message
             let successMessage = `✅ Successfully added teacher: ${result.teacher.firstname} ${result.teacher.lastname}`;
@@ -278,32 +278,32 @@ async function confirmAddTeacher() {
                 successMessage += `\n🏢 Department: ${result.teacher.department}`;
             }
             alert(successMessage);
-            
+
             // Close modal and clear form
             closeAddTeacherModal();
-            
+
             // Reload the page to show the new teacher from database
             location.reload();
-            
+
         } else {
             // Handle API errors with detailed messages
             let errorMessage = '❌ Failed to add teacher: ' + (result.error || 'Unknown error');
-            
+
             if (result.missing_fields) {
                 errorMessage += '\n📝 Missing fields: ' + result.missing_fields.join(', ');
             }
-            
+
             if (result.details) {
                 errorMessage += '\n🔍 Details: ' + result.details;
             }
-            
+
             alert(errorMessage);
         }
-        
+
     } catch (error) {
         console.error('Error adding teacher:', error);
         alert('❌ Network error occurred while adding the teacher. Please check your connection and try again.');
-        
+
     } finally {
         // Reset button state
         confirmBtn.disabled = false;
@@ -316,16 +316,16 @@ function createDepartmentSection(department) {
     const departmentSection = document.createElement('div');
     departmentSection.className = 'subject-section';
     departmentSection.setAttribute('data-subject', department);
-    
+
     departmentSection.innerHTML = `
         <h2 class="subject-title">${department}</h2>
         <div class="teachers-grid"></div>
     `;
-    
+
     // Insert in alphabetical order (but keep "Unassigned" at the end)
     const existingSections = document.querySelectorAll('.subject-section');
     let inserted = false;
-    
+
     if (department === 'Unassigned') {
         // Always put Unassigned at the end
         content.appendChild(departmentSection);
@@ -345,23 +345,23 @@ function createDepartmentSection(department) {
             }
         }
     }
-    
+
     if (!inserted) {
         content.appendChild(departmentSection);
     }
-    
+
     return departmentSection;
 }
 
 function showAddedTeacherDetails(teacherId) {
     const teacher = addedTeachers.find(t => t.id === teacherId);
     if (!teacher) return;
-    
+
     document.getElementById('modalName').innerHTML = `${teacher.firstName} ${teacher.lastName}`;
     document.getElementById('modalPhone').textContent = teacher.phone;
     document.getElementById('modalEmail').textContent = teacher.email;
     document.getElementById('modalCourse').textContent = teacher.courseName;
-    
+
     document.getElementById('detailsModal').style.display = 'block';
 }
 
@@ -369,18 +369,18 @@ function deleteAddedTeacher(teacherId, button) {
     if (confirm('Are you sure you want to delete this teacher?')) {
         // Remove from stored teachers
         addedTeachers = addedTeachers.filter(t => t.id !== teacherId);
-        
+
         // Remove card from page
         const teacherCard = button.closest('.teacher-card');
         const departmentSection = teacherCard.closest('.subject-section');
         teacherCard.remove();
-        
+
         // If department section is now empty, remove it
         const remainingCards = departmentSection.querySelectorAll('.teacher-card');
         if (remainingCards.length === 0) {
             departmentSection.remove();
         }
-        
+
         // Update teacher count
         updateTeacherCount();
     }
@@ -505,7 +505,7 @@ function updateExistingTeacher(firstName, lastName, phone, email, department, co
         courseName: courseName,
         courseCode: courseCode
     };
-    
+
     openUpdateTeacherModal();
 }
 
@@ -548,38 +548,38 @@ function updateTeacher(teacherObj) {
 function updateAddedTeacher(teacherId) {
     const teacher = addedTeachers.find(t => t.id === teacherId);
     if (!teacher) return;
-    
+
     currentUpdatingTeacher = { ...teacher, isExisting: false };
     openUpdateTeacherModal();
 }
 
 function openUpdateTeacherModal() {
     document.getElementById('updateTeacherModal').style.display = 'block';
-    
+
     // Populate dropdowns first
     populateUpdateDropdowns();
-    
+
     // Setup input/dropdown synchronization
     setTimeout(() => {
         setupUpdateInputDropdownSync();
     }, 600);
-    
+
     // Pre-fill teacher information
     document.getElementById('updateTeacherFirstName').value = currentUpdatingTeacher.firstName;
     document.getElementById('updateTeacherLastName').value = currentUpdatingTeacher.lastName;
     document.getElementById('updateTeacherEmail').value = currentUpdatingTeacher.email;
     document.getElementById('updateTeacherPhone').value = currentUpdatingTeacher.phone;
-    
+
     // Pre-fill department
     const department = currentUpdatingTeacher.department === 'Unassigned' ? '' : currentUpdatingTeacher.department;
     document.getElementById('updateTeacherDepartment').value = department;
-    
+
     // Pre-fill course information
     const courseName = currentUpdatingTeacher.courseName === 'Unassigned' ? '' : currentUpdatingTeacher.courseName;
     const courseCode = currentUpdatingTeacher.courseCode === 'Unassigned' ? '' : currentUpdatingTeacher.courseCode;
     document.getElementById('updateCourseName').value = courseName;
     document.getElementById('updateCourseCode').value = courseCode;
-    
+
     // Pre-select dropdowns after they are populated
     setTimeout(() => {
         preSelectUpdateDropdowns(department, courseName, courseCode);
@@ -598,10 +598,10 @@ function populateUpdateDropdowns() {
         .then(response => response.json())
         .then(data => {
             const departmentDropdown = document.getElementById('updateTeacherDepartmentDropdown');
-            
+
             if (departmentDropdown) {
                 departmentDropdown.innerHTML = '<option value="">Select department (optional)</option>';
-                
+
                 if (data.success && Array.isArray(data.departments) && data.departments.length > 0) {
                     data.departments.forEach(dep => {
                         const option = document.createElement('option');
@@ -628,10 +628,10 @@ function populateUpdateDropdowns() {
         .then(data => {
             const courseNameDropdown = document.getElementById('updateCourseNameDropdown');
             const courseCodeDropdown = document.getElementById('updateCourseCodeDropdown');
-            
+
             if (courseNameDropdown) {
                 courseNameDropdown.innerHTML = '<option value="">Select unassigned course name (optional)</option>';
-                
+
                 if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
                     data.course_names.forEach(name => {
                         const option = document.createElement('option');
@@ -641,10 +641,10 @@ function populateUpdateDropdowns() {
                     });
                 }
             }
-            
+
             if (courseCodeDropdown) {
                 courseCodeDropdown.innerHTML = '<option value="">Select unassigned course code (optional)</option>';
-                
+
                 if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
                     data.course_codes.forEach(code => {
                         const option = document.createElement('option');
@@ -665,51 +665,51 @@ function setupUpdateInputDropdownSync() {
     // Department sync
     const depInput = document.getElementById('updateTeacherDepartment');
     const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
-    
+
     if (depInput && depDropdown) {
-        depInput.addEventListener('input', function() {
+        depInput.addEventListener('input', function () {
             if (this.value.trim() !== '') {
                 depDropdown.selectedIndex = 0; // Reset dropdown to default
             }
         });
-        
-        depDropdown.addEventListener('change', function() {
+
+        depDropdown.addEventListener('change', function () {
             if (this.value !== '') {
                 depInput.value = ''; // Clear input field
             }
         });
     }
-    
+
     // Course name sync
     const nameInput = document.getElementById('updateCourseName');
     const nameDropdown = document.getElementById('updateCourseNameDropdown');
-    
+
     if (nameInput && nameDropdown) {
-        nameInput.addEventListener('input', function() {
+        nameInput.addEventListener('input', function () {
             if (this.value.trim() !== '') {
                 nameDropdown.selectedIndex = 0; // Reset dropdown to default
             }
         });
-        
-        nameDropdown.addEventListener('change', function() {
+
+        nameDropdown.addEventListener('change', function () {
             if (this.value !== '') {
                 nameInput.value = ''; // Clear input field
             }
         });
     }
-    
+
     // Course code sync
     const codeInput = document.getElementById('updateCourseCode');
     const codeDropdown = document.getElementById('updateCourseCodeDropdown');
-    
+
     if (codeInput && codeDropdown) {
-        codeInput.addEventListener('input', function() {
+        codeInput.addEventListener('input', function () {
             if (this.value.trim() !== '') {
                 codeDropdown.selectedIndex = 0; // Reset dropdown to default
             }
         });
-        
-        codeDropdown.addEventListener('change', function() {
+
+        codeDropdown.addEventListener('change', function () {
             if (this.value !== '') {
                 codeInput.value = ''; // Clear input field
             }
@@ -723,7 +723,7 @@ function preSelectUpdateDropdowns(department, courseName, courseCode) {
     const departmentDropdown = document.getElementById('updateTeacherDepartmentDropdown');
     const courseNameDropdown = document.getElementById('updateCourseNameDropdown');
     const courseCodeDropdown = document.getElementById('updateCourseCodeDropdown');
-    
+
     if (departmentDropdown) departmentDropdown.selectedIndex = 0;
     if (courseNameDropdown) courseNameDropdown.selectedIndex = 0;
     if (courseCodeDropdown) courseCodeDropdown.selectedIndex = 0;
@@ -740,49 +740,49 @@ function saveTeacherChanges() {
     const lastName = document.getElementById('updateTeacherLastName').value.trim();
     const email = document.getElementById('updateTeacherEmail').value.trim();
     const phone = document.getElementById('updateTeacherPhone').value.trim();
-    
+
     if (!firstName || !lastName || !email || !phone) {
         alert('Please fill in all required teacher information fields (First Name, Last Name, Email, Phone).');
         return;
     }
-    
+
     // Clear either/or logic: input field OR dropdown, not both
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
-    
+
     const depInput = document.getElementById('updateTeacherDepartment');
     const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
-    
+
     // Department logic: input field takes priority, then dropdown, then Unassigned
     if (depInput && depInput.value.trim() !== '') {
         department = depInput.value.trim();
     } else if (depDropdown && depDropdown.value) {
         department = depDropdown.value;
     }
-    
+
     const nameInput = document.getElementById('updateCourseName');
     const nameDropdown = document.getElementById('updateCourseNameDropdown');
-    
+
     // Course name logic: input field takes priority, then dropdown, then Unassigned
     if (nameInput && nameInput.value.trim() !== '') {
         courseName = nameInput.value.trim();
     } else if (nameDropdown && nameDropdown.value) {
         courseName = nameDropdown.value;
     }
-    
+
     const codeInput = document.getElementById('updateCourseCode');
     const codeDropdown = document.getElementById('updateCourseCodeDropdown');
-    
+
     // Course code logic: input field takes priority, then dropdown, then Unassigned
     if (codeInput && codeInput.value.trim() !== '') {
         courseCode = codeInput.value.trim();
     } else if (codeDropdown && codeDropdown.value) {
         courseCode = codeDropdown.value;
     }
-    
+
     console.log('Update values:', { department, courseName, courseCode }); // Debug log
-    
+
     if (currentUpdatingTeacher.isExisting) {
         // For existing teachers, send update to backend
         const updateBtn = document.querySelector('#updateTeacherModal .confirm-btn');
@@ -824,27 +824,27 @@ function saveTeacherChanges() {
             },
             body: JSON.stringify(teacherData)
         })
-        .then(res => res.json())
-        .then(result => {
-            if (!window.verifyToken(result)) return;
-            if (result.success) {
-                alert('Teacher information updated successfully!');
-                closeUpdateTeacherModal();
-                location.reload();
-            } else {
-                alert('Failed to update teacher: ' + (result.error || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error updating teacher:', error);
-            alert('An error occurred while updating the teacher. Please try again.');
-        })
-        .finally(() => {
-            if (updateBtn) {
-                updateBtn.disabled = false;
-                updateBtn.textContent = originalText;
-            }
-        });
+            .then(res => res.json())
+            .then(result => {
+                if (!window.verifyToken(result)) return;
+                if (result.success) {
+                    alert('Teacher information updated successfully!');
+                    closeUpdateTeacherModal();
+                    location.reload();
+                } else {
+                    alert('Failed to update teacher: ' + (result.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error updating teacher:', error);
+                alert('An error occurred while updating the teacher. Please try again.');
+            })
+            .finally(() => {
+                if (updateBtn) {
+                    updateBtn.disabled = false;
+                    updateBtn.textContent = originalText;
+                }
+            });
     } else {
         // For added teachers, update the stored data and card
         const teacherIndex = addedTeachers.findIndex(t => t.id === currentUpdatingTeacher.id);
@@ -952,7 +952,7 @@ async function init() {
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = (row['code'] == '[null]') ? JSON.stringify('Unassigned') : row['code'];
-                clone.querySelector('.teacher-photo').src = row['pfp'];
+                clone.querySelector('.teacher-photo').src = row['pfp'] ?? '/assets/Sample.png';
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
                 // Attach Update and Details button handler with all real data for this card
@@ -968,7 +968,7 @@ async function init() {
                 };
                 clone.querySelector('.details-btn').onclick = () => showTeacherDetails(teacherObj);
                 clone.querySelector('.update-btn').onclick = () => updateTeacher(teacherObj);
-                clone.querySelector('.delete-btn').onclick = function() {
+                clone.querySelector('.delete-btn').onclick = function () {
                     if (confirm('Are you sure you want to delete this teacher? This will preserve all their courses, which will become unassigned.')) {
                         // Call backend API
                         fetch('https://sams-backend-u79d.onrender.com/api/deleteTeacher.php', {
@@ -981,27 +981,27 @@ async function init() {
                             },
                             body: JSON.stringify({ email: teacherObj.email })
                         })
-                        .then(res => res.json())
-                        .then(result => {
-                            if (!window.verifyToken(result)) return;
-                            if (result.success) {
-                                alert('Teacher deleted. Courses are preserved and now unassigned.');
-                                // Remove card from UI
-                                clone.remove();
-                                // Remove empty section if needed (robust)
-                                const section = grid.closest('.subject-section');
-                                if (grid.querySelectorAll('.teacher-card').length === 0) {
-                                    section.remove();
+                            .then(res => res.json())
+                            .then(result => {
+                                if (!window.verifyToken(result)) return;
+                                if (result.success) {
+                                    alert('Teacher deleted. Courses are preserved and now unassigned.');
+                                    // Remove card from UI
+                                    clone.remove();
+                                    // Remove empty section if needed (robust)
+                                    const section = grid.closest('.subject-section');
+                                    if (grid.querySelectorAll('.teacher-card').length === 0) {
+                                        section.remove();
+                                    }
+                                    updateTeacherCount();
+                                } else {
+                                    alert('Failed to delete teacher: ' + (result.error || 'Unknown error'));
                                 }
-                                updateTeacherCount();
-                            } else {
-                                alert('Failed to delete teacher: ' + (result.error || 'Unknown error'));
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error deleting teacher:', error);
-                            alert('An error occurred while deleting the teacher. Please try again.');
-                        });
+                            })
+                            .catch(error => {
+                                console.error('Error deleting teacher:', error);
+                                alert('An error occurred while deleting the teacher. Please try again.');
+                            });
                     }
                 };
                 grid.appendChild(clone)
