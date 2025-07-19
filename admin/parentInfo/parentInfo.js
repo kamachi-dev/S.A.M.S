@@ -158,7 +158,12 @@ function updateFetchedParent(firstName, lastName, phone, email, parentData = nul
         lastName: lastName,
         email: email,
         phone: phone,
-        children: parentData && parentData.children ? parentData.children : []
+        children: parentData && parentData.children ? parentData.children.map(child => ({
+            id: child.id,
+            firstName: child.firstname,
+            lastName: child.lastname,
+            grade: child.grade_level
+        })) : []
     };
     
     openUpdateParentModal();
@@ -641,16 +646,6 @@ function addUpdateChildForm(childData = null) {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="updateChildEmail${updateChildCounter}">Email *</label>
-                <input type="email" id="updateChildEmail${updateChildCounter}" value="${childData?.email || ''}" required>
-            </div>
-            <div class="form-group">
-                <label for="updateChildPhone${updateChildCounter}">Phone Number *</label>
-                <input type="tel" id="updateChildPhone${updateChildCounter}" value="${childData?.phone || ''}" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
                 <label for="updateChildGrade${updateChildCounter}">Grade Level *</label>
                 <select id="updateChildGrade${updateChildCounter}" required>
                     <option value="">Select Grade</option>
@@ -703,11 +698,9 @@ function saveParentChanges() {
         
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
-        const childEmail = document.getElementById(`updateChildEmail${childId}`).value.trim();
-        const childPhone = document.getElementById(`updateChildPhone${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
         
-        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
+        if (!childFirstName || !childLastName || !childGrade) {
             alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
             return;
         }
@@ -715,8 +708,6 @@ function saveParentChanges() {
         children.push({
             firstName: childFirstName,
             lastName: childLastName,
-            email: childEmail,
-            phone: childPhone,
             grade: childGrade
         });
     }
