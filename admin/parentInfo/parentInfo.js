@@ -158,7 +158,14 @@ function updateFetchedParent(firstName, lastName, phone, email, parentData = nul
         lastName: lastName,
         email: email,
         phone: phone,
-        children: parentData && parentData.children ? parentData.children : []
+        originalEmail: email, // Add original email for backend identification
+        parentData: parentData, // Store the full parent data
+        children: parentData && parentData.children ? parentData.children.map(child => ({
+            id: child.id,
+            firstName: child.firstname,
+            lastName: child.lastname,
+            grade: child.grade_level
+        })) : []
     };
     
     openUpdateParentModal();
@@ -641,16 +648,6 @@ function addUpdateChildForm(childData = null) {
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="updateChildEmail${updateChildCounter}">Email *</label>
-                <input type="email" id="updateChildEmail${updateChildCounter}" value="${childData?.email || ''}" required>
-            </div>
-            <div class="form-group">
-                <label for="updateChildPhone${updateChildCounter}">Phone Number *</label>
-                <input type="tel" id="updateChildPhone${updateChildCounter}" value="${childData?.phone || ''}" required>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
                 <label for="updateChildGrade${updateChildCounter}">Grade Level *</label>
                 <select id="updateChildGrade${updateChildCounter}" required>
                     <option value="">Select Grade</option>
@@ -703,11 +700,9 @@ function saveParentChanges() {
         
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
-        const childEmail = document.getElementById(`updateChildEmail${childId}`).value.trim();
-        const childPhone = document.getElementById(`updateChildPhone${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
         
-        if (!childFirstName || !childLastName || !childEmail || !childPhone || !childGrade) {
+        if (!childFirstName || !childLastName || !childGrade) {
             alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
             return;
         }
@@ -715,15 +710,78 @@ function saveParentChanges() {
         children.push({
             firstName: childFirstName,
             lastName: childLastName,
-            email: childEmail,
-            phone: childPhone,
             grade: childGrade
         });
     }
     
-    if (currentUpdatingParent.isExisting) {
-        // For existing parents, just show success message (no actual update to DOM)
-        alert('Parent information updated successfully!');
+    if (currentUpdatingParent.isExisting && currentUpdatingParent.isFetched) {
+        // Prepare children payload for API
+        const childrenPayload = [];
+        if (currentUpdatingParent.children && Array.isArray(currentUpdatingParent.children)) {
+            for (let i = 0; i < children.length; i++) {
+                const origChild = currentUpdatingParent.children[i] || {};
+                childrenPayload.push({
+                    id: origChild.id,
+                    firstname: children[i].firstName,
+                    lastname: children[i].lastName,
+                    grade_level: children[i].grade,
+                    action: 'update'
+                });
+            }
+        }
+
+        // Prepare payload for updateParent.php
+        const payload = {
+            original_email: currentUpdatingParent.originalEmail || currentUpdatingParent.email,
+            firstname: parentFirstName,
+            lastname: parentLastName,
+            email: parentEmail,
+            phone: parentPhone,
+            children: childrenPayload
+        };
+
+        // Show loading state (optional)
+        const saveBtn = document.querySelector('.save-btn');
+        const originalText = saveBtn ? saveBtn.textContent : '';
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+        }
+
+        fetch('https://sams-backend-u79d.onrender.com/api/updateParent.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (!window.verifyToken(result)) return;
+            if (result.success) {
+                alert('Parent information updated successfully!');
+                closeUpdateParentModal();
+                // Optionally reload parents from DB
+                loadParentsFromDatabase();
+            } else {
+                let errorMessage = 'Failed to update parent: ' + (result.error || 'Unknown error');
+                if (result.details) errorMessage += '\nDetails: ' + result.details;
+                alert(errorMessage);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating parent:', error);
+            alert('Network error occurred while updating the parent. Please try again.');
+        })
+        .finally(() => {
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.textContent = originalText;
+            }
+        });
     } else {
         // For added parents, update the stored data and card
         const parentIndex = addedParents.findIndex(p => p.id === currentUpdatingParent.id);
@@ -737,18 +795,15 @@ function saveParentChanges() {
                 phone: parentPhone,
                 children: children
             };
-            
             // Update card display
             const card = document.querySelector(`[data-added="true"]`);
             if (card && card.querySelector('.parent-name').textContent.includes(currentUpdatingParent.firstName)) {
                 card.querySelector('.parent-name').textContent = `${parentFirstName} ${parentLastName}`;
             }
-            
             alert('Parent information updated successfully!');
         }
+        closeUpdateParentModal();
     }
-    
-    closeUpdateParentModal();
 }
 
 // Helper functions for updating existing parent details

@@ -1,3 +1,5 @@
+base_url = 'https://sams-backend-u79d.onrender.com'; 
+
 // Donut Charts SAMPLE data
 const donutData = [
     {
@@ -191,3 +193,27 @@ function downloadAttendanceData() {
 
 // Make function globally available
 window.downloadAttendanceData = downloadAttendanceData;
+
+// Adding Actual Attendance
+
+// Helper function to get token from cookies
+if (window.token) {
+  fetch(`${base_url}/api/getTeacherCourses.php`, {
+    method: 'GET',
+    headers: {
+      'Token': window.token
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        console.error("Error:", data.error);
+      } else {
+        console.log("Teacher courses:", data);
+      }
+    })
+    .catch(err => console.error("Fetch failed:", err));
+} else {
+  console.error("No token found in window object");
+}
+
