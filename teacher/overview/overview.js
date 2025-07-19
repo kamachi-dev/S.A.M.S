@@ -197,23 +197,23 @@ window.downloadAttendanceData = downloadAttendanceData;
 // Adding Actual Attendance
 
 // Helper function to get token from cookies
-fetch(`${base_url}/api/getTeacherCourses.php`, {
+if (window.token) {
+  fetch(`${base_url}/api/getTeacherCourses.php`, {
     method: 'GET',
     headers: {
-        'Content-Type': 'application/json',
-        'Token': window.token,
-        'Provider': window.provider
-    },
-    credentials: 'include'
-})
-.then(res => res.json())
-.then(data => {
-    if (data.error) {
-        console.error('Failed to fetch courses:', data.error);
-    } else {
-        console.log('Teacher courses:', data);
+      'Token': window.token
     }
-})
-.catch(err => {
-    console.error('Error fetching courses:', err);
-});
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        console.error("Error:", data.error);
+      } else {
+        console.log("Teacher courses:", data);
+      }
+    })
+    .catch(err => console.error("Fetch failed:", err));
+} else {
+  console.error("No token found in window object");
+}
+
