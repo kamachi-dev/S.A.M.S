@@ -189,7 +189,7 @@ nav > ul > li > a {
     height: 40px;
     cursor: pointer;
     z-index: 1000;
-    background: white;
+    background: #bb363c;
     border-radius: 50%;
     padding: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -281,15 +281,12 @@ nav > ul > li > a {
 
 /*responsiveness##############################################################*/
 @media only screen and (max-width: 750px) {
-    .navBar {
-        visibility: hidden;
-    }
     .slip {
         width: 100%;
     }
     .menu {
         visibility: visible;
-        background-color: #007acc;
+        background-color: #ec1f28;
         border: none;
         padding: 10px;
         border-radius: 5px;
@@ -316,7 +313,7 @@ nav > ul > li > a {
     .menuItem img{
         filter: invert(1);
         width: 15px;
-        height: auto;
+        height: 15px;
         object-fit: contain;
     }
 
@@ -338,7 +335,7 @@ nav > ul > li > a {
         /* border-radius: 10px; */
         gap: 20px;
         opacity: 0.95;
-        top: 1.8em;
+        top: 1.6em;
         left:-1.6em;
     }
 

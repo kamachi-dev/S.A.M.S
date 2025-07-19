@@ -347,4 +347,8 @@
         align-items: center;
         gap: 8px;
     }
+
+    .menu{
+        display: none;
+    }
 }

@@ -19,21 +19,18 @@
 /* Filter Section */
 .filter-section {
     display: flex;
-    justify-content: flex-start;
+    gap: 50px;
     align-items: center;
-    gap: 30px;
-    margin-bottom: 30px;
-    padding: 0 10px;
+    width: 100%;
 }
 
 .search-container {
-    flex: 1;
-    max-width: 300px;
+    width: auto;
 }
 
 .add-button {
     padding: 12px 24px;
-    font-size: 14px;
+    font-size: 24px;
     font-weight: bold;
     background: #28a745;
     color: white;
@@ -42,7 +39,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-    margin-left: 15px;
+    height: 50px;
 }
 
 .add-button:hover {
@@ -52,7 +49,7 @@
 .search-input {
     width: 100%;
     padding: 12px 20px;
-    font-size: 16px;
+    font-size: 24px;
     border: 2px solid #ddd;
     border-radius: 25px;
     outline: none;
@@ -63,19 +60,27 @@
     border-color: #4A90E2;
 }
 
+.filter-button{
+    display: flex;
+    align-items: center;
+}
+
 .filter-dropdowns {
     margin-left: auto;
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
 .filter-select {
     padding: 10px 15px;
-    font-size: 14px;
-    border: 2px solid #ddd;
+    font-size: 24px;
     border-radius: 8px;
     background: white;
     cursor: pointer;
     outline: none;
     min-width: 150px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .filter-select:focus {
@@ -513,5 +518,9 @@
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .menu{
+        display: none;
     }
 }

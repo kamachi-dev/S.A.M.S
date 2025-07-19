@@ -758,7 +758,7 @@ body {
         position: fixed;
         width: 1.9em;
         aspect-ratio: 1 / 1;
-        top: calc(100vh - 2.8em);
+        top: calc(100vh - 3em);
         left: 1em;
         z-index: 10;
         cursor: pointer;
@@ -791,9 +791,9 @@ body {
     }
 
     .popup.show {
-        height: 50px;
+        height: 48px;
         width: 300px;
-        background: #007acc;
+        background: #a7161e;
     }
 
     .menuNav {
@@ -820,5 +820,9 @@ body {
         display: flex;
         align-items: center;
         gap: 8px;
+    }
+
+    .signout-icon{
+        display: none !important;
     }
 }

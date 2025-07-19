@@ -303,4 +303,8 @@
         font-size: 12px;
         margin-left: 10px;
     }
+
+    .menu{
+        display: none;
+    }
 }

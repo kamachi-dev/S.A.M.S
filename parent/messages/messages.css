@@ -301,12 +301,15 @@
 }
 
 @media only screen and (max-width: 750px) {
+    .navBar {
+        visibility: hidden;
+    }
     .menu {
         position: fixed;
         /* so it stays at viewport position */
         width: 1.9em;
         aspect-ratio: 1 / 1;
-        top: calc(100vh - 2.8em);
+        top: calc(100vh - 3em);
         /* bottom-ish */
         left: 1em;
         /* left side */
@@ -348,9 +351,9 @@
     }
 
     .popup.show {
-        height: 50px;
+        height: 48px;
         width: 300px;
-        background: #007acc;
+        background: #a7161e;
     }
 
     .menuNav {
@@ -419,4 +422,7 @@
         margin-right: 0;
     }
 
+    .signout-icon{
+        display: none;
+    }
 }

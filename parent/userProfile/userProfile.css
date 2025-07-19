@@ -391,6 +391,9 @@ input {
 
 
 @media only screen and (max-width: 750px){
+    .navBar {
+        visibility: hidden;
+    }
     .menu {
         position: fixed; /* so it stays at viewport position */
         width: 1.9em;
