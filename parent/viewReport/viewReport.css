@@ -84,7 +84,7 @@ body {
 
 .student-card_picked {
     background: white;
-    border-radius: 15px;
+    /* border-radius: 15px; */
     padding: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: none;
@@ -96,10 +96,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 15px;
+    margin: 0;
     width: 100%;
+    box-sizing: border-box;
 }
-
 /* Student Selection Page Styles */
 .students-attendance-section-top,
 .students-attendance-section-bottom {

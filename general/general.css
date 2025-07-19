@@ -21,6 +21,7 @@ body {
     margin: 0;
     overflow: hidden;
     justify-content: center;
+    font-family: sans-serif;
 }
 button {
     font: 1.5em sans-serif;
