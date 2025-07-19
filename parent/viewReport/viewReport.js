@@ -255,7 +255,7 @@ function createStudentCard(student) {
 
     card.innerHTML = `
         <div class="student-avatar">
-            <img src="${student.pfp || '/assets/icons/placeholder-parent.jpeg'}" alt="Student Photo" />
+            <img src="/assets/icons/placeholder-parent.jpeg" alt="Student Photo" />
         </div>
         <div class="student-details">
             <div class="student-name">${student.fullName}</div>
@@ -363,7 +363,7 @@ async function handleDesktopStudentSelection(student) {
         <div class="student-card_picked">
             <div class="test">
                 <div class="student-avatar_picked">
-                    <img src="${student.pfp || '/assets/icons/placeholder-parent.jpeg'}" alt="Student Photo" />
+                    <img src="/assets/icons/placeholder-parent.jpeg" alt="Student Photo" />
                 </div>
                 <div class="student-details_picked">
                     <div class="student-name_picked">${student.fullName}</div>
@@ -465,7 +465,7 @@ function extractStudentsFromRecords(records) {
                 firstName: record.firstname,
                 lastName: record.lastname,
                 fullName: `${record.firstname} ${record.lastname}`,
-                pfp: record.picture || '/assets/icons/placeholder-parent.jpeg'
+                pfp: '/assets/icons/placeholder-parent.jpeg'
             });
         }
     });
