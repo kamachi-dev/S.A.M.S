@@ -158,6 +158,8 @@ function updateFetchedParent(firstName, lastName, phone, email, parentData = nul
         lastName: lastName,
         email: email,
         phone: phone,
+        originalEmail: email, // Add original email for backend identification
+        parentData: parentData, // Store the full parent data
         children: parentData && parentData.children ? parentData.children.map(child => ({
             id: child.id,
             firstName: child.firstname,
@@ -730,7 +732,7 @@ function saveParentChanges() {
 
         // Prepare payload for updateParent.php
         const payload = {
-            parent_id: currentUpdatingParent.parentData?.parent_id || currentUpdatingParent.id || currentUpdatingParent.parent_id,
+            original_email: currentUpdatingParent.originalEmail || currentUpdatingParent.email,
             firstname: parentFirstName,
             lastname: parentLastName,
             email: parentEmail,
