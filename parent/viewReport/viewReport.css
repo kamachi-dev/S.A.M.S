@@ -687,6 +687,9 @@ body {
 }
 
 @media only screen and (max-width: 750px) {
+    .popup.show{
+        top: 0;
+    }
     .navBar {
         visibility: hidden;
         position: absolute;
@@ -760,12 +763,16 @@ body {
 
     .menu {
         position: fixed;
+        /* so it stays at viewport position */
         width: 1.9em;
         aspect-ratio: 1 / 1;
-        top: calc(100vh - 3em);
+        top: calc(100vh - 5.5em);
+        /* bottom-ish */
         left: 1em;
+        /* left side */
         z-index: 10;
         cursor: pointer;
+        /* REMOVE visibility: hidden */
     }
 
     .hiddenMenu {

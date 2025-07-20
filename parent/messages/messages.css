@@ -309,7 +309,6 @@
         /* so it stays at viewport position */
         width: 1.9em;
         aspect-ratio: 1 / 1;
-        top: calc(100vh - 3em);
         /* bottom-ish */
         left: 1em;
         /* left side */
