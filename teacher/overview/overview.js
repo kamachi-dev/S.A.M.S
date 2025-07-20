@@ -377,10 +377,15 @@ function calculateAttendanceStats(records) {
     stats.term.percent = calcPercent(stats.term.present, stats.term.late, stats.term.absent, stats.term.total);
     stats.year.percent = calcPercent(stats.year.present, stats.year.late, stats.year.absent, stats.year.total);
 
-    // Calculate weekly weighted percentages
+    // Calculate weekly percentages for present, late, absent (exclude excused)
+    stats.weeklyData.presentPerc = [0, 0, 0, 0];
+    stats.weeklyData.latePerc = [0, 0, 0, 0];
+    stats.weeklyData.absentPerc = [0, 0, 0, 0];
     for (let i = 0; i < 4; i++) {
-        stats.weeklyData.percent[i] = weekTotals[i] > 0 ? ((weekWeighted[i] / weekTotals[i]) * 100).toFixed(2) : "0.00";
-        // For bar charts, keep present, late, absent as counts (or you can convert to percent if needed)
+        const total = stats.weeklyData.present[i] + stats.weeklyData.late[i] + stats.weeklyData.absent[i];
+        stats.weeklyData.presentPerc[i] = total > 0 ? ((stats.weeklyData.present[i] / total) * 100).toFixed(2) : "0.00";
+        stats.weeklyData.latePerc[i] = total > 0 ? ((stats.weeklyData.late[i] / total) * 100).toFixed(2) : "0.00";
+        stats.weeklyData.absentPerc[i] = total > 0 ? ((stats.weeklyData.absent[i] / total) * 100).toFixed(2) : "0.00";
     }
 
     return stats;
@@ -393,26 +398,35 @@ function updateChartsWithData(stats) {
     updateDonutChart(termChart, stats.term, 'termDonut');
     updateDonutChart(yearChart, stats.year, 'yearDonut');
 
-    // Update bar charts with weighted percentages
-    updateBarChart(presentBarChart, stats.weeklyData.percent);
-    updateBarChart(absentBarChart, stats.weeklyData.percent.map(() => 0)); // Absent is always 0 in weighted percent
-    updateBarChart(lateBarChart, stats.weeklyData.percent.map(p => (p / 2).toFixed(2))); // Late is half of present
+    // Update bar charts with weekly present, late, absent percentages
+    if (stats.weeklyData && stats.weeklyData.presentPerc && stats.weeklyData.latePerc && stats.weeklyData.absentPerc) {
+        updateBarChart(presentBarChart, stats.weeklyData.presentPerc);
+        updateBarChart(lateBarChart, stats.weeklyData.latePerc);
+        updateBarChart(absentBarChart, stats.weeklyData.absentPerc);
+    } else {
+        updateBarChart(presentBarChart, [0, 0, 0, 0]);
+        updateBarChart(lateBarChart, [0, 0, 0, 0]);
+        updateBarChart(absentBarChart, [0, 0, 0, 0]);
+    }
 
     // Update student count
     const studentCountElement = document.querySelector('.count-number');
     if (studentCountElement) {
-        studentCountElement.textContent = stats.uniqueStudents.size;
+        // If uniqueStudents is a Set, use its size, otherwise fallback to 0
+        studentCountElement.textContent = stats.uniqueStudents && typeof stats.uniqueStudents.size === "number"
+            ? stats.uniqueStudents.size
+            : 0;
     }
 }
 
 // Update individual donut chart
 function updateDonutChart(chart, periodStats, chartId) {
-    const total = periodStats.total || 1;
+    // Defensive: if chart is not initialized, skip
+    if (!chart) return;
+
     const presentCount = periodStats.present || 0;
     const lateCount = periodStats.late || 0;
     const absentCount = periodStats.absent || 0;
-
-    // Calculate weighted percentage (present=1, late=0.5, absent=0)
     const attendancePercentage = periodStats.percent || 0;
 
     // Update chart data
@@ -435,6 +449,13 @@ function updateDonutChart(chart, periodStats, chartId) {
             legendItems[2].textContent = absentCount;  // Absent
         }
     }
+}
+
+// Update bar chart with new data
+function updateBarChart(chart, data) {
+    if (!chart) return;
+    chart.data.datasets[0].data = data;
+    chart.update();
 }
 
 // Download attendance data as CSV with real data
