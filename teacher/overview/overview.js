@@ -377,10 +377,15 @@ function calculateAttendanceStats(records) {
     stats.term.percent = calcPercent(stats.term.present, stats.term.late, stats.term.absent, stats.term.total);
     stats.year.percent = calcPercent(stats.year.present, stats.year.late, stats.year.absent, stats.year.total);
 
-    // Calculate weekly weighted percentages
+    // Calculate weekly percentages for present, late, absent (exclude excused)
+    stats.weeklyData.presentPerc = [0, 0, 0, 0];
+    stats.weeklyData.latePerc = [0, 0, 0, 0];
+    stats.weeklyData.absentPerc = [0, 0, 0, 0];
     for (let i = 0; i < 4; i++) {
-        stats.weeklyData.percent[i] = weekTotals[i] > 0 ? ((weekWeighted[i] / weekTotals[i]) * 100).toFixed(2) : "0.00";
-        // For bar charts, keep present, late, absent as counts (or you can convert to percent if needed)
+        const total = stats.weeklyData.present[i] + stats.weeklyData.late[i] + stats.weeklyData.absent[i];
+        stats.weeklyData.presentPerc[i] = total > 0 ? ((stats.weeklyData.present[i] / total) * 100).toFixed(2) : "0.00";
+        stats.weeklyData.latePerc[i] = total > 0 ? ((stats.weeklyData.late[i] / total) * 100).toFixed(2) : "0.00";
+        stats.weeklyData.absentPerc[i] = total > 0 ? ((stats.weeklyData.absent[i] / total) * 100).toFixed(2) : "0.00";
     }
 
     return stats;
@@ -393,10 +398,10 @@ function updateChartsWithData(stats) {
     updateDonutChart(termChart, stats.term, 'termDonut');
     updateDonutChart(yearChart, stats.year, 'yearDonut');
 
-    // Update bar charts with weighted percentages
-    updateBarChart(presentBarChart, stats.weeklyData.percent);
-    updateBarChart(absentBarChart, stats.weeklyData.percent.map(() => 0)); // Absent is always 0 in weighted percent
-    updateBarChart(lateBarChart, stats.weeklyData.percent.map(p => (p / 2).toFixed(2))); // Late is half of present
+    // Update bar charts with weekly present, late, absent percentages
+    updateBarChart(presentBarChart, stats.weeklyData.presentPerc);
+    updateBarChart(lateBarChart, stats.weeklyData.latePerc);
+    updateBarChart(absentBarChart, stats.weeklyData.absentPerc);
 
     // Update student count
     const studentCountElement = document.querySelector('.count-number');
