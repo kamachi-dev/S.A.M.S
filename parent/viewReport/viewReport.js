@@ -337,10 +337,6 @@ async function handleMobileStudentSelection(cardElement, student) {
         // Load attendance data and display
         await loadStudentDetails(cardElement, student);
     } 
-    // else {
-    //     // If clicking the same card again, deselect
-    //     selectedStudent = null;
-    // }
 }
 
 // Handle student selection on desktop
@@ -551,6 +547,28 @@ document.addEventListener('DOMContentLoaded', function () {
     window.nextMonth = nextMonth;
     window.viewStudentProfile = viewStudentProfile;
 });
+
+// Prevent student-card_picked from auto-closing on mobile
+if (false && document) {
+    document.addEventListener('click', (event) => {
+        const isMobile = window.matchMedia("(max-width: 750px)").matches;
+        if (!isMobile) return; // Only apply this behavior on mobile
+
+        const pickedCard = document.querySelector('.student-card_picked');
+
+        if (pickedCard && !pickedCard.contains(event.target)) {
+            pickedCard.classList.remove('student-card_picked');
+            pickedCard.classList.add('student-card');
+
+            const charts = pickedCard.querySelector(".charts-top-bottom");
+            if (charts) charts.remove();
+
+            selectedStudent = null;
+        }
+    });
+}
+
+
 
 // Export functions for global access
 window.previousMonth = previousMonth;
