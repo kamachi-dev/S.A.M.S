@@ -489,7 +489,18 @@ function showTeacherDetails(teacherObj) {
     document.getElementById('modalName').textContent = `${teacherObj.firstname} ${teacherObj.lastname}`;
     document.getElementById('modalPhone').textContent = teacherObj.phone;
     document.getElementById('modalEmail').textContent = teacherObj.email;
-    document.getElementById('modalCourse').textContent = teacherObj.courseName || 'N/A';
+    // Show all courses as "Course Name (Code)" comma separated
+    let courseDisplay = '';
+    if (Array.isArray(teacherObj.courseNames) && Array.isArray(teacherObj.courseCodes)) {
+        for (let i = 0; i < Math.max(teacherObj.courseNames.length, teacherObj.courseCodes.length); i++) {
+            const name = teacherObj.courseNames[i] ?? 'Unassigned';
+            const code = teacherObj.courseCodes[i] ?? 'Unassigned';
+            courseDisplay += `${name} (${code})${i < Math.max(teacherObj.courseNames.length, teacherObj.courseCodes.length) - 1 ? ', ' : ''}`;
+        }
+    } else {
+        courseDisplay = 'Unassigned';
+    }
+    document.getElementById('modalCourse').textContent = courseDisplay;
     document.getElementById('detailsModal').style.display = 'flex';
 }
 
@@ -538,8 +549,9 @@ function updateTeacher(teacherObj) {
         email: teacherObj.email,
         phone: teacherObj.phone,
         department: teacherObj.department || 'Unassigned',
-        courseName: teacherObj.courseName || 'Unassigned',
-        courseCode: teacherObj.courseCode || 'Unassigned',
+        // Join all courses as comma separated for the update modal input fields
+        courseName: Array.isArray(teacherObj.courseNames) ? teacherObj.courseNames.join(', ') : (teacherObj.courseName || 'Unassigned'),
+        courseCode: Array.isArray(teacherObj.courseCodes) ? teacherObj.courseCodes.join(', ') : (teacherObj.courseCode || 'Unassigned'),
         id: teacherObj.id // if available
     };
     openUpdateTeacherModal();
@@ -945,16 +957,29 @@ async function init() {
                     box.appendChild(sec);
                     prevDepartment = row['department'] ?? 'Unassigned';
                 }
-                let courses = '';
-                JSON.parse(row['code']).forEach((course_i, i) => {
-                    courses += `${course_i ?? 'Unassigned'} `;
-                    courseCodes.add(JSON.stringify([JSON.parse(row['code'])[i] ?? 'Unassigned', JSON.parse(row['course'])[i] ?? 'Unassigned']));
-                });
+                // Build arrays of all course names and codes
+                let courseNamesArr = [];
+                let courseCodesArr = [];
+                try {
+                    courseCodesArr = JSON.parse(row['code']);
+                    courseNamesArr = JSON.parse(row['course']);
+                } catch (e) {
+                    courseCodesArr = [];
+                    courseNamesArr = [];
+                }
+                // Build a string with all courses (name + code)
+                let coursesDisplay = '';
+                for (let i = 0; i < Math.max(courseNamesArr.length, courseCodesArr.length); i++) {
+                    const code = courseCodesArr[i] ?? 'Unassigned';
+                    const name = courseNamesArr[i] ?? 'Unassigned';
+                    coursesDisplay += `${name} (${code})${i < Math.max(courseNamesArr.length, courseCodesArr.length) - 1 ? ', ' : ''}`;
+                    courseCodes.add(JSON.stringify([code, name]));
+                }
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = (row['code'] == '[null]') ? JSON.stringify('Unassigned') : row['code'];
                 clone.querySelector('.teacher-photo').src = row['pfp'] ?? '/assets/icons/placeholder-parent.jpeg';
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
-                clone.querySelector('.teacher-id').innerText = courses;
+                clone.querySelector('.teacher-id').innerText = coursesDisplay;
                 // Attach Update and Details button handler with all real data for this card
                 const teacherObj = {
                     id: row['id'],
@@ -963,9 +988,10 @@ async function init() {
                     email: row['email'],
                     phone: row['phone'],
                     department: row['department'] ?? 'Unassigned',
-                    courseName: (JSON.parse(row['course'])[0] ?? 'Unassigned'),
-                    courseCode: (JSON.parse(row['code'])[0] ?? 'Unassigned')
+                    courseNames: courseNamesArr.length > 0 ? courseNamesArr : ['Unassigned'],
+                    courseCodes: courseCodesArr.length > 0 ? courseCodesArr : ['Unassigned']
                 };
+
                 clone.querySelector('.details-btn').onclick = () => showTeacherDetails(teacherObj);
                 clone.querySelector('.update-btn').onclick = () => updateTeacher(teacherObj);
                 clone.querySelector('.delete-btn').onclick = function () {
