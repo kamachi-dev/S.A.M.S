@@ -549,9 +549,9 @@ function updateTeacher(teacherObj) {
         email: teacherObj.email,
         phone: teacherObj.phone,
         department: teacherObj.department || 'Unassigned',
-        // Pass as JSON string for editing
-        courseName: JSON.stringify(Array.isArray(teacherObj.courseNames) ? teacherObj.courseNames : [teacherObj.courseName || 'Unassigned']),
-        courseCode: JSON.stringify(Array.isArray(teacherObj.courseCodes) ? teacherObj.courseCodes : [teacherObj.courseCode || 'Unassigned']),
+        // Join all courses as comma separated for the update modal input fields
+        courseName: Array.isArray(teacherObj.courseNames) ? teacherObj.courseNames.join(', ') : (teacherObj.courseName || 'Unassigned'),
+        courseCode: Array.isArray(teacherObj.courseCodes) ? teacherObj.courseCodes.join(', ') : (teacherObj.courseCode || 'Unassigned'),
         id: teacherObj.id // if available
     };
     openUpdateTeacherModal();
@@ -586,7 +586,7 @@ function openUpdateTeacherModal() {
     const department = currentUpdatingTeacher.department === 'Unassigned' ? '' : currentUpdatingTeacher.department;
     document.getElementById('updateTeacherDepartment').value = department;
 
-    // Pre-fill course information as JSON array string
+    // Pre-fill course information
     const courseName = currentUpdatingTeacher.courseName === 'Unassigned' ? '' : currentUpdatingTeacher.courseName;
     const courseCode = currentUpdatingTeacher.courseCode === 'Unassigned' ? '' : currentUpdatingTeacher.courseCode;
     document.getElementById('updateCourseName').value = courseName;
@@ -776,50 +776,35 @@ function saveTeacherChanges() {
     const nameInput = document.getElementById('updateCourseName');
     const nameDropdown = document.getElementById('updateCourseNameDropdown');
 
-    // Parse JSON array string from input, fallback to dropdown, then Unassigned
+    // Course name logic: input field takes priority, then dropdown, then Unassigned
     if (nameInput && nameInput.value.trim() !== '') {
-        try {
-            const arr = JSON.parse(nameInput.value.trim());
-            if (Array.isArray(arr)) {
-                courseName = arr;
-            } else {
-                courseName = [nameInput.value.trim()];
-            }
-        } catch {
-            courseName = [nameInput.value.trim()];
-        }
+        courseName = nameInput.value.trim();
     } else if (nameDropdown && nameDropdown.value) {
-        courseName = [nameDropdown.value];
+        courseName = nameDropdown.value;
     }
 
     const codeInput = document.getElementById('updateCourseCode');
     const codeDropdown = document.getElementById('updateCourseCodeDropdown');
 
+    // Course code logic: input field takes priority, then dropdown, then Unassigned
     if (codeInput && codeInput.value.trim() !== '') {
-        try {
-            const arr = JSON.parse(codeInput.value.trim());
-            if (Array.isArray(arr)) {
-                courseCode = arr;
-            } else {
-                courseCode = [codeInput.value.trim()];
-            }
-        } catch {
-            courseCode = [codeInput.value.trim()];
-        }
+        courseCode = codeInput.value.trim();
     } else if (codeDropdown && codeDropdown.value) {
-        courseCode = [codeDropdown.value];
+        courseCode = codeDropdown.value;
     }
 
-    // Show loading state
-    const updateBtn = document.querySelector('#updateTeacherModal .confirm-btn');
-    const originalText = updateBtn ? updateBtn.textContent : 'Save Changes';
-    if (updateBtn) {
-        updateBtn.disabled = true;
-        updateBtn.textContent = 'Updating...';
-    }
+    console.log('Update values:', { department, courseName, courseCode }); // Debug log
 
     if (currentUpdatingTeacher.isExisting) {
         // For existing teachers, send update to backend
+        const updateBtn = document.querySelector('#updateTeacherModal .confirm-btn');
+        const originalText = updateBtn ? updateBtn.textContent : 'Save Changes';
+        if (updateBtn) {
+            updateBtn.disabled = true;
+            updateBtn.textContent = 'Updating...';
+        }
+
+
         // Prepare data for API
         const teacherData = {
             firstname: firstName,
@@ -832,10 +817,10 @@ function saveTeacherChanges() {
         if (department !== 'Unassigned' && department !== '') {
             teacherData.department = department;
         }
-        if (courseName !== 'Unassigned' && courseName.length > 0) {
+        if (courseName !== 'Unassigned' && courseName !== '') {
             teacherData.course_name = courseName;
         }
-        if (courseCode !== 'Unassigned' && courseCode.length > 0) {
+        if (courseCode !== 'Unassigned' && courseCode !== '') {
             teacherData.course_code = courseCode;
         }
 
@@ -885,8 +870,8 @@ function saveTeacherChanges() {
                 email: email,
                 phone: phone,
                 department: department,
-                courseName: JSON.stringify(courseName),
-                courseCode: JSON.stringify(courseCode)
+                courseName: courseName,
+                courseCode: courseCode
             };
             // If department changed, move the card
             if (oldDepartment !== department) {
