@@ -549,12 +549,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Prevent student-card_picked from auto-closing on mobile
-if (false && document) {
+if (document) {
     document.addEventListener('click', (event) => {
         const isMobile = window.matchMedia("(max-width: 750px)").matches;
         if (!isMobile) return; // Only apply this behavior on mobile
 
         const pickedCard = document.querySelector('.student-card_picked');
+        
+        // Don't close if clicking on calendar navigation or calendar elements
+        if (event.target.closest('.calendar-container') || 
+            event.target.closest('.nav-button') ||
+            event.target.closest('.calendar-day') ||
+            event.target.closest('.charts-top-bottom')) {
+            return;
+        }
 
         if (pickedCard && !pickedCard.contains(event.target)) {
             pickedCard.classList.remove('student-card_picked');
