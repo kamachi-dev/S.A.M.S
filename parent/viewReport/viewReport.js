@@ -495,6 +495,14 @@ async function displayStudents() {
         // Create and append student cards
         students.forEach(student => {
             const card = createStudentCard(student);
+
+            // Restore the picked card if it matches selectedStudent
+            if (selectedStudent && student.id === selectedStudent.id) {
+                card.classList.remove('student-card');
+                card.classList.add('student-card_picked');
+                loadStudentDetails(card, student); // Re-insert the charts and calendar
+            }
+
             studentsGrid.appendChild(card);
         });
 
@@ -517,7 +525,6 @@ window.addEventListener('resize', () => {
     const isNowMobile = window.matchMedia("(max-width: 750px)").matches;
 
     if (wasMobile && !isNowMobile) {
-        // Reset when switching from mobile to desktop
         const leftPanel = document.querySelector(".students-left");
         if (leftPanel) {
             leftPanel.innerHTML = `
@@ -527,11 +534,8 @@ window.addEventListener('resize', () => {
             `;
         }
 
-        // Clear selected student
-        selectedStudent = null;
-
-        // Refresh student display
-        displayStudents();
+        // Keep selectedStudent (don't set to null)
+        displayStudents(); // Will now preserve selectedStudent if set
     }
 
     wasMobile = isNowMobile;
@@ -547,33 +551,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.nextMonth = nextMonth;
     window.viewStudentProfile = viewStudentProfile;
 });
-
-// Prevent student-card_picked from auto-closing on mobile
-if (false && document) {
-    document.addEventListener('click', (event) => {
-        const isMobile = window.matchMedia("(max-width: 750px)").matches;
-        if (!isMobile) return; // Only apply this behavior on mobile
-
-        const pickedCard = document.querySelector('.student-card_picked');
-
-        if (pickedCard && !pickedCard.contains(event.target)) {
-            pickedCard.classList.remove('student-card_picked');
-            pickedCard.classList.add('student-card');
-
-            const charts = pickedCard.querySelector(".charts-top-bottom");
-            if (charts) charts.remove();
-
-            selectedStudent = null;
-        }
-    });
-}
-
-const card = createStudentCard(student);
-if (selectedStudent && student.id === selectedStudent.id) {
-    card.classList.remove('student-card');
-    card.classList.add('student-card_picked');
-    loadStudentDetails(card, student);
-}
 
 // Export functions for global access
 window.previousMonth = previousMonth;
