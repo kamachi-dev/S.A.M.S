@@ -666,10 +666,14 @@ function populateUpdateDropdowns() {
                 courseNameDropdown.innerHTML = '<option value="">Select unassigned course name (optional)</option>';
 
                 if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
-                    data.course_names.forEach(name => {
+                    data.course_names.forEach(courseData => {
                         const option = document.createElement('option');
-                        option.value = name;
-                        option.textContent = name;
+                        option.value = courseData.name || courseData;
+                        option.textContent = courseData.name || courseData;
+                        // Store course ID for later use
+                        if (courseData.id) {
+                            option.setAttribute('data-course-id', courseData.id);
+                        }
                         courseNameDropdown.appendChild(option);
                     });
                 }
@@ -679,10 +683,14 @@ function populateUpdateDropdowns() {
                 courseCodeDropdown.innerHTML = '<option value="">Select unassigned course code (optional)</option>';
 
                 if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
-                    data.course_codes.forEach(code => {
+                    data.course_codes.forEach(courseData => {
                         const option = document.createElement('option');
-                        option.value = code;
-                        option.textContent = code;
+                        option.value = courseData.code || courseData;
+                        option.textContent = courseData.code || courseData;
+                        // Store course ID for later use
+                        if (courseData.id) {
+                            option.setAttribute('data-course-id', courseData.id);
+                        }
                         courseCodeDropdown.appendChild(option);
                     });
                 }
@@ -807,7 +815,9 @@ function saveTeacherChanges() {
         courseName = nameDropdown.value;
         // When using dropdown, we need to get the course ID from the option's data attribute
         const selectedOption = nameDropdown.options[nameDropdown.selectedIndex];
-        selectedCourseId = selectedOption.getAttribute('data-course-id');
+        if (selectedOption) {
+            selectedCourseId = selectedOption.getAttribute('data-course-id');
+        }
     } else {
         courseName = ''; // Empty means unassign
     }
@@ -823,7 +833,9 @@ function saveTeacherChanges() {
         // When using dropdown, we need to get the course ID from the option's data attribute
         if (!selectedCourseId) { // Only if not already set by name dropdown
             const selectedOption = codeDropdown.options[codeDropdown.selectedIndex];
-            selectedCourseId = selectedOption.getAttribute('data-course-id');
+            if (selectedOption) {
+                selectedCourseId = selectedOption.getAttribute('data-course-id');
+            }
         }
     } else {
         courseCode = ''; // Empty means unassign
@@ -849,25 +861,23 @@ function saveTeacherChanges() {
             original_email: currentUpdatingTeacher.email // always send original email for lookup
         };
         
-        // Add course/department fields (empty values will trigger unassignment)
-        teacherData.department = department;
-        teacherData.course_name = courseName;
-        teacherData.course_code = courseCode;
-        
-        // Add selected course ID if using dropdown selection
+        // Add selected course ID if using dropdown selection (this takes priority)
         if (selectedCourseId) {
             teacherData.selected_course_id = selectedCourseId;
+            console.log('Sending selected_course_id:', selectedCourseId);
+        } else {
+            // Only send course name/code if not using dropdown selection
+            if (courseName !== 'Unassigned' && courseName !== '') {
+                teacherData.course_name = courseName;
+            }
+            if (courseCode !== 'Unassigned' && courseCode !== '') {
+                teacherData.course_code = courseCode;
+            }
         }
         
-        // Legacy: Add fields only if not empty (for backward compatibility)
+        // Add department if provided
         if (department !== 'Unassigned' && department !== '') {
             teacherData.department = department;
-        }
-        if (courseName !== 'Unassigned' && courseName !== '') {
-            teacherData.course_name = courseName;
-        }
-        if (courseCode !== 'Unassigned' && courseCode !== '') {
-            teacherData.course_code = courseCode;
         }
 
         console.log('Sending to API:', teacherData); // Debug log
@@ -884,13 +894,21 @@ function saveTeacherChanges() {
         })
             .then(res => res.json())
             .then(result => {
+                console.log('API Response:', result); // Debug log
                 if (!window.verifyToken(result)) return;
                 if (result.success) {
                     alert('Teacher information updated successfully!');
                     closeUpdateTeacherModal();
                     location.reload();
                 } else {
-                    alert('Failed to update teacher: ' + (result.error || 'Unknown error'));
+                    let errorMessage = 'Failed to update teacher: ' + (result.error || 'Unknown error');
+                    if (result.pg_error) {
+                        errorMessage += '\nDatabase error: ' + result.pg_error;
+                    }
+                    if (result.details) {
+                        errorMessage += '\nDetails: ' + result.details;
+                    }
+                    alert(errorMessage);
                 }
             })
             .catch(error => {
