@@ -1,4 +1,4 @@
-base_url = 'https://sams-backend-u79d.onrender.com'; 
+base_url = 'https://sams-backend-u79d.onrender.com';
 
 // Global variables for charts
 let dailyChart, termChart, yearChart;
@@ -176,18 +176,18 @@ async function fetchDashboardData() {
 function populateFilterDropdowns(data) {
     const subjects = new Set();
     const grades = new Set();
-    
+
     data.forEach(record => {
         if (record.name) subjects.add(record.name);
         if (record.grade_level) grades.add(record.grade_level);
     });
-    
+
     // Populate subject dropdown
     const subjectSelect = document.querySelector('.filter-select');
     if (subjectSelect) {
         // Clear existing options except "All Subjects"
         subjectSelect.innerHTML = '<option value="all">All Subjects</option>';
-        
+
         Array.from(subjects).sort().forEach(subject => {
             const option = document.createElement('option');
             option.value = subject;
@@ -195,13 +195,13 @@ function populateFilterDropdowns(data) {
             subjectSelect.appendChild(option);
         });
     }
-    
+
     // Populate grade dropdown
     const gradeSelect = document.querySelectorAll('.filter-select')[1];
     if (gradeSelect) {
         // Clear existing options except "All Grades"
         gradeSelect.innerHTML = '<option value="all">All Grades</option>';
-        
+
         Array.from(grades).sort().forEach(grade => {
             const option = document.createElement('option');
             option.value = grade;
@@ -215,21 +215,21 @@ function populateFilterDropdowns(data) {
 function filterData() {
     const subjectSelect = document.querySelector('.filter-select');
     const gradeSelect = document.querySelectorAll('.filter-select')[1];
-    
+
     const selectedSubject = subjectSelect ? subjectSelect.value : 'all';
     const selectedGrade = gradeSelect ? gradeSelect.value : 'all';
-    
+
     console.log('Filtering by:', { subject: selectedSubject, grade: selectedGrade });
-    
+
     filteredData = allDashboardData.filter(record => {
         const subjectMatch = selectedSubject === 'all' || record.name === selectedSubject;
         const gradeMatch = selectedGrade === 'all' || record.grade_level === selectedGrade;
-        
+
         return subjectMatch && gradeMatch;
     });
-    
+
     console.log('Filtered data count:', filteredData.length);
-    
+
     // Update charts with filtered data
     if (filteredData.length > 0) {
         const stats = calculateAttendanceStats(filteredData);
@@ -255,16 +255,16 @@ function filterData() {
 function setupFilterListeners() {
     const subjectSelect = document.querySelector('.filter-select');
     const gradeSelect = document.querySelectorAll('.filter-select')[1];
-    
+
     if (subjectSelect) {
-        subjectSelect.addEventListener('change', function() {
+        subjectSelect.addEventListener('change', function () {
             console.log('Subject filter changed to:', this.value);
             filterData();
         });
     }
-    
+
     if (gradeSelect) {
-        gradeSelect.addEventListener('change', function() {
+        gradeSelect.addEventListener('change', function () {
             console.log('Grade filter changed to:', this.value);
             filterData();
         });
@@ -275,11 +275,10 @@ function setupFilterListeners() {
 function calculateAttendanceStats(records) {
     const today = new Date();
     const currentYear = today.getFullYear();
-    
+
     // Calculate current term (4-month periods)
     const currentMonth = today.getMonth() + 1; // 1-12
     let termStart, termEnd;
-    
     if (currentMonth >= 1 && currentMonth <= 4) {
         termStart = 1; termEnd = 4;
     } else if (currentMonth >= 5 && currentMonth <= 8) {
@@ -289,16 +288,34 @@ function calculateAttendanceStats(records) {
     }
 
     const stats = {
-        daily: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
-        term: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
-        year: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+        daily: { present: 0, late: 0, absent: 0, excused: 0, total: 0, percent: 0 },
+        term: { present: 0, late: 0, absent: 0, excused: 0, total: 0, percent: 0 },
+        year: { present: 0, late: 0, absent: 0, excused: 0, total: 0, percent: 0 },
         uniqueStudents: new Set(),
         weeklyData: {
             present: [0, 0, 0, 0],
+            late: [0, 0, 0, 0],
             absent: [0, 0, 0, 0],
-            late: [0, 0, 0, 0]
+            excused: [0, 0, 0, 0],
+            percent: [0, 0, 0, 0]
         }
     };
+
+    // Helper for weighted attendance
+    function weighted(att) {
+        if (att === 3) return 1; // present
+        if (att === 2) return 0.5; // late
+        return 0; // absent or excused
+    }
+
+    // Helper for excused
+    function isExcused(att) {
+        return att === 0;
+    }
+
+    // For weekly percent calculation
+    const weekTotals = [0, 0, 0, 0]; // total records per week (excluding excused)
+    const weekWeighted = [0, 0, 0, 0]; // sum of weighted attendance per week
 
     records.forEach(record => {
         const recordDate = new Date(record.sent);
@@ -306,15 +323,14 @@ function calculateAttendanceStats(records) {
         const recordMonth = recordDate.getMonth() + 1;
         const recordDay = recordDate.toDateString();
         const todayString = today.toDateString();
-        
+
         // Track unique students
         stats.uniqueStudents.add(`${record.firstname}_${record.lastname}`);
-        
+
         // Map attendance codes: 0=excused, 1=absent, 2=late, 3=present
         const attendance = parseInt(record.attendance);
         let category;
-        
-        switch(attendance) {
+        switch (attendance) {
             case 0: category = 'excused'; break;
             case 1: category = 'absent'; break;
             case 2: category = 'late'; break;
@@ -325,45 +341,47 @@ function calculateAttendanceStats(records) {
         // Daily stats (today only)
         if (recordDay === todayString) {
             stats.daily[category]++;
-            stats.daily.total++;
+            if (!isExcused(attendance)) stats.daily.total++;
         }
 
         // Term stats (current term)
         if (recordYear === currentYear && recordMonth >= termStart && recordMonth <= termEnd) {
             stats.term[category]++;
-            stats.term.total++;
+            if (!isExcused(attendance)) stats.term.total++;
         }
 
         // Year stats (current calendar year)
         if (recordYear === currentYear) {
             stats.year[category]++;
-            stats.year.total++;
-            
+            if (!isExcused(attendance)) stats.year.total++;
+
             // Calculate weekly data for bar charts
             const weekOfMonth = Math.ceil(recordDate.getDate() / 7) - 1;
             if (weekOfMonth >= 0 && weekOfMonth < 4) {
-                if (attendance === 3) { // present
-                    stats.weeklyData.present[weekOfMonth]++;
-                } else if (attendance === 1) { // absent
-                    stats.weeklyData.absent[weekOfMonth]++;
-                } else if (attendance === 2) { // late
-                    stats.weeklyData.late[weekOfMonth]++;
+                stats.weeklyData[category][weekOfMonth]++;
+                if (!isExcused(attendance)) {
+                    weekTotals[weekOfMonth]++;
+                    weekWeighted[weekOfMonth] += weighted(attendance);
                 }
             }
         }
     });
 
-    // Calculate percentages for weekly data
-    const totalStudents = stats.uniqueStudents.size || 1;
-    stats.weeklyData.present = stats.weeklyData.present.map(count => 
-        totalStudents > 0 ? ((count / totalStudents) * 100).toFixed(2) : 0
-    );
-    stats.weeklyData.absent = stats.weeklyData.absent.map(count => 
-        totalStudents > 0 ? ((count / totalStudents) * 100).toFixed(2) : 0
-    );
-    stats.weeklyData.late = stats.weeklyData.late.map(count => 
-        totalStudents > 0 ? ((count / totalStudents) * 100).toFixed(2) : 0
-    );
+    // Calculate weighted percentages for each period
+    function calcPercent(present, late, absent, total) {
+        if (total === 0) return 0;
+        return (((present * 1 + late * 0.5) / total) * 100).toFixed(2);
+    }
+
+    stats.daily.percent = calcPercent(stats.daily.present, stats.daily.late, stats.daily.absent, stats.daily.total);
+    stats.term.percent = calcPercent(stats.term.present, stats.term.late, stats.term.absent, stats.term.total);
+    stats.year.percent = calcPercent(stats.year.present, stats.year.late, stats.year.absent, stats.year.total);
+
+    // Calculate weekly weighted percentages
+    for (let i = 0; i < 4; i++) {
+        stats.weeklyData.percent[i] = weekTotals[i] > 0 ? ((weekWeighted[i] / weekTotals[i]) * 100).toFixed(2) : "0.00";
+        // For bar charts, keep present, late, absent as counts (or you can convert to percent if needed)
+    }
 
     return stats;
 }
@@ -375,10 +393,10 @@ function updateChartsWithData(stats) {
     updateDonutChart(termChart, stats.term, 'termDonut');
     updateDonutChart(yearChart, stats.year, 'yearDonut');
 
-    // Update bar charts
-    updateBarChart(presentBarChart, stats.weeklyData.present);
-    updateBarChart(absentBarChart, stats.weeklyData.absent);
-    updateBarChart(lateBarChart, stats.weeklyData.late);
+    // Update bar charts with weighted percentages
+    updateBarChart(presentBarChart, stats.weeklyData.percent);
+    updateBarChart(absentBarChart, stats.weeklyData.percent.map(() => 0)); // Absent is always 0 in weighted percent
+    updateBarChart(lateBarChart, stats.weeklyData.percent.map(p => (p / 2).toFixed(2))); // Late is half of present
 
     // Update student count
     const studentCountElement = document.querySelector('.count-number');
@@ -393,20 +411,20 @@ function updateDonutChart(chart, periodStats, chartId) {
     const presentCount = periodStats.present || 0;
     const lateCount = periodStats.late || 0;
     const absentCount = periodStats.absent || 0;
-    
-    // Calculate percentage (present + late as "attendance")
-    const attendancePercentage = total > 0 ? (((presentCount + lateCount) / total) * 100).toFixed(2) : 0;
-    
+
+    // Calculate weighted percentage (present=1, late=0.5, absent=0)
+    const attendancePercentage = periodStats.percent || 0;
+
     // Update chart data
     chart.data.datasets[0].data = [presentCount, lateCount, absentCount];
     chart.update();
-    
+
     // Update percentage display
     const percentElement = document.querySelector(`#${chartId}`).parentElement.querySelector('.chart-percent');
     if (percentElement) {
         percentElement.textContent = `${attendancePercentage}%`;
     }
-    
+
     // Update legend values
     const legendContainer = document.querySelector(`#${chartId}`).parentElement.querySelector('.legend-donut');
     if (legendContainer) {
@@ -419,36 +437,30 @@ function updateDonutChart(chart, periodStats, chartId) {
     }
 }
 
-// Update bar chart
-function updateBarChart(chart, data) {
-    chart.data.datasets[0].data = data;
-    chart.update();
-}
-
 // Download attendance data as CSV with real data
 async function downloadAttendanceData() {
     try {
         // Use the current filtered data or all data if no filters applied
         const dataToExport = filteredData.length > 0 ? filteredData : allDashboardData;
-        
+
         if (dataToExport.length === 0) {
             alert('No data available to download');
             return;
         }
-        
+
         // Calculate current statistics for export
         const stats = calculateAttendanceStats(dataToExport);
-        
+
         // Get current filter values
         const subjectSelect = document.querySelector('.filter-select');
         const gradeSelect = document.querySelectorAll('.filter-select')[1];
-        
+
         const subject = subjectSelect ? subjectSelect.value : 'All Subjects';
         const grade = gradeSelect ? gradeSelect.value : 'All Grades';
-        
+
         // Create workbook and worksheet
         const workbook = XLSX.utils.book_new();
-        
+
         // Summary data
         const summaryData = [
             ['SAMS Attendance Report'],
@@ -458,12 +470,12 @@ async function downloadAttendanceData() {
             ['Total Students:', stats.uniqueStudents.size],
             [''],
             ['Period', 'Present', 'Late', 'Absent', 'Excused', 'Total', 'Attendance %'],
-            ['Daily', stats.daily.present, stats.daily.late, stats.daily.absent, stats.daily.excused, stats.daily.total, 
-             stats.daily.total > 0 ? (((stats.daily.present + stats.daily.late) / stats.daily.total) * 100).toFixed(2) + '%' : '0%'],
+            ['Daily', stats.daily.present, stats.daily.late, stats.daily.absent, stats.daily.excused, stats.daily.total,
+                stats.daily.total > 0 ? (((stats.daily.present + stats.daily.late) / stats.daily.total) * 100).toFixed(2) + '%' : '0%'],
             ['Term', stats.term.present, stats.term.late, stats.term.absent, stats.term.excused, stats.term.total,
-             stats.term.total > 0 ? (((stats.term.present + stats.term.late) / stats.term.total) * 100).toFixed(2) + '%' : '0%'],
+                stats.term.total > 0 ? (((stats.term.present + stats.term.late) / stats.term.total) * 100).toFixed(2) + '%' : '0%'],
             ['Year', stats.year.present, stats.year.late, stats.year.absent, stats.year.excused, stats.year.total,
-             stats.year.total > 0 ? (((stats.year.present + stats.year.late) / stats.year.total) * 100).toFixed(2) + '%' : '0%'],
+                stats.year.total > 0 ? (((stats.year.present + stats.year.late) / stats.year.total) * 100).toFixed(2) + '%' : '0%'],
             [''],
             ['Weekly Breakdown (Percentages)'],
             ['Week', 'Present %', 'Late %', 'Absent %'],
@@ -472,21 +484,21 @@ async function downloadAttendanceData() {
             ['Week 3', stats.weeklyData.present[2] + '%', stats.weeklyData.late[2] + '%', stats.weeklyData.absent[2] + '%'],
             ['Week 4', stats.weeklyData.present[3] + '%', stats.weeklyData.late[3] + '%', stats.weeklyData.absent[3] + '%']
         ];
-        
+
         // Create summary worksheet
         const summaryWS = XLSX.utils.aoa_to_sheet(summaryData);
         XLSX.utils.book_append_sheet(workbook, summaryWS, 'Summary');
-        
+
         // Detailed records data
         if (dataToExport.length > 0) {
             const detailedData = [
                 ['Student Name', 'Course', 'Grade Level', 'Date', 'Attendance Status']
             ];
-            
+
             dataToExport.forEach(record => {
                 const attendanceStatus = ['Excused', 'Absent', 'Late', 'Present'][parseInt(record.attendance)] || 'Unknown';
                 const date = new Date(record.sent).toLocaleDateString();
-                
+
                 detailedData.push([
                     `${record.firstname} ${record.lastname}`,
                     record.name || 'N/A',
@@ -495,21 +507,21 @@ async function downloadAttendanceData() {
                     attendanceStatus
                 ]);
             });
-            
+
             // Create detailed records worksheet
             const detailedWS = XLSX.utils.aoa_to_sheet(detailedData);
             XLSX.utils.book_append_sheet(workbook, detailedWS, 'Detailed Records');
         }
-        
+
         // Generate filename with current date and filters
         const date = new Date().toISOString().split('T')[0];
         const subjectSuffix = subject !== 'all' && subject !== 'All Subjects' ? `_${subject.replace(/\s+/g, '_')}` : '';
         const gradeSuffix = grade !== 'all' && grade !== 'All Grades' ? `_${grade.replace(/\s+/g, '_')}` : '';
         const filename = `SAMS_Attendance_Report_${date}${subjectSuffix}${gradeSuffix}.xlsx`;
-        
+
         // Download the file
         XLSX.writeFile(workbook, filename);
-        
+
     } catch (error) {
         console.error('Error generating Excel file:', error);
         // Fallback to CSV if Excel generation fails
@@ -519,75 +531,75 @@ async function downloadAttendanceData() {
 
 // Fallback CSV download function
 function downloadCSVFallback() {
-    
+
     // Get current filter values
     const subjectSelect = document.querySelector('.filter-select');
     const gradeSelect = document.querySelectorAll('.filter-select')[1];
-    
+
     const subject = subjectSelect ? subjectSelect.value : 'All Subjects';
     const grade = gradeSelect ? gradeSelect.value : 'All Grades';
-    
+
     // Use real data if available, otherwise use sample data
     const stats = filteredData.length > 0 ? calculateAttendanceStats(filteredData) : null;
-    
+
     const attendanceData = [
         // Header row
         ['Period', 'Present', 'Late', 'Absent', 'Total', 'Percentage'],
-        
+
         // Daily data
-        ['Daily Class Attendance', 
-         stats ? stats.daily.present : '25', 
-         stats ? stats.daily.late : '1', 
-         stats ? stats.daily.absent : '0', 
-         stats ? stats.daily.total : '26', 
-         stats && stats.daily.total > 0 ? (((stats.daily.present + stats.daily.late) / stats.daily.total) * 100).toFixed(2) + '%' : '81.25%'],
-        
+        ['Daily Class Attendance',
+            stats ? stats.daily.present : '25',
+            stats ? stats.daily.late : '1',
+            stats ? stats.daily.absent : '0',
+            stats ? stats.daily.total : '26',
+            stats && stats.daily.total > 0 ? (((stats.daily.present + stats.daily.late) / stats.daily.total) * 100).toFixed(2) + '%' : '81.25%'],
+
         // Term data  
-        ['Class Term Attendance', 
-         stats ? stats.term.present : '204', 
-         stats ? stats.term.late : '103', 
-         stats ? stats.term.absent : '27', 
-         stats ? stats.term.total : '334', 
-         stats && stats.term.total > 0 ? (((stats.term.present + stats.term.late) / stats.term.total) * 100).toFixed(2) + '%' : '76.5%'],
-        
+        ['Class Term Attendance',
+            stats ? stats.term.present : '204',
+            stats ? stats.term.late : '103',
+            stats ? stats.term.absent : '27',
+            stats ? stats.term.total : '334',
+            stats && stats.term.total > 0 ? (((stats.term.present + stats.term.late) / stats.term.total) * 100).toFixed(2) + '%' : '76.5%'],
+
         // School Year data
-        ['Class School Year Attendance', 
-         stats ? stats.year.present : '548', 
-         stats ? stats.year.late : '236', 
-         stats ? stats.year.absent : '259', 
-         stats ? stats.year.total : '1043', 
-         stats && stats.year.total > 0 ? (((stats.year.present + stats.year.late) / stats.year.total) * 100).toFixed(2) + '%' : '63.85%']
+        ['Class School Year Attendance',
+            stats ? stats.year.present : '548',
+            stats ? stats.year.late : '236',
+            stats ? stats.year.absent : '259',
+            stats ? stats.year.total : '1043',
+            stats && stats.year.total > 0 ? (((stats.year.present + stats.year.late) / stats.year.total) * 100).toFixed(2) + '%' : '63.85%']
     ];
-    
+
     // Add filter information at the top
     const headerInfo = [
         ['SAMS Attendance Report'],
         ['Generated on:', new Date().toLocaleDateString()],
         ['Subject:', subject],
-        ['Grade:', grade], 
+        ['Grade:', grade],
         [''], // Empty row for spacing
     ];
-    
+
     // Combine header info with attendance data
     const fullData = [...headerInfo, ...attendanceData];
-    
+
     // Convert to CSV format
-    const csvContent = fullData.map(row => 
+    const csvContent = fullData.map(row =>
         row.map(cell => `"${cell}"`).join(',')
     ).join('\n');
-    
+
     // Create and download the file
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
-    
+
     if (link.download !== undefined) {
         const url = URL.createObjectURL(blob);
         link.setAttribute('href', url);
-        
+
         // Generate filename with current date and filters
         const date = new Date().toISOString().split('T')[0];
         const filename = `SAMS_Attendance_Report_${date}_CSV_Fallback.csv`;
-        
+
         link.setAttribute('download', filename);
         link.style.visibility = 'hidden';
         document.body.appendChild(link);
@@ -600,27 +612,27 @@ function downloadCSVFallback() {
 async function initializeDashboard() {
     // Initialize charts first
     initializeCharts();
-    
+
     // Check if we have the required authentication
     if (!window.token) {
         console.error('No authentication token found');
         return;
     }
-    
+
     // Fetch and display real data
     const dashboardData = await fetchDashboardData();
-    
+
     if (dashboardData && Array.isArray(dashboardData)) {
         // Store all data for filtering
         allDashboardData = dashboardData;
         filteredData = dashboardData; // Initially show all data
-        
+
         // Populate filter dropdowns
         populateFilterDropdowns(dashboardData);
-        
+
         // Setup filter event listeners
         setupFilterListeners();
-        
+
         // Calculate and display initial stats
         const stats = calculateAttendanceStats(dashboardData);
         updateChartsWithData(stats);
