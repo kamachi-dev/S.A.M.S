@@ -309,6 +309,11 @@ function showStudentDetails(status, element) {
     // Process attendance data for this student
     attendanceData = processAttendanceForCalendar(allStudentRecords, student.fullName);
 
+    // Reset calendar to current date
+    const today = new Date();
+    currentMonth = today.getMonth();
+    currentYear = today.getFullYear();
+
     const isMobile = window.matchMedia("(max-width: 750px)").matches;
 
     if (isMobile) {
@@ -317,6 +322,7 @@ function showStudentDetails(status, element) {
         handleDesktopStudentSelection(student);
     }
 }
+
 
 // Handle student selection on mobile
 async function handleMobileStudentSelection(cardElement, student) {
