@@ -546,8 +546,10 @@ document.addEventListener('DOMContentLoaded', function () {
     window.previousMonth = previousMonth;
     window.nextMonth = nextMonth;
     window.viewStudentProfile = viewStudentProfile;
+});
 
-    // Handle clicking outside the picked card on mobile
+// Prevent student-card_picked from auto-closing on mobile
+if (false && document) {
     document.addEventListener('click', (event) => {
         const isMobile = window.matchMedia("(max-width: 750px)").matches;
         if (!isMobile) return; // Only apply this behavior on mobile
@@ -564,7 +566,9 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedStudent = null;
         }
     });
-});
+}
+
+
 
 // Export functions for global access
 window.previousMonth = previousMonth;
