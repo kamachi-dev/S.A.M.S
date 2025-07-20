@@ -533,56 +533,6 @@ window.addEventListener('resize', () => {
         // Refresh student display
         displayStudents();
     }
-
-    wasMobile = isNowMobile;
-});
-
-// Initialize everything when page loads
-document.addEventListener('DOMContentLoaded', function () {
-    // Load and display students
-    displayStudents();
-
-    // Set up global navigation functions
-    window.previousMonth = previousMonth;
-    window.nextMonth = nextMonth;
-    window.viewStudentProfile = viewStudentProfile;
-});
-
-// Prevent student-card_picked from auto-closing on mobile
-if (document) {
-    document.addEventListener('click', (event) => {
-        const isMobile = window.matchMedia("(max-width: 750px)").matches;
-        if (!isMobile) return; // Only apply this behavior on mobile
-
-        const pickedCard = document.querySelector('.student-card_picked');
-        
-        // Don't close if clicking on calendar navigation or calendar elements
-        if (event.target.closest('.calendar-container') || 
-            event.target.closest('.nav-button') ||
-            event.target.closest('.calendar-day') ||
-            event.target.closest('.charts-top-bottom')) {
-            return;
-        }
-
-        if (pickedCard && !pickedCard.contains(event.target)) {
-            pickedCard.classList.remove('student-card_picked');
-            pickedCard.classList.add('student-card');
-
-            const charts = pickedCard.querySelector(".charts-top-bottom");
-            if (charts) charts.remove();
-
-            selectedStudent = null;
-        }
-    });
-}
-
-const card = createStudentCard(student);
-if (selectedStudent && student.id === selectedStudent.id) {
-    card.classList.remove('student-card');
-    card.classList.add('student-card_picked');
-    loadStudentDetails(card, student);
-}
-
 // Export functions for global access
 window.previousMonth = previousMonth;
 window.nextMonth = nextMonth;
