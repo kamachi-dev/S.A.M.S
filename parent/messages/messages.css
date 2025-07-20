@@ -348,7 +348,6 @@
 
     .popup.show {
         height: 48px;
-        width: 300px;
         background: #a7161e;
         top: -2em;
     }
