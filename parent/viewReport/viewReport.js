@@ -321,6 +321,7 @@ function showStudentDetails(status, element) {
 // Handle student selection on mobile
 async function handleMobileStudentSelection(cardElement, student) {
     const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
+    if (isAlreadyPicked) return;
 
     // Reset all other cards
     document.querySelectorAll('.student-card_picked').forEach(card => {
