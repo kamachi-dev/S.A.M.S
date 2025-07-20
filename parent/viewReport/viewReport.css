@@ -98,6 +98,7 @@ body {
     align-items: center;
     margin: 0;
     width: 100%;
+    border-radius: 0px;
     box-sizing: border-box;
 }
 /* Student Selection Page Styles */
@@ -756,6 +757,11 @@ body {
     .student-card {
         min-width: 250px;
         scroll-snap-align: start;
+    }
+
+    .student-card_picked {
+        border-radius: 15px;
+        height: auto;
     }
 
     .menu {
