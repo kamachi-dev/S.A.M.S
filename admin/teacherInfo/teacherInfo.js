@@ -107,10 +107,14 @@ function populateDropdowns() {
                 courseNameDropdown.innerHTML = '<option value="">Select unassigned course name (optional)</option>';
 
                 if (data.success && Array.isArray(data.course_names) && data.course_names.length > 0) {
-                    data.course_names.forEach(name => {
+                    data.course_names.forEach((courseData, index) => {
                         const option = document.createElement('option');
-                        option.value = name;
-                        option.textContent = name;
+                        option.value = courseData.name || courseData;
+                        option.textContent = courseData.name || courseData;
+                        // Store course ID for later use
+                        if (courseData.id) {
+                            option.setAttribute('data-course-id', courseData.id);
+                        }
                         courseNameDropdown.appendChild(option);
                     });
                 } else {
@@ -126,10 +130,14 @@ function populateDropdowns() {
                 courseCodeDropdown.innerHTML = '<option value="">Select unassigned course code (optional)</option>';
 
                 if (data.success && Array.isArray(data.course_codes) && data.course_codes.length > 0) {
-                    data.course_codes.forEach(code => {
+                    data.course_codes.forEach((courseData, index) => {
                         const option = document.createElement('option');
-                        option.value = code;
-                        option.textContent = code;
+                        option.value = courseData.code || courseData;
+                        option.textContent = courseData.code || courseData;
+                        // Store course ID for later use
+                        if (courseData.id) {
+                            option.setAttribute('data-course-id', courseData.id);
+                        }
                         courseCodeDropdown.appendChild(option);
                     });
                 } else {
@@ -485,6 +493,19 @@ function updateTeacherCount() {
 
 // Helper functions for updating existing teacher details
 
+// Helper function to find course ID by name or code
+function findCourseIdByName(courseName) {
+    // This would need to be implemented with actual course data
+    // For now, return empty string as fallback
+    return '';
+}
+
+function findCourseIdByCode(courseCode) {
+    // This would need to be implemented with actual course data
+    // For now, return empty string as fallback
+    return '';
+}
+
 function showTeacherDetails(teacherObj) {
     document.getElementById('modalName').textContent = `${teacherObj.firstname} ${teacherObj.lastname}`;
     document.getElementById('modalPhone').textContent = teacherObj.phone;
@@ -762,7 +783,7 @@ function saveTeacherChanges() {
     let department = 'Unassigned';
     let courseName = 'Unassigned';
     let courseCode = 'Unassigned';
-    let selectedCourseId = '';
+    let selectedCourseId = null;
 
     const depInput = document.getElementById('updateTeacherDepartment');
     const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
@@ -784,8 +805,9 @@ function saveTeacherChanges() {
         courseName = nameInput.value.trim();
     } else if (nameDropdown && nameDropdown.value) {
         courseName = nameDropdown.value;
-        // If using dropdown, we need to find the course ID
-        selectedCourseId = findCourseIdByName(nameDropdown.value);
+        // When using dropdown, we need to get the course ID from the option's data attribute
+        const selectedOption = nameDropdown.options[nameDropdown.selectedIndex];
+        selectedCourseId = selectedOption.getAttribute('data-course-id');
     } else {
         courseName = ''; // Empty means unassign
     }
@@ -798,9 +820,10 @@ function saveTeacherChanges() {
         courseCode = codeInput.value.trim();
     } else if (codeDropdown && codeDropdown.value) {
         courseCode = codeDropdown.value;
-        // If using dropdown, we need to find the course ID
+        // When using dropdown, we need to get the course ID from the option's data attribute
         if (!selectedCourseId) { // Only if not already set by name dropdown
-            selectedCourseId = findCourseIdByCode(codeDropdown.value);
+            const selectedOption = codeDropdown.options[codeDropdown.selectedIndex];
+            selectedCourseId = selectedOption.getAttribute('data-course-id');
         }
     } else {
         courseCode = ''; // Empty means unassign
