@@ -533,6 +533,8 @@ window.addEventListener('resize', () => {
         // Refresh student display
         displayStudents();
     }
+}
+)
 // Export functions for global access
 window.previousMonth = previousMonth;
 window.nextMonth = nextMonth;
