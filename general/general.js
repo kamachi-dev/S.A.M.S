@@ -64,5 +64,55 @@ function signOut() {
     window.location.href = '/index.html';
 }
 
+// Handle student selection on mobile
+async function handleMobileStudentSelection(cardElement, student) {
+    const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
+
+    // Reset all other cards
+    document.querySelectorAll('.student-card_picked').forEach(card => {
+        card.classList.remove('student-card_picked');
+        card.classList.add('student-card');
+        const charts = card.querySelector(".charts-top-bottom");
+        if (charts) charts.remove();
+    });
+
+    if (!isAlreadyPicked) {
+        cardElement.classList.remove('student-card');
+        cardElement.classList.add('student-card_picked');
+
+        // Load attendance data and display
+        await loadStudentDetails(cardElement, student);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Load and display students
+    displayStudents();
+
+    // Set up global navigation functions
+    window.previousMonth = previousMonth;
+    window.nextMonth = nextMonth;
+    window.viewStudentProfile = viewStudentProfile;
+
+    // Handle clicking outside the picked card on mobile
+    document.addEventListener('click', (event) => {
+        const isMobile = window.matchMedia("(max-width: 750px)").matches;
+        if (!isMobile) return; // Only apply this behavior on mobile
+
+        const pickedCard = document.querySelector('.student-card_picked');
+
+        if (pickedCard && !pickedCard.contains(event.target)) {
+            pickedCard.classList.remove('student-card_picked');
+            pickedCard.classList.add('student-card');
+
+            const charts = pickedCard.querySelector(".charts-top-bottom");
+            if (charts) charts.remove();
+
+            selectedStudent = null;
+        }
+    });
+});
+
+
 // Make signOut function globally available
 window.signOut = signOut;
