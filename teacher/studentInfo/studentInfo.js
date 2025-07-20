@@ -130,7 +130,7 @@ function createStudentCard(student) {
     const studentId = student.id ? student.id.toString().padStart(10, '0') : 'N/A';
 
     studentCard.innerHTML = `
-        <img src="${student.pfp || '/assets/Sample.png'}" alt="Student" class="student-photo">
+        <img src="${student.pfp || '/assets/icons/placeholder-parent.jpeg'}" alt="Student" class="student-photo">
         <div class="student-info">
             <div class="student-name">${fullName}</div>
         </div>

@@ -22,19 +22,19 @@ async function loadParentsFromDatabase() {
                 'Token': window.token,
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (!window.verifyToken(data)) return;
-        
+
         fetchedParents = data;
         displayParents(fetchedParents);
         updateParentCount();
-        
+
         // Remove loader if it exists
         const loader = document.querySelector('.loader');
         if (loader) loader.remove();
-        
+
     } catch (error) {
         console.error('Error fetching parents:', error);
         // Show error message or fallback
@@ -48,10 +48,10 @@ function displayParents(parents) {
     const filterSection = content.querySelector('.filter-section');
     content.innerHTML = '';
     content.appendChild(filterSection);
-    
+
     // Group parents by first letter of last name
     const groupedParents = {};
-    
+
     parents.forEach(parent => {
         const firstLetter = parent.lastname.charAt(0).toUpperCase();
         if (!groupedParents[firstLetter]) {
@@ -59,37 +59,37 @@ function displayParents(parents) {
         }
         groupedParents[firstLetter].push(parent);
     });
-    
+
     // Sort letters alphabetically
     const sortedLetters = Object.keys(groupedParents).sort();
-    
+
     // Create sections for each letter
     sortedLetters.forEach(letter => {
         const letterSection = document.createElement('div');
         letterSection.className = 'letter-section';
         letterSection.setAttribute('data-letter', letter.toLowerCase());
-        
+
         const letterTitle = document.createElement('h2');
         letterTitle.className = 'letter-title';
         letterTitle.textContent = letter;
-        
+
         const parentsGrid = document.createElement('div');
         parentsGrid.className = 'parents-grid';
-        
+
         // Sort parents within each letter group by last name
         groupedParents[letter].sort((a, b) => a.lastname.localeCompare(b.lastname));
-        
+
         // Create parent cards
         groupedParents[letter].forEach(parent => {
             const parentCard = createParentCard(parent);
             parentsGrid.appendChild(parentCard);
         });
-        
+
         letterSection.appendChild(letterTitle);
         letterSection.appendChild(parentsGrid);
         content.appendChild(letterSection);
     });
-    
+
     // Reinitialize search functionality for new cards
     initializeSearchAndFilters();
 }
@@ -100,9 +100,9 @@ function createParentCard(parent) {
     parentCard.className = 'parent-card';
     parentCard.setAttribute('data-letter', parent.lastname.charAt(0).toLowerCase());
     parentCard.setAttribute('data-fetched', 'true');
-    
+
     parentCard.innerHTML = `
-        <img src="${parent.pfp || '/assets/Sample.png'}" alt="Parent" class="parent-photo">
+        <img src="${parent.pfp || '/assets/icons/placeholder-parent.jpeg'}" alt="Parent" class="parent-photo">
         <div class="parent-info">
             <div class="parent-name">${parent.firstname} ${parent.lastname}</div>
         </div>
@@ -112,14 +112,14 @@ function createParentCard(parent) {
             <button class="delete-btn" onclick="deleteFetchedParent('${parent.email}', this)">Delete</button>
         </div>
     `;
-    
+
     return parentCard;
 }
 
 // Function to show details for fetched parents
 function showFetchedParentDetails(firstName, lastName, phone, email, parentData = null) {
     document.getElementById('modalName').innerHTML = `${firstName} ${lastName}`;
-    
+
     // Find the parent data to get children information
     let childrenDetails = '';
     if (parentData && parentData.children && parentData.children.length > 0) {
@@ -134,7 +134,7 @@ function showFetchedParentDetails(firstName, lastName, phone, email, parentData 
     } else {
         childrenDetails = '<p style="color: #666; font-style: italic;">No children information available.</p>';
     }
-    
+
     const modalInfo = document.querySelector('.modal-info');
     modalInfo.innerHTML = `
         <p><strong>Phone:</strong> ${phone}</p>
@@ -144,7 +144,7 @@ function showFetchedParentDetails(firstName, lastName, phone, email, parentData 
             ${childrenDetails}
         </div>
     `;
-    
+
     document.getElementById('detailsModal').style.display = 'block';
 }
 
@@ -167,7 +167,7 @@ function updateFetchedParent(firstName, lastName, phone, email, parentData = nul
             grade: child.grade_level
         })) : []
     };
-    
+
     openUpdateParentModal();
 }
 
@@ -178,7 +178,7 @@ async function deleteFetchedParent(email, button) {
             // Show loading state
             button.disabled = true;
             button.textContent = 'Deleting...';
-            
+
             const response = await fetch('https://sams-backend-u79d.onrender.com/api/deleteParent.php', {
                 method: 'POST',
                 credentials: 'include',
@@ -191,11 +191,11 @@ async function deleteFetchedParent(email, button) {
                     email: email
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (!window.verifyToken(data)) return;
-            
+
             if (data.success) {
                 // Show success message with details
                 let successMessage = `Successfully deleted parent: ${data.deleted_parent.name}`;
@@ -203,37 +203,37 @@ async function deleteFetchedParent(email, button) {
                     successMessage += `\nAlso deleted ${data.children_count} associated student(s).`;
                 }
                 alert(successMessage);
-                
+
                 // Remove from UI
                 const parentCard = button.closest('.parent-card');
                 const letterSection = parentCard.closest('.letter-section');
                 parentCard.remove();
-                
+
                 // If letter section is now empty, remove it
                 const remainingCards = letterSection.querySelectorAll('.parent-card');
                 if (remainingCards.length === 0) {
                     letterSection.remove();
                 }
-                
+
                 // Update parent count
                 updateParentCount();
-                
+
                 // Remove from fetchedParents array if it exists
                 fetchedParents = fetchedParents.filter(parent => parent.email !== email);
-                
+
             } else {
                 // Show error message
                 alert(`Failed to delete parent: ${data.error || 'Unknown error occurred'}`);
-                
+
                 // Reset button state
                 button.disabled = false;
                 button.textContent = 'Delete';
             }
-            
+
         } catch (error) {
             console.error('Error deleting parent:', error);
             alert('An error occurred while deleting the parent. Please try again.');
-            
+
             // Reset button state
             button.disabled = false;
             button.textContent = 'Delete';
@@ -260,7 +260,7 @@ function clearAddParentForm() {
     document.getElementById('parentLastName').value = '';
     document.getElementById('parentEmail').value = '';
     document.getElementById('parentPhone').value = '';
-    
+
     // Clear children container
     document.getElementById('childrenContainer').innerHTML = '';
     childCounter = 0;
@@ -269,11 +269,11 @@ function clearAddParentForm() {
 function addChildForm() {
     childCounter++;
     const childrenContainer = document.getElementById('childrenContainer');
-    
+
     const childForm = document.createElement('div');
     childForm.className = 'child-form';
     childForm.id = `child-${childCounter}`;
-    
+
     childForm.innerHTML = `
         <div class="child-form-header">
             <h4>Child ${childCounter}</h4>
@@ -304,7 +304,7 @@ function addChildForm() {
             </div>
         </div>
     `;
-    
+
     childrenContainer.appendChild(childForm);
 }
 
@@ -313,7 +313,7 @@ function removeChildForm(childId) {
     if (childForm) {
         childForm.remove();
     }
-    
+
     // If no children left, add one back
     const remainingChildren = document.querySelectorAll('.child-form');
     if (remainingChildren.length === 0) {
@@ -327,43 +327,43 @@ async function confirmAddParent() {
     const parentLastName = document.getElementById('parentLastName').value.trim();
     const parentEmail = document.getElementById('parentEmail').value.trim();
     const parentPhone = document.getElementById('parentPhone').value.trim();
-    
+
     if (!parentFirstName || !parentLastName || !parentEmail || !parentPhone) {
         alert('Please fill in all required parent information fields (First Name, Last Name, Email, Phone).');
         return;
     }
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(parentEmail)) {
         alert('Please enter a valid email address.');
         return;
     }
-    
+
     // Validate and collect children data
     const childForms = document.querySelectorAll('.child-form');
     const children = [];
-    
+
     for (let i = 0; i < childForms.length; i++) {
         const childForm = childForms[i];
         const childId = childForm.id.split('-')[1];
-        
+
         const childFirstName = document.getElementById(`childFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`childLastName${childId}`).value.trim();
         const childGrade = document.getElementById(`childGrade${childId}`).value;
-        
+
         if (!childFirstName || !childLastName || !childGrade) {
             alert(`Please fill in all required fields for Child ${i + 1} (First Name, Last Name, Grade Level).`);
             return;
         }
-        
+
         children.push({
             firstname: childFirstName,
             lastname: childLastName,
             grade_level: childGrade
         });
     }
-    
+
     // Prepare data for addParent.php API
     const parentData = {
         firstname: parentFirstName,
@@ -372,13 +372,13 @@ async function confirmAddParent() {
         phone: parentPhone,
         children: children
     };
-    
+
     // Show loading state
     const confirmBtn = document.querySelector('.confirm-btn');
     const originalText = confirmBtn.textContent;
     confirmBtn.disabled = true;
     confirmBtn.textContent = 'Adding Parent...';
-    
+
     try {
         // Call the addParent.php API
         const response = await fetch('https://sams-backend-u79d.onrender.com/api/addParent.php', {
@@ -391,12 +391,12 @@ async function confirmAddParent() {
             },
             body: JSON.stringify(parentData)
         });
-        
+
         const result = await response.json();
-        
+
         // Check for authentication errors
         if (!window.verifyToken(result)) return;
-        
+
         if (result.success === true) {
             // Show success message
             let successMessage = `✅ Successfully added parent: ${result.parent.firstname} ${result.parent.lastname}`;
@@ -404,32 +404,32 @@ async function confirmAddParent() {
                 successMessage += `\n👶 Added ${result.children_count} child(ren)`;
             }
             alert(successMessage);
-            
+
             // Close modal and clear form
             closeAddParentModal();
-            
+
             // Reload the page to show the new parent from database
             location.reload();
-            
+
         } else {
             // Handle API errors with detailed messages
             let errorMessage = '❌ Failed to add parent: ' + (result.error || 'Unknown error');
-            
+
             if (result.missing_fields) {
                 errorMessage += '\n📝 Missing fields: ' + result.missing_fields.join(', ');
             }
-            
+
             if (result.details) {
                 errorMessage += '\n🔍 Details: ' + result.details;
             }
-            
+
             alert(errorMessage);
         }
-        
+
     } catch (error) {
         console.error('Error adding parent:', error);
         alert('❌ Network error occurred while adding the parent. Please check your connection and try again.');
-        
+
     } finally {
         // Reset button state
         confirmBtn.disabled = false;
@@ -441,20 +441,20 @@ function addParentCardToPage(parent) {
     // Determine which letter section to add to
     const firstLetter = parent.lastName.charAt(0).toUpperCase();
     let letterSection = document.querySelector(`[data-letter="${firstLetter.toLowerCase()}"]`);
-    
+
     // If letter section doesn't exist, create it
     if (!letterSection) {
         letterSection = createLetterSection(firstLetter);
     }
-    
+
     // Create parent card
     const parentCard = document.createElement('div');
     parentCard.className = 'parent-card';
     parentCard.setAttribute('data-letter', firstLetter.toLowerCase());
     parentCard.setAttribute('data-added', 'true');
-    
+
     parentCard.innerHTML = `
-        <img src="/assets/Sample.png" alt="Parent" class="parent-photo">
+        <img src="/assets/icons/placeholder-parent.jpeg" alt="Parent" class="parent-photo">
         <div class="parent-info">
             <div class="parent-name">${parent.firstName} ${parent.lastName}</div>
         </div>
@@ -464,7 +464,7 @@ function addParentCardToPage(parent) {
             <button class="delete-btn" onclick="deleteAddedParent(${parent.id}, this)">Delete</button>
         </div>
     `;
-    
+
     // Add to the appropriate grid
     const parentsGrid = letterSection.querySelector('.parents-grid');
     parentsGrid.appendChild(parentCard);
@@ -475,16 +475,16 @@ function createLetterSection(letter) {
     const letterSection = document.createElement('div');
     letterSection.className = 'letter-section';
     letterSection.setAttribute('data-letter', letter.toLowerCase());
-    
+
     letterSection.innerHTML = `
         <h2 class="letter-title">${letter}</h2>
         <div class="parents-grid"></div>
     `;
-    
+
     // Insert in alphabetical order
     const existingSections = document.querySelectorAll('.letter-section');
     let inserted = false;
-    
+
     for (let section of existingSections) {
         const sectionLetter = section.getAttribute('data-letter');
         if (letter.toLowerCase() < sectionLetter) {
@@ -493,18 +493,18 @@ function createLetterSection(letter) {
             break;
         }
     }
-    
+
     if (!inserted) {
         content.appendChild(letterSection);
     }
-    
+
     return letterSection;
 }
 
 function showAddedParentDetails(parentId) {
     const parent = addedParents.find(p => p.id === parentId);
     if (!parent) return;
-    
+
     let childrenDetails = '';
     parent.children.forEach((child, index) => {
         childrenDetails += `
@@ -516,11 +516,11 @@ function showAddedParentDetails(parentId) {
             </div>
         `;
     });
-    
+
     document.getElementById('modalName').innerHTML = `${parent.firstName} ${parent.lastName}`;
     document.getElementById('modalPhone').textContent = parent.phone;
     document.getElementById('modalEmail').textContent = parent.email;
-    
+
     // Add children details to modal
     const modalInfo = document.querySelector('.modal-info');
     modalInfo.innerHTML = `
@@ -531,7 +531,7 @@ function showAddedParentDetails(parentId) {
             ${childrenDetails}
         </div>
     `;
-    
+
     document.getElementById('detailsModal').style.display = 'flex';
 }
 
@@ -539,18 +539,18 @@ function deleteAddedParent(parentId, button) {
     if (confirm('Are you sure you want to delete this parent?')) {
         // Remove from stored parents
         addedParents = addedParents.filter(p => p.id !== parentId);
-        
+
         // Remove card from page
         const parentCard = button.closest('.parent-card');
         const letterSection = parentCard.closest('.letter-section');
         parentCard.remove();
-        
+
         // If letter section is now empty, remove it
         const remainingCards = letterSection.querySelectorAll('.parent-card');
         if (remainingCards.length === 0) {
             letterSection.remove();
         }
-        
+
         // Update parent count
         updateParentCount();
     }
@@ -562,7 +562,7 @@ function updateParent(name, phone, email) {
     const nameParts = name.split(' ');
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(' ');
-    
+
     currentUpdatingParent = {
         isExisting: true,
         originalName: name,
@@ -580,37 +580,37 @@ function updateParent(name, phone, email) {
             }
         ]
     };
-    
+
     openUpdateParentModal();
 }
 
 function updateAddedParent(parentId) {
     const parent = addedParents.find(p => p.id === parentId);
     if (!parent) return;
-    
+
     currentUpdatingParent = { ...parent, isExisting: false };
     openUpdateParentModal();
 }
 
 function openUpdateParentModal() {
     document.getElementById('updateParentModal').style.display = 'flex';
-    
+
     // Pre-fill parent information
     document.getElementById('updateParentFirstName').value = currentUpdatingParent.firstName;
     document.getElementById('updateParentLastName').value = currentUpdatingParent.lastName;
     document.getElementById('updateParentEmail').value = currentUpdatingParent.email;
     document.getElementById('updateParentPhone').value = currentUpdatingParent.phone;
-    
+
     // Clear and populate children
     const childrenContainer = document.getElementById('updateChildrenContainer');
     childrenContainer.innerHTML = '';
     updateChildCounter = 0;
-    
+
     // Add existing children
     currentUpdatingParent.children.forEach(child => {
         addUpdateChildForm(child);
     });
-    
+
     // If no children, add one empty form
     if (currentUpdatingParent.children.length === 0) {
         addUpdateChildForm();
@@ -626,11 +626,11 @@ function closeUpdateParentModal() {
 function addUpdateChildForm(childData = null) {
     updateChildCounter++;
     const childrenContainer = document.getElementById('updateChildrenContainer');
-    
+
     const childForm = document.createElement('div');
     childForm.className = 'child-form';
     childForm.id = `updateChild-${updateChildCounter}`;
-    
+
     childForm.innerHTML = `
         <div class="child-form-header">
             <h4>Child ${updateChildCounter}</h4>
@@ -661,7 +661,7 @@ function addUpdateChildForm(childData = null) {
             </div>
         </div>
     `;
-    
+
     childrenContainer.appendChild(childForm);
 }
 
@@ -670,7 +670,7 @@ function removeUpdateChildForm(childId) {
     if (childForm) {
         childForm.remove();
     }
-    
+
     // If no children left, add one back
     const remainingChildren = document.querySelectorAll('#updateChildrenContainer .child-form');
     if (remainingChildren.length === 0) {
@@ -684,36 +684,36 @@ function saveParentChanges() {
     const parentLastName = document.getElementById('updateParentLastName').value.trim();
     const parentEmail = document.getElementById('updateParentEmail').value.trim();
     const parentPhone = document.getElementById('updateParentPhone').value.trim();
-    
+
     if (!parentFirstName || !parentLastName || !parentEmail || !parentPhone) {
         alert('Please fill in all parent information fields.');
         return;
     }
-    
+
     // Validate children fields
     const childForms = document.querySelectorAll('#updateChildrenContainer .child-form');
     const children = [];
-    
+
     for (let i = 0; i < childForms.length; i++) {
         const childForm = childForms[i];
         const childId = childForm.id.split('-')[1];
-        
+
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
-        
+
         if (!childFirstName || !childLastName || !childGrade) {
             alert(`Please fill in all fields for Child ${parseInt(childId)}.`);
             return;
         }
-        
+
         children.push({
             firstName: childFirstName,
             lastName: childLastName,
             grade: childGrade
         });
     }
-    
+
     if (currentUpdatingParent.isExisting && currentUpdatingParent.isFetched) {
         // Prepare children payload for API
         const childrenPayload = [];
@@ -758,30 +758,30 @@ function saveParentChanges() {
             },
             body: JSON.stringify(payload)
         })
-        .then(response => response.json())
-        .then(result => {
-            if (!window.verifyToken(result)) return;
-            if (result.success) {
-                alert('Parent information updated successfully!');
-                closeUpdateParentModal();
-                // Optionally reload parents from DB
-                loadParentsFromDatabase();
-            } else {
-                let errorMessage = 'Failed to update parent: ' + (result.error || 'Unknown error');
-                if (result.details) errorMessage += '\nDetails: ' + result.details;
-                alert(errorMessage);
-            }
-        })
-        .catch(error => {
-            console.error('Error updating parent:', error);
-            alert('Network error occurred while updating the parent. Please try again.');
-        })
-        .finally(() => {
-            if (saveBtn) {
-                saveBtn.disabled = false;
-                saveBtn.textContent = originalText;
-            }
-        });
+            .then(response => response.json())
+            .then(result => {
+                if (!window.verifyToken(result)) return;
+                if (result.success) {
+                    alert('Parent information updated successfully!');
+                    closeUpdateParentModal();
+                    // Optionally reload parents from DB
+                    loadParentsFromDatabase();
+                } else {
+                    let errorMessage = 'Failed to update parent: ' + (result.error || 'Unknown error');
+                    if (result.details) errorMessage += '\nDetails: ' + result.details;
+                    alert(errorMessage);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating parent:', error);
+                alert('Network error occurred while updating the parent. Please try again.');
+            })
+            .finally(() => {
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                }
+            });
     } else {
         // For added parents, update the stored data and card
         const parentIndex = addedParents.findIndex(p => p.id === currentUpdatingParent.id);
@@ -819,9 +819,9 @@ function showUpdatedParentDetails(firstName, lastName, phone, email, children) {
             </div>
         `;
     });
-    
+
     document.getElementById('modalName').innerHTML = `${firstName} ${lastName}`;
-    
+
     const modalInfo = document.querySelector('.modal-info');
     modalInfo.innerHTML = `
         <p><strong>Phone:</strong> ${phone}</p>
@@ -831,7 +831,7 @@ function showUpdatedParentDetails(firstName, lastName, phone, email, children) {
             ${childrenDetails}
         </div>
     `;
-    
+
     document.getElementById('detailsModal').style.display = 'flex';
 }
 
@@ -845,7 +845,7 @@ function updateExistingParent(firstName, lastName, phone, email, children) {
         phone: phone,
         children: children
     };
-    
+
     openUpdateParentModal();
 }
 
@@ -863,26 +863,26 @@ function initializeSearchAndFilters() {
     const searchInput = document.querySelector('.search-input');
     const gradeFilter = document.getElementById('gradeFilter');
     const sectionFilter = document.getElementById('sectionFilter');
-    
+
     // Search functionality
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             const searchTerm = this.value.toLowerCase();
             const parentCards = document.querySelectorAll('.parent-card');
             const letterSections = document.querySelectorAll('.letter-section');
-            
+
             parentCards.forEach(card => {
                 const parentName = card.querySelector('.parent-name').textContent.toLowerCase();
-                
+
                 const isVisible = parentName.includes(searchTerm);
-                
+
                 if (isVisible && !card.classList.contains('hidden')) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
-            
+
             // Hide/show letter sections based on whether they have visible cards
             letterSections.forEach(section => {
                 const visibleCardsInSection = section.querySelectorAll('.parent-card[style*="flex"]');
@@ -892,25 +892,25 @@ function initializeSearchAndFilters() {
                     section.style.display = 'flex';
                 }
             });
-            
+
             // Update count
             updateParentCount();
         });
     }
-    
+
     // Grade filter functionality (placeholder for future use)
     if (gradeFilter) {
-        gradeFilter.addEventListener('change', function() {
+        gradeFilter.addEventListener('change', function () {
             const selectedGrade = this.value;
             console.log('Grade filter selected:', selectedGrade);
             // Placeholder - functionality to be implemented later
             // For now, this doesn't affect the display
         });
     }
-    
+
     // Section filter functionality (placeholder for future use)
     if (sectionFilter) {
-        sectionFilter.addEventListener('change', function() {
+        sectionFilter.addEventListener('change', function () {
             const selectedSection = this.value;
             console.log('Section filter selected:', selectedSection);
             // Placeholder - functionality to be implemented later
@@ -920,7 +920,7 @@ function initializeSearchAndFilters() {
 }
 
 // Initialize search and filters after DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadParentsFromDatabase();
     initializeSearchAndFilters();
 });
@@ -941,7 +941,7 @@ function deleteParent(button) {
     if (confirm('Are you sure you want to delete this parent?')) {
         const parentCard = button.closest('.parent-card');
         parentCard.remove();
-        
+
         // Update parent count after deletion
         const parentCountElement = document.querySelector('.count-number');
         const visibleCards = document.querySelectorAll('.parent-card:not(.hidden)');
@@ -950,20 +950,20 @@ function deleteParent(button) {
 }
 
 // Close modal when clicking outside of it
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     const modal = document.getElementById('detailsModal');
     const addModal = document.getElementById('addParentModal');
-    
+
     if (event.target === modal) {
         closeDetailsModal();
     }
-    
+
     if (event.target === addModal) {
         closeAddParentModal();
     }
 });
 
 // Initialize the page when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadParentsFromDatabase();
 });

@@ -952,7 +952,7 @@ async function init() {
                 });
                 const clone = html.querySelector('.teacher-card').cloneNode(true);
                 clone.dataset.subject = (row['code'] == '[null]') ? JSON.stringify('Unassigned') : row['code'];
-                clone.querySelector('.teacher-photo').src = row['pfp'] ?? '/assets/Sample.png';
+                clone.querySelector('.teacher-photo').src = row['pfp'] ?? '/assets/icons/placeholder-parent.jpeg';
                 clone.querySelector('.teacher-name').innerText = `${row['firstname']} ${row['lastname']}`;
                 clone.querySelector('.teacher-id').innerText = courses;
                 // Attach Update and Details button handler with all real data for this card
