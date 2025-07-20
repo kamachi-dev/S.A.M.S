@@ -693,8 +693,6 @@ function removeUpdateChildForm(childId) {
             childForm.remove();
         }
     }
-        childForm.remove();
-    }
 
     // If no children left, add one back
     const remainingChildren = document.querySelectorAll('#updateChildrenContainer .child-form[style*="block"], #updateChildrenContainer .child-form:not([style*="none"])');
