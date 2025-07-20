@@ -399,25 +399,34 @@ function updateChartsWithData(stats) {
     updateDonutChart(yearChart, stats.year, 'yearDonut');
 
     // Update bar charts with weekly present, late, absent percentages
-    updateBarChart(presentBarChart, stats.weeklyData.presentPerc);
-    updateBarChart(lateBarChart, stats.weeklyData.latePerc);
-    updateBarChart(absentBarChart, stats.weeklyData.absentPerc);
+    if (stats.weeklyData && stats.weeklyData.presentPerc && stats.weeklyData.latePerc && stats.weeklyData.absentPerc) {
+        updateBarChart(presentBarChart, stats.weeklyData.presentPerc);
+        updateBarChart(lateBarChart, stats.weeklyData.latePerc);
+        updateBarChart(absentBarChart, stats.weeklyData.absentPerc);
+    } else {
+        updateBarChart(presentBarChart, [0, 0, 0, 0]);
+        updateBarChart(lateBarChart, [0, 0, 0, 0]);
+        updateBarChart(absentBarChart, [0, 0, 0, 0]);
+    }
 
     // Update student count
     const studentCountElement = document.querySelector('.count-number');
     if (studentCountElement) {
-        studentCountElement.textContent = stats.uniqueStudents.size;
+        // If uniqueStudents is a Set, use its size, otherwise fallback to 0
+        studentCountElement.textContent = stats.uniqueStudents && typeof stats.uniqueStudents.size === "number"
+            ? stats.uniqueStudents.size
+            : 0;
     }
 }
 
 // Update individual donut chart
 function updateDonutChart(chart, periodStats, chartId) {
-    const total = periodStats.total || 1;
+    // Defensive: if chart is not initialized, skip
+    if (!chart) return;
+
     const presentCount = periodStats.present || 0;
     const lateCount = periodStats.late || 0;
     const absentCount = periodStats.absent || 0;
-
-    // Calculate weighted percentage (present=1, late=0.5, absent=0)
     const attendancePercentage = periodStats.percent || 0;
 
     // Update chart data
@@ -440,6 +449,13 @@ function updateDonutChart(chart, periodStats, chartId) {
             legendItems[2].textContent = absentCount;  // Absent
         }
     }
+}
+
+// Update bar chart with new data
+function updateBarChart(chart, data) {
+    if (!chart) return;
+    chart.data.datasets[0].data = data;
+    chart.update();
 }
 
 // Download attendance data as CSV with real data
