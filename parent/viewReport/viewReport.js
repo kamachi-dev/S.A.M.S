@@ -336,10 +336,11 @@ async function handleMobileStudentSelection(cardElement, student) {
 
         // Load attendance data and display
         await loadStudentDetails(cardElement, student);
-    } else {
-        // If clicking the same card again, deselect
-        selectedStudent = null;
-    }
+    } 
+    // else {
+    //     // If clicking the same card again, deselect
+    //     selectedStudent = null;
+    // }
 }
 
 // Handle student selection on desktop
