@@ -568,7 +568,12 @@ if (false && document) {
     });
 }
 
-
+const card = createStudentCard(student);
+if (selectedStudent && student.id === selectedStudent.id) {
+    card.classList.remove('student-card');
+    card.classList.add('student-card_picked');
+    loadStudentDetails(card, student);
+}
 
 // Export functions for global access
 window.previousMonth = previousMonth;
