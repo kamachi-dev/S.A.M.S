@@ -630,6 +630,13 @@ function addUpdateChildForm(childData = null) {
     const childForm = document.createElement('div');
     childForm.className = 'child-form';
     childForm.id = `updateChild-${updateChildCounter}`;
+    
+    // Store whether this is an existing child or new child
+    const isExisting = childData && childData.id;
+    childForm.setAttribute('data-existing', isExisting ? 'true' : 'false');
+    if (isExisting) {
+        childForm.setAttribute('data-child-id', childData.id);
+    }
 
     childForm.innerHTML = `
         <div class="child-form-header">
@@ -668,11 +675,29 @@ function addUpdateChildForm(childData = null) {
 function removeUpdateChildForm(childId) {
     const childForm = document.getElementById(`updateChild-${childId}`);
     if (childForm) {
+        const isExisting = childForm.getAttribute('data-existing') === 'true';
+        
+        if (isExisting) {
+            // Mark existing child for removal instead of actually removing the form
+            childForm.style.display = 'none';
+            childForm.setAttribute('data-action', 'remove');
+            
+            // Update the header to show it's marked for removal
+            const header = childForm.querySelector('.child-form-header h4');
+            if (header) {
+                header.textContent = header.textContent + ' (Will be removed)';
+                header.style.color = '#e74c3c';
+            }
+        } else {
+            // For new children, actually remove the form
+            childForm.remove();
+        }
+    }
         childForm.remove();
     }
 
     // If no children left, add one back
-    const remainingChildren = document.querySelectorAll('#updateChildrenContainer .child-form');
+    const remainingChildren = document.querySelectorAll('#updateChildrenContainer .child-form[style*="block"], #updateChildrenContainer .child-form:not([style*="none"])');
     if (remainingChildren.length === 0) {
         addUpdateChildForm();
     }
@@ -697,7 +722,18 @@ function saveParentChanges() {
     for (let i = 0; i < childForms.length; i++) {
         const childForm = childForms[i];
         const childId = childForm.id.split('-')[1];
+        const isExisting = childForm.getAttribute('data-existing') === 'true';
+        const isHidden = childForm.style.display === 'none';
+        const originalChildId = childForm.getAttribute('data-child-id');
 
+        // Handle removed children
+        if (isExisting && isHidden) {
+            children.push({
+                id: originalChildId,
+                action: 'remove'
+            });
+            continue;
+        }
         const childFirstName = document.getElementById(`updateChildFirstName${childId}`).value.trim();
         const childLastName = document.getElementById(`updateChildLastName${childId}`).value.trim();
         const childGrade = document.getElementById(`updateChildGrade${childId}`).value;
@@ -707,28 +743,24 @@ function saveParentChanges() {
             return;
         }
 
-        children.push({
-            firstName: childFirstName,
-            lastName: childLastName,
-            grade: childGrade
-        });
+        // Determine action based on whether this is existing or new child
+        const action = isExisting ? 'update' : 'add';
+        
+        const childData = {
+            firstname: childFirstName,
+            lastname: childLastName,
+            grade_level: childGrade,
+            action: action
+        };
+        
+        // Add ID for existing children
+        if (isExisting && originalChildId) {
+            childData.id = originalChildId;
+        }
+        children.push(childData);
     }
 
     if (currentUpdatingParent.isExisting && currentUpdatingParent.isFetched) {
-        // Prepare children payload for API
-        const childrenPayload = [];
-        if (currentUpdatingParent.children && Array.isArray(currentUpdatingParent.children)) {
-            for (let i = 0; i < children.length; i++) {
-                const origChild = currentUpdatingParent.children[i] || {};
-                childrenPayload.push({
-                    id: origChild.id,
-                    firstname: children[i].firstName,
-                    lastname: children[i].lastName,
-                    grade_level: children[i].grade,
-                    action: 'update'
-                });
-            }
-        }
 
         // Prepare payload for updateParent.php
         const payload = {
@@ -737,7 +769,7 @@ function saveParentChanges() {
             lastname: parentLastName,
             email: parentEmail,
             phone: parentPhone,
-            children: childrenPayload
+            children: children
         };
 
         // Show loading state (optional)
@@ -793,7 +825,11 @@ function saveParentChanges() {
                 lastName: parentLastName,
                 email: parentEmail,
                 phone: parentPhone,
-                children: children
+                children: children.map(child => ({
+                    firstName: child.firstname,
+                    lastName: child.lastname,
+                    grade: child.grade_level
+                }))
             };
             // Update card display
             const card = document.querySelector(`[data-added="true"]`);
