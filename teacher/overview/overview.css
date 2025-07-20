@@ -42,6 +42,12 @@
 .filter-select option {
     padding: 8px;
     font-size: 16px;
+    background: white;
+    color: #333;
+}
+
+.filter-select option:hover {
+    background: #f0f0f0;
 }
 
 .download-button {

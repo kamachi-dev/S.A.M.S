@@ -3,6 +3,8 @@ base_url = 'https://sams-backend-u79d.onrender.com';
 // Global variables for charts
 let dailyChart, termChart, yearChart;
 let presentBarChart, absentBarChart, lateBarChart;
+let allDashboardData = []; // Store all data for filtering
+let filteredData = []; // Store currently filtered data
 
 // Initialize charts with placeholder data first
 function initializeCharts() {
@@ -167,6 +169,105 @@ async function fetchDashboardData() {
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
         return null;
+    }
+}
+
+// Populate filter dropdowns with unique values from data
+function populateFilterDropdowns(data) {
+    const subjects = new Set();
+    const grades = new Set();
+    
+    data.forEach(record => {
+        if (record.name) subjects.add(record.name);
+        if (record.grade_level) grades.add(record.grade_level);
+    });
+    
+    // Populate subject dropdown
+    const subjectSelect = document.querySelector('.filter-select');
+    if (subjectSelect) {
+        // Clear existing options except "All Subjects"
+        subjectSelect.innerHTML = '<option value="all">All Subjects</option>';
+        
+        Array.from(subjects).sort().forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
+        });
+    }
+    
+    // Populate grade dropdown
+    const gradeSelect = document.querySelectorAll('.filter-select')[1];
+    if (gradeSelect) {
+        // Clear existing options except "All Grades"
+        gradeSelect.innerHTML = '<option value="all">All Grades</option>';
+        
+        Array.from(grades).sort().forEach(grade => {
+            const option = document.createElement('option');
+            option.value = grade;
+            option.textContent = grade;
+            gradeSelect.appendChild(option);
+        });
+    }
+}
+
+// Filter data based on selected criteria
+function filterData() {
+    const subjectSelect = document.querySelector('.filter-select');
+    const gradeSelect = document.querySelectorAll('.filter-select')[1];
+    
+    const selectedSubject = subjectSelect ? subjectSelect.value : 'all';
+    const selectedGrade = gradeSelect ? gradeSelect.value : 'all';
+    
+    console.log('Filtering by:', { subject: selectedSubject, grade: selectedGrade });
+    
+    filteredData = allDashboardData.filter(record => {
+        const subjectMatch = selectedSubject === 'all' || record.name === selectedSubject;
+        const gradeMatch = selectedGrade === 'all' || record.grade_level === selectedGrade;
+        
+        return subjectMatch && gradeMatch;
+    });
+    
+    console.log('Filtered data count:', filteredData.length);
+    
+    // Update charts with filtered data
+    if (filteredData.length > 0) {
+        const stats = calculateAttendanceStats(filteredData);
+        updateChartsWithData(stats);
+    } else {
+        // Show empty state if no data matches filters
+        const emptyStats = {
+            daily: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+            term: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+            year: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+            uniqueStudents: new Set(),
+            weeklyData: {
+                present: [0, 0, 0, 0],
+                absent: [0, 0, 0, 0],
+                late: [0, 0, 0, 0]
+            }
+        };
+        updateChartsWithData(emptyStats);
+    }
+}
+
+// Setup filter event listeners
+function setupFilterListeners() {
+    const subjectSelect = document.querySelector('.filter-select');
+    const gradeSelect = document.querySelectorAll('.filter-select')[1];
+    
+    if (subjectSelect) {
+        subjectSelect.addEventListener('change', function() {
+            console.log('Subject filter changed to:', this.value);
+            filterData();
+        });
+    }
+    
+    if (gradeSelect) {
+        gradeSelect.addEventListener('change', function() {
+            console.log('Grade filter changed to:', this.value);
+            filterData();
+        });
     }
 }
 
@@ -414,11 +515,24 @@ async function initializeDashboard() {
     const dashboardData = await fetchDashboardData();
     
     if (dashboardData && Array.isArray(dashboardData)) {
+        // Store all data for filtering
+        allDashboardData = dashboardData;
+        filteredData = dashboardData; // Initially show all data
+        
+        // Populate filter dropdowns
+        populateFilterDropdowns(dashboardData);
+        
+        // Setup filter event listeners
+        setupFilterListeners();
+        
+        // Calculate and display initial stats
         const stats = calculateAttendanceStats(dashboardData);
         updateChartsWithData(stats);
         console.log('Dashboard updated with real data:', stats);
     } else {
         console.log('Using placeholder data - API data not available');
+        // Setup filter listeners even with placeholder data
+        setupFilterListeners();
     }
 }
 
