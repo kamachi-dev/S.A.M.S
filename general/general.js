@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.previousMonth = previousMonth;
     window.nextMonth = nextMonth;
     window.viewStudentProfile = viewStudentProfile;
-
 });
 
 
