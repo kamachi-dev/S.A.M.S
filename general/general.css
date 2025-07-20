@@ -143,14 +143,16 @@ nav > ul > li > a {
 }
 .content-border {
     display: block;
-    background-color: rgb(122, 22, 22);
-    height: calc(100.5vh - 8.4em);
+    background-color: rgb(255, 255, 255);
+    /* height: calc(100.5vh - 8.4em); */
+    height: 100%;
     position: fixed;
     top: 8.1em;
     width: 100%;
     z-index: 3;
-    padding: 0;
-    margin: 0;
+    /* padding: 0;
+    margin: 0; */
+    padding-bottom: 8em;
     box-sizing: border-box;
     border: 20px solid #ffffff;
 }

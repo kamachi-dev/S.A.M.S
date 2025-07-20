@@ -687,6 +687,10 @@ body {
 }
 
 @media only screen and (max-width: 750px) {
+    .navBar {
+        visibility: hidden;
+        position: absolute;
+    }
     .section-title {
         text-align: center;
     }

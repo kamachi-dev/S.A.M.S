@@ -319,28 +319,28 @@ function showStudentDetails(status, element) {
 }
 
 // Handle student selection on mobile
-// async function handleMobileStudentSelection(cardElement, student) {
-//     const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
+async function handleMobileStudentSelection(cardElement, student) {
+    const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
 
-//     // Reset all other cards
-//     document.querySelectorAll('.student-card_picked').forEach(card => {
-//         card.classList.remove('student-card_picked');
-//         card.classList.add('student-card');
-//         const charts = card.querySelector(".charts-top-bottom");
-//         if (charts) charts.remove();
-//     });
+    // Reset all other cards
+    document.querySelectorAll('.student-card_picked').forEach(card => {
+        card.classList.remove('student-card_picked');
+        card.classList.add('student-card');
+        const charts = card.querySelector(".charts-top-bottom");
+        if (charts) charts.remove();
+    });
 
-//     if (!isAlreadyPicked) {
-//         cardElement.classList.remove('student-card');
-//         cardElement.classList.add('student-card_picked');
+    if (!isAlreadyPicked) {
+        cardElement.classList.remove('student-card');
+        cardElement.classList.add('student-card_picked');
 
-//         // Load attendance data and display
-//         await loadStudentDetails(cardElement, student);
-//     } else {
-//         // If clicking the same card again, deselect
-//         selectedStudent = null;
-//     }
-// }
+        // Load attendance data and display
+        await loadStudentDetails(cardElement, student);
+    } else {
+        // If clicking the same card again, deselect
+        selectedStudent = null;
+    }
+}
 
 // Handle student selection on desktop
 async function handleDesktopStudentSelection(student) {
