@@ -322,7 +322,16 @@ function showStudentDetails(status, element) {
 async function handleMobileStudentSelection(cardElement, student) {
     const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
 
-    // Reset all other cards
+    // If already picked, unpick it (toggle behavior)
+    if (isAlreadyPicked) {
+        cardElement.classList.remove('student-card_picked');
+        cardElement.classList.add('student-card');
+        const charts = cardElement.querySelector(".charts-top-bottom");
+        if (charts) charts.remove();
+        return; // Exit early
+    }
+
+    // Reset all other picked cards
     document.querySelectorAll('.student-card_picked').forEach(card => {
         card.classList.remove('student-card_picked');
         card.classList.add('student-card');
@@ -330,14 +339,12 @@ async function handleMobileStudentSelection(cardElement, student) {
         if (charts) charts.remove();
     });
 
-    if (!isAlreadyPicked) {
-        cardElement.classList.remove('student-card');
-        cardElement.classList.add('student-card_picked');
-
-        // Load attendance data and display
-        await loadStudentDetails(cardElement, student);
-    } 
+    // Pick the new card
+    cardElement.classList.remove('student-card');
+    cardElement.classList.add('student-card_picked');
+    await loadStudentDetails(cardElement, student);
 }
+
 
 // Handle student selection on desktop
 async function handleDesktopStudentSelection(student) {
@@ -495,14 +502,6 @@ async function displayStudents() {
         // Create and append student cards
         students.forEach(student => {
             const card = createStudentCard(student);
-
-            // Restore the picked card if it matches selectedStudent
-            if (selectedStudent && student.id === selectedStudent.id) {
-                card.classList.remove('student-card');
-                card.classList.add('student-card_picked');
-                loadStudentDetails(card, student); // Re-insert the charts and calendar
-            }
-
             studentsGrid.appendChild(card);
         });
 
@@ -525,6 +524,7 @@ window.addEventListener('resize', () => {
     const isNowMobile = window.matchMedia("(max-width: 750px)").matches;
 
     if (wasMobile && !isNowMobile) {
+        // Reset when switching from mobile to desktop
         const leftPanel = document.querySelector(".students-left");
         if (leftPanel) {
             leftPanel.innerHTML = `
@@ -534,8 +534,11 @@ window.addEventListener('resize', () => {
             `;
         }
 
-        // Keep selectedStudent (don't set to null)
-        displayStudents(); // Will now preserve selectedStudent if set
+        // Clear selected student
+        selectedStudent = null;
+
+        // Refresh student display
+        displayStudents();
     }
 
     wasMobile = isNowMobile;
