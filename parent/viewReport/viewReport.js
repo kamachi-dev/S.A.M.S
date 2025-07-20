@@ -537,24 +537,24 @@ window.addEventListener('resize', () => {
     wasMobile = isNowMobile;
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Load and display students
-    displayStudents();
+// document.addEventListener('DOMContentLoaded', function () {
+//     // Load and display students
+//     displayStudents();
 
-    // Set up global navigation functions
-    window.previousMonth = previousMonth;
-    window.nextMonth = nextMonth;
-    window.viewStudentProfile = viewStudentProfile;
+//     // Set up global navigation functions
+//     window.previousMonth = previousMonth;
+//     window.nextMonth = nextMonth;
+//     window.viewStudentProfile = viewStudentProfile;
 
-    document.addEventListener('click', function(event) {
-        const pickedCard = document.querySelector('.student-card_picked');
-        if (pickedCard && !pickedCard.contains(event.target)) {
-            pickedCard.classList.remove('student-card_picked');
+//     document.addEventListener('click', function(event) {
+//         const pickedCard = document.querySelector('.student-card_picked');
+//         if (pickedCard && !pickedCard.contains(event.target)) {
+//             pickedCard.classList.remove('student-card_picked');
 
-            selectedStudent = null;
-        }
-    });
-});
+//             selectedStudent = null;
+//         }
+//     });
+// });
 
 // Export functions for global access
 window.previousMonth = previousMonth;
