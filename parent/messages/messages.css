@@ -306,15 +306,12 @@
     }
     .menu {
         position: fixed;
-        /* so it stays at viewport position */
         width: 1.9em;
         aspect-ratio: 1 / 1;
-        /* bottom-ish */
+        top: calc(100vh - 5.4em);
         left: 1em;
-        /* left side */
         z-index: 10;
         cursor: pointer;
-        /* REMOVE visibility: hidden */
     }
 
     .hiddenMenu {
@@ -353,6 +350,7 @@
         height: 48px;
         width: 300px;
         background: #a7161e;
+        top: -2em;
     }
 
     .menuNav {
