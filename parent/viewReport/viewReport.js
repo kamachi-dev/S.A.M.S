@@ -322,16 +322,7 @@ function showStudentDetails(status, element) {
 async function handleMobileStudentSelection(cardElement, student) {
     const isAlreadyPicked = cardElement.classList.contains('student-card_picked');
 
-    // If already picked, unpick it (toggle behavior)
-    if (isAlreadyPicked) {
-        cardElement.classList.remove('student-card_picked');
-        cardElement.classList.add('student-card');
-        const charts = cardElement.querySelector(".charts-top-bottom");
-        if (charts) charts.remove();
-        return; // Exit early
-    }
-
-    // Reset all other picked cards
+    // Reset all other cards
     document.querySelectorAll('.student-card_picked').forEach(card => {
         card.classList.remove('student-card_picked');
         card.classList.add('student-card');
@@ -339,12 +330,14 @@ async function handleMobileStudentSelection(cardElement, student) {
         if (charts) charts.remove();
     });
 
-    // Pick the new card
-    cardElement.classList.remove('student-card');
-    cardElement.classList.add('student-card_picked');
-    await loadStudentDetails(cardElement, student);
-}
+    if (!isAlreadyPicked) {
+        cardElement.classList.remove('student-card');
+        cardElement.classList.add('student-card_picked');
 
+        // Load attendance data and display
+        await loadStudentDetails(cardElement, student);
+    } 
+}
 
 // Handle student selection on desktop
 async function handleDesktopStudentSelection(student) {
@@ -554,6 +547,33 @@ document.addEventListener('DOMContentLoaded', function () {
     window.nextMonth = nextMonth;
     window.viewStudentProfile = viewStudentProfile;
 });
+
+// Prevent student-card_picked from auto-closing on mobile
+if (false && document) {
+    document.addEventListener('click', (event) => {
+        const isMobile = window.matchMedia("(max-width: 750px)").matches;
+        if (!isMobile) return; // Only apply this behavior on mobile
+
+        const pickedCard = document.querySelector('.student-card_picked');
+
+        if (pickedCard && !pickedCard.contains(event.target)) {
+            pickedCard.classList.remove('student-card_picked');
+            pickedCard.classList.add('student-card');
+
+            const charts = pickedCard.querySelector(".charts-top-bottom");
+            if (charts) charts.remove();
+
+            selectedStudent = null;
+        }
+    });
+}
+
+const card = createStudentCard(student);
+if (selectedStudent && student.id === selectedStudent.id) {
+    card.classList.remove('student-card');
+    card.classList.add('student-card_picked');
+    loadStudentDetails(card, student);
+}
 
 // Export functions for global access
 window.previousMonth = previousMonth;
