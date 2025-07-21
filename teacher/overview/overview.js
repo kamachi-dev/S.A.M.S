@@ -203,6 +203,8 @@ function populateFilterDropdowns(data) {
     // Use attendance data for subjects
     data.forEach(record => {
         if (record.name) subjects.add(record.name);
+        // Also collect grades from attendance data to ensure we have all grades
+        if (record.grade_level) grades.add(record.grade_level);
     });
 
     // Populate subject dropdown
@@ -227,11 +229,15 @@ function populateFilterDropdowns(data) {
 
         Array.from(grades).sort().forEach(grade => {
             const option = document.createElement('option');
+            // Store the full grade format (e.g., "Grade 12") as the value
             option.value = grade;
             option.textContent = grade;
             gradeSelect.appendChild(option);
         });
     }
+    
+    console.log('Available grades:', Array.from(grades)); // Debug log
+    console.log('Available subjects:', Array.from(subjects)); // Debug log
 }
 
 // Filter data based on selected criteria
@@ -246,12 +252,24 @@ function filterData() {
 
     filteredData = allDashboardData.filter(record => {
         const subjectMatch = selectedSubject === 'all' || record.name === selectedSubject;
-        const gradeMatch = selectedGrade === 'all' || record.grade_level === selectedGrade;
+        
+        // Fix grade matching - handle both "Grade 12" format and "12" format
+        let gradeMatch = selectedGrade === 'all';
+        if (!gradeMatch && record.grade_level) {
+            // If selectedGrade is "Grade 12", match with "Grade 12"
+            // If selectedGrade is "12", match with "Grade 12" 
+            if (selectedGrade.startsWith('Grade ')) {
+                gradeMatch = record.grade_level === selectedGrade;
+            } else {
+                gradeMatch = record.grade_level === `Grade ${selectedGrade}` || record.grade_level === selectedGrade;
+            }
+        }
 
         return subjectMatch && gradeMatch;
     });
 
     console.log('Filtered data count:', filteredData.length);
+    console.log('Sample filtered record:', filteredData[0]); // Debug log
 
     // Update charts with filtered data
     if (filteredData.length > 0) {
@@ -671,6 +689,9 @@ async function initializeDashboard() {
         allDashboardData = dashboardData;
         filteredData = dashboardData; // Initially show all data
 
+        console.log('Dashboard data loaded:', dashboardData.length, 'records');
+        console.log('Sample record:', dashboardData[0]); // Debug log
+        
         // Populate filter dropdowns
         populateFilterDropdowns(dashboardData);
 
