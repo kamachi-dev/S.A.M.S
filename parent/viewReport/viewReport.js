@@ -208,6 +208,8 @@ function generateCalendar(month, year) {
         emptyDay.textContent = nextMonthDay;
         calendarGrid.appendChild(emptyDay);
     }
+    const container = document.querySelector('.charts-top-bottom') || document.querySelector('.students-left');
+    setupCalendarNavigation(container);
 }
 
 // Show attendance details for a specific day
