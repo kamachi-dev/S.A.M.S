@@ -208,8 +208,6 @@ function generateCalendar(month, year) {
         emptyDay.textContent = nextMonthDay;
         calendarGrid.appendChild(emptyDay);
     }
-    const container = document.querySelector('.charts-top-bottom') || document.querySelector('.students-left');
-    setupCalendarNavigation(container);
 }
 
 // Show attendance details for a specific day
@@ -450,13 +448,13 @@ function generateTimeBlocks(todaysAttendance) {
 }
 
 // Setup calendar navigation
-function setupCalendarNavigation(container) {
-    const prevBtn = container.querySelector(".nav-button.prev");
-    const nextBtn = container.querySelector(".nav-button.next");
+// function setupCalendarNavigation(container) {
+//     const prevBtn = container.querySelector(".nav-button.prev");
+//     const nextBtn = container.querySelector(".nav-button.next");
 
-    if (prevBtn) prevBtn.addEventListener("click", previousMonth);
-    if (nextBtn) nextBtn.addEventListener("click", nextMonth);
-}
+//     if (prevBtn) prevBtn.addEventListener("click", previousMonth);
+//     if (nextBtn) nextBtn.addEventListener("click", nextMonth);
+// }
 
 // Extract unique students from records
 function extractStudentsFromRecords(records) {
