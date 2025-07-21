@@ -5,6 +5,7 @@ let dailyChart, termChart, yearChart;
 let presentBarChart, absentBarChart, lateBarChart;
 let allDashboardData = []; // Store all data for filtering
 let filteredData = []; // Store currently filtered data
+let allStudentsData = []; // Store enrolled students data for accurate count
 
 // Initialize charts with placeholder data first
 function initializeCharts() {
@@ -141,7 +142,53 @@ function initializeBarCharts() {
 // Fetch dashboard data from API
 async function fetchDashboardData() {
     try {
-        const response = await fetch(`${base_url}/api/getTeacherDashboard.php`, {
+        // Fetch both attendance data and enrolled students data
+        const [attendanceResponse, studentsResponse] = await Promise.all([
+            fetch(`${base_url}/api/getTeacherDashboard.php`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Provider': window.provider,
+                    'Token': window.token,
+                }
+            }),
+            fetch(`${base_url}/api/getStudentTeacher.php`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Provider': window.provider,
+                    'Token': window.token,
+                }
+            })
+        ]);
+
+        const attendanceData = await attendanceResponse.json();
+        const studentsData = await studentsResponse.json();
+
+        if (!window.verifyToken(attendanceData) || !window.verifyToken(studentsData)) {
+            console.error('Token verification failed');
+            return null;
+        }
+
+        if (attendanceData.error || studentsData.error) {
+            console.error('API Error:', attendanceData.error || studentsData.error);
+            return null;
+        }
+
+        // Store both datasets
+        allStudentsData = Array.isArray(studentsData) ? studentsData : [];
+        
+        console.log('Dashboard data received:', attendanceData);
+        console.log('Students data received:', studentsData);
+        return attendanceData;
+
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        return null;
+    }
+}
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -177,9 +224,14 @@ function populateFilterDropdowns(data) {
     const subjects = new Set();
     const grades = new Set();
 
+    // Use students data for more accurate grade population
+    allStudentsData.forEach(student => {
+        if (student.grade_level) grades.add(student.grade_level);
+    });
+
+    // Use attendance data for subjects
     data.forEach(record => {
         if (record.name) subjects.add(record.name);
-        if (record.grade_level) grades.add(record.grade_level);
     });
 
     // Populate subject dropdown
@@ -409,14 +461,40 @@ function updateChartsWithData(stats) {
         updateBarChart(absentBarChart, [0, 0, 0, 0]);
     }
 
-    // Update student count
+    // Update student count using enrolled students data
     const studentCountElement = document.querySelector('.count-number');
     if (studentCountElement) {
-        // If uniqueStudents is a Set, use its size, otherwise fallback to 0
-        studentCountElement.textContent = stats.uniqueStudents && typeof stats.uniqueStudents.size === "number"
-            ? stats.uniqueStudents.size
-            : 0;
+        // Use filtered enrolled students count for accurate display
+        const filteredStudentsCount = getFilteredStudentsCount();
+        studentCountElement.textContent = filteredStudentsCount;
     }
+}
+
+// Get filtered students count based on current filters
+function getFilteredStudentsCount() {
+    const subjectSelect = document.querySelector('.filter-select');
+    const gradeSelect = document.querySelectorAll('.filter-select')[1];
+
+    const selectedSubject = subjectSelect ? subjectSelect.value : 'all';
+    const selectedGrade = gradeSelect ? gradeSelect.value : 'all';
+
+    let filteredStudents = allStudentsData;
+
+    // Filter by grade if selected
+    if (selectedGrade !== 'all') {
+        filteredStudents = filteredStudents.filter(student => 
+            student.grade_level === selectedGrade
+        );
+    }
+
+    // Filter by subject if selected (check if student is enrolled in courses with that subject)
+    if (selectedSubject !== 'all') {
+        // This would require enrollment data to properly filter by subject
+        // For now, we'll use all students if subject filter is applied
+        // You might need to enhance this based on your enrollment table structure
+    }
+
+    return filteredStudents.length;
 }
 
 // Update individual donut chart

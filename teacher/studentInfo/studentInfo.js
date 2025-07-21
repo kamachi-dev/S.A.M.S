@@ -175,7 +175,6 @@ function showError(message) {
 function initializeFilters() {
     const searchInput = document.querySelector('.search-input');
     const gradeFilter = document.getElementById('gradeFilter');
-    const sectionFilter = document.getElementById('sectionFilter');
 
     // Populate grade filter with available grades
     if (gradeFilter && allStudents.length > 0) {
@@ -234,14 +233,6 @@ function initializeFilters() {
             if (searchInput) {
                 searchInput.value = '';
             }
-        });
-    }
-
-    // Section filter functionality (placeholder for future use)
-    if (sectionFilter) {
-        sectionFilter.addEventListener('change', function () {
-            // This can be implemented when section data is available
-            console.log('Section filter selected:', this.value);
         });
     }
 }
