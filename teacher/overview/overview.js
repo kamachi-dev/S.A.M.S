@@ -189,49 +189,15 @@ async function fetchDashboardData() {
         return null;
     }
 }
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
-            }
-        });
-
-        const data = await response.json();
-
-        if (!window.verifyToken(data)) {
-            console.error('Token verification failed');
-            return null;
-        }
-
-        if (data.error) {
-            console.error('API Error:', data.error);
-            return null;
-        }
-
-        console.log('Dashboard data received:', data);
-        return data;
-
-    } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        return null;
-    }
-}
 
 // Populate filter dropdowns with unique values from data
 function populateFilterDropdowns(data) {
     const subjects = new Set();
     const grades = new Set();
 
-    // Use students data for more accurate grade population
-    allStudentsData.forEach(student => {
-        if (student.grade_level) grades.add(student.grade_level);
-    });
-
-    // Use attendance data for subjects
     data.forEach(record => {
         if (record.name) subjects.add(record.name);
+        if (record.grade_level) grades.add(record.grade_level);
     });
 
     // Populate subject dropdown
@@ -461,40 +427,14 @@ function updateChartsWithData(stats) {
         updateBarChart(absentBarChart, [0, 0, 0, 0]);
     }
 
-    // Update student count using enrolled students data
+    // Update student count
     const studentCountElement = document.querySelector('.count-number');
     if (studentCountElement) {
-        // Use filtered enrolled students count for accurate display
-        const filteredStudentsCount = getFilteredStudentsCount();
-        studentCountElement.textContent = filteredStudentsCount;
+        // If uniqueStudents is a Set, use its size, otherwise fallback to 0
+        studentCountElement.textContent = stats.uniqueStudents && typeof stats.uniqueStudents.size === "number"
+            ? stats.uniqueStudents.size
+            : 0;
     }
-}
-
-// Get filtered students count based on current filters
-function getFilteredStudentsCount() {
-    const subjectSelect = document.querySelector('.filter-select');
-    const gradeSelect = document.querySelectorAll('.filter-select')[1];
-
-    const selectedSubject = subjectSelect ? subjectSelect.value : 'all';
-    const selectedGrade = gradeSelect ? gradeSelect.value : 'all';
-
-    let filteredStudents = allStudentsData;
-
-    // Filter by grade if selected
-    if (selectedGrade !== 'all') {
-        filteredStudents = filteredStudents.filter(student => 
-            student.grade_level === selectedGrade
-        );
-    }
-
-    // Filter by subject if selected (check if student is enrolled in courses with that subject)
-    if (selectedSubject !== 'all') {
-        // This would require enrollment data to properly filter by subject
-        // For now, we'll use all students if subject filter is applied
-        // You might need to enhance this based on your enrollment table structure
-    }
-
-    return filteredStudents.length;
 }
 
 // Update individual donut chart
