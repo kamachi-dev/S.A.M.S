@@ -29,6 +29,7 @@ function previousMonth() {
         currentMonth = 11;
         currentYear--;
     }
+    console.log('Previous month:', currentMonth, currentYear); // Debug log
     generateCalendar(currentMonth, currentYear);
 }
 
@@ -38,6 +39,7 @@ function nextMonth() {
         currentMonth = 0;
         currentYear++;
     }
+    console.log('Next month:', currentMonth, currentYear); // Debug log
     generateCalendar(currentMonth, currentYear);
 }
 
@@ -415,9 +417,9 @@ async function generateChartsHTML(student) {
                 </div>
                 <div class="calendar-container">
                     <div class="calendar-header">
-                        <button class="nav-button prev" onclick="previousMonth()"><</button>
+                        <button class="nav-button prev"><</button>
                         <h3 id="monthYear">December 2026</h3>
-                        <button class="nav-button next" onclick="nextMonth()">></button>
+                        <button class="nav-button next">></button>
                     </div>
                     <div class="calendar-grid">
                         <div class="day-header">Mo</div>
@@ -449,11 +451,31 @@ function generateTimeBlocks(todaysAttendance) {
 
 // Setup calendar navigation
 function setupCalendarNavigation(container) {
+    // Remove existing event listeners to prevent duplicates
     const prevBtn = container.querySelector(".nav-button.prev");
     const nextBtn = container.querySelector(".nav-button.next");
-
-    if (prevBtn) prevBtn.addEventListener("click", previousMonth);
-    if (nextBtn) nextBtn.addEventListener("click", nextMonth);
+    
+    if (prevBtn) {
+        // Clone node to remove all event listeners
+        const newPrevBtn = prevBtn.cloneNode(true);
+        prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+        newPrevBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            previousMonth();
+        });
+    }
+    
+    if (nextBtn) {
+        // Clone node to remove all event listeners
+        const newNextBtn = nextBtn.cloneNode(true);
+        nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+        newNextBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            nextMonth();
+        });
+    }
 }
 
 // Extract unique students from records
