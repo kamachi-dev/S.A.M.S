@@ -6,6 +6,7 @@ let presentBarChart, absentBarChart, lateBarChart;
 let allDashboardData = []; // Store all data for filtering
 let filteredData = []; // Store currently filtered data
 let allStudentsData = []; // Store enrolled students data for accurate count
+let currentSearchTerm = ''; // Store current search term
 
 // Initialize charts with placeholder data first
 function initializeCharts() {
@@ -142,9 +143,141 @@ function initializeBarCharts() {
 // Fetch dashboard data from API
 async function fetchDashboardData() {
     try {
-        // Fetch both attendance data and enrolled students data
-        const [attendanceResponse, studentsResponse] = await Promise.all([
-            fetch(`${base_url}/api/getTeacherDashboard.php`, {
+        // Use the new enhanced API that includes grade levels
+        const response = await fetch(`${base_url}/api/getTeacherDashboardWithGrades.php`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            }
+        });
+
+        const data = await response.json();
+
+        if (!window.verifyToken(data)) {
+            console.error('Token verification failed');
+            return null;
+        }
+
+        if (data.error) {
+            console.error('API Error:', data.error);
+            return null;
+        }
+
+        // The new API returns both attendance and student data combined
+        allStudentsData = data.students || [];
+        
+        console.log('Enhanced dashboard data received:', data.attendance);
+        console.log('Students data received:', data.students);
+        return data.attendance;
+
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        
+        // Fallback to original API if new one fails
+        try {
+            const [attendanceResponse, studentsResponse] = await Promise.all([
+                fetch(`${base_url}/api/getTeacherDashboard.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Provider': window.provider,
+                        'Token': window.token,
+                    }
+                }),
+                fetch(`${base_url}/api/getStudentTeacher.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Provider': window.provider,
+                        'Token': window.token,
+                    }
+                })
+            ]);
+
+            const attendanceData = await attendanceResponse.json();
+            const studentsData = await studentsResponse.json();
+
+            if (!window.verifyToken(attendanceData) || !window.verifyToken(studentsData)) {
+                console.error('Token verification failed');
+                return null;
+            }
+
+            if (attendanceData.error || studentsData.error) {
+                console.error('API Error:', attendanceData.error || studentsData.error);
+                return null;
+            }
+
+            // Store both datasets
+            allStudentsData = Array.isArray(studentsData) ? studentsData : [];
+            
+            console.log('Fallback - Dashboard data received:', attendanceData);
+            console.log('Fallback - Students data received:', studentsData);
+            return attendanceData;
+
+        } catch (fallbackError) {
+            console.error('Fallback API also failed:', fallbackError);
+            return null;
+        }
+    }
+}
+
+// Enhanced filter data function with search support
+function filterData() {
+    const subjectSelect = document.querySelector('.filter-select');
+    const gradeSelect = document.querySelectorAll('.filter-select')[1];
+    const searchInput = document.getElementById('studentSearch');
+
+    const selectedSubject = subjectSelect ? subjectSelect.value : 'all';
+    const selectedGrade = gradeSelect ? gradeSelect.value : 'all';
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    
+    currentSearchTerm = searchTerm; // Store for Excel export
+
+    console.log('Filtering by:', { 
+        subject: selectedSubject, 
+        grade: selectedGrade, 
+        search: searchTerm 
+    });
+
+    filteredData = allDashboardData.filter(record => {
+        // Subject filter
+        const subjectMatch = selectedSubject === 'all' || record.name === selectedSubject;
+        
+        // Grade filter - improved logic
+        let gradeMatch = selectedGrade === 'all';
+        if (!gradeMatch && record.grade_level) {
+            const recordGrade = record.grade_level.toString().toLowerCase().trim();
+            const filterGrade = selectedGrade.toString().toLowerCase().trim();
+            
+            // Handle various grade formats
+            gradeMatch = recordGrade === filterGrade || 
+                        recordGrade === filterGrade.replace('grade ', '') ||
+                        recordGrade.replace('grade ', '') === filterGrade ||
+                        recordGrade.includes(filterGrade.replace('grade ', '')) ||
+                        filterGrade.includes(recordGrade.replace('grade ', ''));
+        }
+        
+        // Student name search filter
+        let searchMatch = true;
+        if (searchTerm !== '') {
+            const studentName = `${record.firstname} ${record.lastname}`.toLowerCase();
+            searchMatch = studentName.includes(searchTerm);
+        }
+
+        const matches = subjectMatch && gradeMatch && searchMatch;
+        
+        // Debug logging for grade filter issues
+        if (selectedGrade !== 'all' && record.grade_level) {
+            console.log(`Grade filter debug - Record: "${record.grade_level}" vs Filter: "${selectedGrade}" = ${gradeMatch}`);
+        }
+
+        return matches;
+    });
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -302,6 +435,7 @@ function filterData() {
 function setupFilterListeners() {
     const subjectSelect = document.querySelector('.filter-select');
     const gradeSelect = document.querySelectorAll('.filter-select')[1];
+    const searchInput = document.getElementById('studentSearch');
 
     if (subjectSelect) {
         subjectSelect.addEventListener('change', function () {
@@ -314,6 +448,19 @@ function setupFilterListeners() {
         gradeSelect.addEventListener('change', function () {
             console.log('Grade filter changed to:', this.value);
             filterData();
+        });
+    }
+
+    // Student search functionality
+    if (searchInput) {
+        // Add debounced search to avoid too many filter calls
+        let searchTimeout;
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                console.log('Search term changed to:', this.value);
+                filterData();
+            }, 300); // 300ms delay
         });
     }
 }
@@ -579,7 +726,7 @@ async function downloadAttendanceData() {
         if (currentStudents.length > 0) {
             summaryData.push(
                 [''],
-                ['Students Included in This Report'],
+                ['Students Included in This Report' + (currentSearchTerm ? ` (Search: "${currentSearchTerm}")` : '')],
                 ['Student Name', 'Grade Level', 'Course']
             );
             
@@ -628,7 +775,8 @@ async function downloadAttendanceData() {
         const date = new Date().toISOString().split('T')[0];
         const subjectSuffix = subject !== 'all' && subject !== 'All Subjects' ? `_${subject.replace(/\s+/g, '_')}` : '';
         const gradeSuffix = grade !== 'all' && grade !== 'All Grades' ? `_${grade.replace(/\s+/g, '_')}` : '';
-        const filename = `SAMS_Attendance_Report_${date}${subjectSuffix}${gradeSuffix}.xlsx`;
+        const searchSuffix = currentSearchTerm ? `_Search_${currentSearchTerm.replace(/\s+/g, '_')}` : '';
+        const filename = `SAMS_Attendance_Report_${date}${subjectSuffix}${gradeSuffix}${searchSuffix}.xlsx`;
 
         // Download the file
         XLSX.writeFile(workbook, filename);
@@ -691,6 +839,7 @@ function downloadCSVFallback() {
         ['Generated on:', new Date().toLocaleDateString()],
         ['Subject:', subject],
         ['Grade:', grade],
+        ['Search Term:', currentSearchTerm || 'None'],
         ['Students Count:', currentStudents.length],
         [''], // Empty row for spacing
     ];
