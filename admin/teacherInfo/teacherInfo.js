@@ -676,6 +676,12 @@ function populateUpdateDropdowns() {
                         }
                         courseNameDropdown.appendChild(option);
                     });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = data.error || 'No unassigned courses';
+                    option.disabled = true;
+                    courseNameDropdown.appendChild(option);
                 }
             }
 
@@ -693,6 +699,12 @@ function populateUpdateDropdowns() {
                         }
                         courseCodeDropdown.appendChild(option);
                     });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = data.error || 'No unassigned courses';
+                    option.disabled = true;
+                    courseCodeDropdown.appendChild(option);
                 }
             }
         })
@@ -815,6 +827,7 @@ function saveTeacherChanges() {
         const selectedOption = nameDropdown.options[nameDropdown.selectedIndex];
         if (selectedOption && selectedOption.getAttribute('data-course-id')) {
             selectedCourseId = selectedOption.getAttribute('data-course-id');
+            console.log('Course name dropdown - selected course ID:', selectedCourseId, 'from option:', selectedOption);
         }
     }
 
@@ -831,6 +844,7 @@ function saveTeacherChanges() {
             const selectedOption = codeDropdown.options[codeDropdown.selectedIndex];
             if (selectedOption && selectedOption.getAttribute('data-course-id')) {
                 selectedCourseId = selectedOption.getAttribute('data-course-id');
+                console.log('Course code dropdown - selected course ID:', selectedCourseId, 'from option:', selectedOption);
             }
         }
     }
