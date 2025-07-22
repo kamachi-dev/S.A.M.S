@@ -788,57 +788,51 @@ function saveTeacherChanges() {
     }
 
     // Dual input: prioritize input field, fallback to dropdown, default to empty for unassignment
-    let department = 'Unassigned';
-    let courseName = 'Unassigned';
-    let courseCode = 'Unassigned';
+    let department = '';
+    let courseName = '';
+    let courseCode = '';
     let selectedCourseId = null;
 
     const depInput = document.getElementById('updateTeacherDepartment');
     const depDropdown = document.getElementById('updateTeacherDepartmentDropdown');
 
-    // Department logic: input field takes priority, then dropdown, then empty for unassignment
+    // Department logic: input field takes priority, then dropdown
     if (depInput && depInput.value.trim() !== '') {
         department = depInput.value.trim();
-    } else if (depDropdown && depDropdown.value) {
+    } else if (depDropdown && depDropdown.value && depDropdown.selectedIndex > 0) {
         department = depDropdown.value;
-    } else {
-        department = ''; // Empty means unassign
     }
 
     const nameInput = document.getElementById('updateCourseName');
     const nameDropdown = document.getElementById('updateCourseNameDropdown');
 
-    // Course name logic: input field takes priority, then dropdown, then empty for unassignment
+    // Course name logic: input field takes priority, then dropdown
     if (nameInput && nameInput.value.trim() !== '') {
         courseName = nameInput.value.trim();
-    } else if (nameDropdown && nameDropdown.value) {
+    } else if (nameDropdown && nameDropdown.value && nameDropdown.selectedIndex > 0) {
         courseName = nameDropdown.value;
         // When using dropdown, we need to get the course ID from the option's data attribute
         const selectedOption = nameDropdown.options[nameDropdown.selectedIndex];
-        if (selectedOption) {
+        if (selectedOption && selectedOption.getAttribute('data-course-id')) {
             selectedCourseId = selectedOption.getAttribute('data-course-id');
         }
-    } else {
-        courseName = ''; // Empty means unassign
     }
 
     const codeInput = document.getElementById('updateCourseCode');
     const codeDropdown = document.getElementById('updateCourseCodeDropdown');
 
-    // Course code logic: input field takes priority, then dropdown, then empty for unassignment
+    // Course code logic: input field takes priority, then dropdown
     if (codeInput && codeInput.value.trim() !== '') {
         courseCode = codeInput.value.trim();
-    } else if (codeDropdown && codeDropdown.value) {
+    } else if (codeDropdown && codeDropdown.value && codeDropdown.selectedIndex > 0) {
         courseCode = codeDropdown.value;
         // When using dropdown, we need to get the course ID from the option's data attribute
         if (!selectedCourseId) { // Only if not already set by name dropdown
             const selectedOption = codeDropdown.options[codeDropdown.selectedIndex];
-            if (selectedOption) {
+            if (selectedOption && selectedOption.getAttribute('data-course-id')) {
                 selectedCourseId = selectedOption.getAttribute('data-course-id');
             }
         }
-    } else {
-        courseCode = ''; // Empty means unassign
     }
 
     console.log('Update values:', { department, courseName, courseCode, selectedCourseId }); // Debug log
@@ -866,17 +860,17 @@ function saveTeacherChanges() {
             teacherData.selected_course_id = selectedCourseId;
             console.log('Sending selected_course_id:', selectedCourseId);
         } else {
-            // Only send course name/code if not using dropdown selection
-            if (courseName !== 'Unassigned' && courseName !== '') {
+            // Only send course name/code if they have values (not empty strings)
+            if (courseName && courseName.trim() !== '') {
                 teacherData.course_name = courseName;
             }
-            if (courseCode !== 'Unassigned' && courseCode !== '') {
+            if (courseCode && courseCode.trim() !== '') {
                 teacherData.course_code = courseCode;
             }
         }
         
-        // Add department if provided
-        if (department !== 'Unassigned' && department !== '') {
+        // Add department if provided (not empty string)
+        if (department && department.trim() !== '') {
             teacherData.department = department;
         }
 
