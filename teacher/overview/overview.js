@@ -749,22 +749,71 @@ async function downloadAttendanceData() {
             ['Week 4', stats.weeklyData.present[3] + '%', stats.weeklyData.late[3] + '%', stats.weeklyData.absent[3] + '%']
         ];
 
-        // Add students list section
+        // Add individual student attendance summaries
         if (currentStudents.length > 0) {
             summaryData.push(
                 [''],
-                ['Students Included in This Report' + (currentSearchTerm ? ` (Search: "${currentSearchTerm}")` : '')],
-                ['Student Name', 'Grade Level', 'Course']
+                ['Individual Student Attendance Summary' + (currentSearchTerm ? ` (Search: "${currentSearchTerm}")` : '')],
+                ['Student Name', 'Grade Level', 'Course', 'Total Records', 'Present', 'Late', 'Absent', 'Excused', 'Attendance %']
             );
             
-            // Sort students by name for better readability
-            currentStudents.sort((a, b) => a.name.localeCompare(b.name));
+            // Calculate individual student stats
+            const studentStats = new Map();
             
-            currentStudents.forEach(student => {
+            // Process each attendance record to build per-student statistics
+            dataToExport.forEach(record => {
+                const studentKey = `${record.firstname} ${record.lastname}`;
+                
+                if (!studentStats.has(studentKey)) {
+                    studentStats.set(studentKey, {
+                        name: studentKey,
+                        grade: record.grade_level || 'N/A',
+                        course: record.name || 'N/A',
+                        present: 0,
+                        late: 0,
+                        absent: 0,
+                        excused: 0,
+                        total: 0
+                    });
+                }
+                
+                const studentData = studentStats.get(studentKey);
+                const attendance = parseInt(record.attendance);
+                
+                // Map attendance codes: 0=excused, 1=absent, 2=late, 3=present
+                switch (attendance) {
+                    case 0: studentData.excused++; break;
+                    case 1: studentData.absent++; break;
+                    case 2: studentData.late++; break;
+                    case 3: studentData.present++; break;
+                    default: studentData.absent++; break;
+                }
+                
+                // Only count non-excused records in total for percentage calculation
+                if (attendance !== 0) {
+                    studentData.total++;
+                }
+            });
+            
+            // Sort students by name and add to summary
+            const sortedStudents = Array.from(studentStats.values()).sort((a, b) => a.name.localeCompare(b.name));
+            
+            sortedStudents.forEach(student => {
+                // Calculate attendance percentage (Present + Late counts as attended)
+                const attendancePercentage = student.total > 0 
+                    ? (((student.present + student.late * 0.5) / student.total) * 100).toFixed(2) + '%'
+                    : '0%';
+                
                 summaryData.push([
                     student.name,
                     student.grade,
-                    student.course
+                    student.course,
+                    student.present + student.late + student.absent + student.excused,
+                    student.present,
+                    student.late,
+                    student.absent,
+                    student.excused,
+                    attendancePercentage
                 ]);
             });
         }
@@ -773,29 +822,96 @@ async function downloadAttendanceData() {
         const summaryWS = XLSX.utils.aoa_to_sheet(summaryData);
         XLSX.utils.book_append_sheet(workbook, summaryWS, 'Summary');
 
-        // Detailed records data
+        // Create individual student detailed worksheets
+        if (dataToExport.length > 0) {
+            // Group records by student
+            const studentRecords = new Map();
+            
+            dataToExport.forEach(record => {
+                const studentKey = `${record.firstname} ${record.lastname}`;
+                
+                if (!studentRecords.has(studentKey)) {
+                    studentRecords.set(studentKey, []);
+                }
+                
+                studentRecords.get(studentKey).push(record);
+            });
+            
+            // Create a worksheet for each student (limit to first 10 students to avoid too many sheets)
+            let studentCount = 0;
+            const maxStudentSheets = 10;
+            
+            for (const [studentName, records] of studentRecords) {
+                if (studentCount >= maxStudentSheets) break;
+                
+                // Sort records by date (newest first)
+                records.sort((a, b) => new Date(b.sent) - new Date(a.sent));
+                
+                const studentData = [
+                    [`Attendance Details: ${studentName}`],
+                    ['Grade Level:', records[0].grade_level || 'N/A'],
+                    ['Course:', records[0].name || 'N/A'],
+                    ['Total Records:', records.length],
+                    [''],
+                    ['Date', 'Time', 'Attendance Status', 'Confidence', 'Distance']
+                ];
+                
+                records.forEach(record => {
+                    const attendanceStatus = ['Excused', 'Absent', 'Late', 'Present'][parseInt(record.attendance)] || 'Unknown';
+                    const recordDate = new Date(record.sent);
+                    
+                    studentData.push([
+                        recordDate.toLocaleDateString(),
+                        recordDate.toLocaleTimeString(),
+                        attendanceStatus,
+                        record.confidence ? parseFloat(record.confidence).toFixed(2) : 'N/A',
+                        record.distance ? parseFloat(record.distance).toFixed(2) : 'N/A'
+                    ]);
+                });
+                
+                // Create worksheet for this student
+                const studentWS = XLSX.utils.aoa_to_sheet(studentData);
+                
+                // Clean student name for sheet name (remove special characters)
+                const cleanStudentName = studentName.replace(/[^a-zA-Z0-9\s]/g, '').substring(0, 25);
+                XLSX.utils.book_append_sheet(workbook, studentWS, cleanStudentName);
+                
+                studentCount++;
+            }
+        }
+
+        // All records detailed data (keep existing functionality)
         if (dataToExport.length > 0) {
             const detailedData = [
-                ['Student Name', 'Course', 'Grade Level', 'Date', 'Time', 'Attendance Status']
+                ['Student Name', 'Course', 'Grade Level', 'Date', 'Time', 'Attendance Status', 'Confidence', 'Distance']
             ];
 
-            dataToExport.forEach(record => {
+            // Sort by date and student name
+            const sortedData = [...dataToExport].sort((a, b) => {
+                const dateCompare = new Date(b.sent) - new Date(a.sent);
+                if (dateCompare !== 0) return dateCompare;
+                return `${a.firstname} ${a.lastname}`.localeCompare(`${b.firstname} ${b.lastname}`);
+            });
+
+            sortedData.forEach(record => {
                 const attendanceStatus = ['Excused', 'Absent', 'Late', 'Present'][parseInt(record.attendance)] || 'Unknown';
-                const date = new Date(record.sent).toLocaleDateString();
+                const recordDate = new Date(record.sent);
 
                 detailedData.push([
                     `${record.firstname} ${record.lastname}`,
                     record.name || 'N/A',
                     record.grade_level || 'N/A',
-                    date,
-                    date,
-                    attendanceStatus
+                    recordDate.toLocaleDateString(),
+                    recordDate.toLocaleTimeString(),
+                    attendanceStatus,
+                    record.confidence ? parseFloat(record.confidence).toFixed(2) : 'N/A',
+                    record.distance ? parseFloat(record.distance).toFixed(2) : 'N/A'
                 ]);
             });
 
             // Create detailed records worksheet
             const detailedWS = XLSX.utils.aoa_to_sheet(detailedData);
-            XLSX.utils.book_append_sheet(workbook, detailedWS, 'Detailed Records');
+            XLSX.utils.book_append_sheet(workbook, detailedWS, 'All Records');
         }
 
         // Generate filename with current date and filters
