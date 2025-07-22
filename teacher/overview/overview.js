@@ -594,7 +594,6 @@ async function downloadAttendanceData() {
                 ]);
             });
         }
-        ];
 
         // Create summary worksheet
         const summaryWS = XLSX.utils.aoa_to_sheet(summaryData);
