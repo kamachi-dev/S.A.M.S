@@ -743,10 +743,10 @@ async function downloadAttendanceData() {
             [''],
             ['Weekly Breakdown (Percentages)'],
             ['Week', 'Present %', 'Late %', 'Absent %'],
-            ['Week 1', stats.weeklyData.present[0] + '%', stats.weeklyData.late[0] + '%', stats.weeklyData.absent[0] + '%'],
-            ['Week 2', stats.weeklyData.present[1] + '%', stats.weeklyData.late[1] + '%', stats.weeklyData.absent[1] + '%'],
-            ['Week 3', stats.weeklyData.present[2] + '%', stats.weeklyData.late[2] + '%', stats.weeklyData.absent[2] + '%'],
-            ['Week 4', stats.weeklyData.present[3] + '%', stats.weeklyData.late[3] + '%', stats.weeklyData.absent[3] + '%']
+            ['Week 1', stats.weeklyData.presentPerc[0] + '%', stats.weeklyData.latePerc[0] + '%', stats.weeklyData.absentPerc[0] + '%'],
+            ['Week 2', stats.weeklyData.presentPerc[1] + '%', stats.weeklyData.latePerc[1] + '%', stats.weeklyData.absentPerc[1] + '%'],
+            ['Week 3', stats.weeklyData.presentPerc[2] + '%', stats.weeklyData.latePerc[2] + '%', stats.weeklyData.absentPerc[2] + '%'],
+            ['Week 4', stats.weeklyData.presentPerc[3] + '%', stats.weeklyData.latePerc[3] + '%', stats.weeklyData.absentPerc[3] + '%']
         ];
 
         // Add individual student attendance summaries
