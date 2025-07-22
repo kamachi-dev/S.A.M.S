@@ -253,15 +253,21 @@ function filterData() {
     filteredData = allDashboardData.filter(record => {
         const subjectMatch = selectedSubject === 'all' || record.name === selectedSubject;
         
-        // Fix grade matching - handle both "Grade 12" format and "12" format
+        // Fix grade matching - handle multiple grade formats
         let gradeMatch = selectedGrade === 'all';
         if (!gradeMatch && record.grade_level) {
-            // If selectedGrade is "Grade 12", match with "Grade 12"
-            // If selectedGrade is "12", match with "Grade 12" 
-            if (selectedGrade.startsWith('Grade ')) {
-                gradeMatch = record.grade_level === selectedGrade;
+            const recordGrade = record.grade_level.toString().toLowerCase();
+            const filterGrade = selectedGrade.toString().toLowerCase();
+            
+            // Handle various grade formats: "Grade 12", "12", "grade 12", etc.
+            if (filterGrade.includes('grade')) {
+                // Selected filter is "Grade 12" format
+                gradeMatch = recordGrade === filterGrade || recordGrade === filterGrade.replace('grade ', '');
             } else {
-                gradeMatch = record.grade_level === `Grade ${selectedGrade}` || record.grade_level === selectedGrade;
+                // Selected filter is just "12" format
+                gradeMatch = recordGrade === filterGrade || 
+                           recordGrade === `grade ${filterGrade}` ||
+                           recordGrade.includes(filterGrade);
             }
         }
 
@@ -269,7 +275,7 @@ function filterData() {
     });
 
     console.log('Filtered data count:', filteredData.length);
-    console.log('Sample filtered record:', filteredData[0]); // Debug log
+    console.log('Sample filtered records:', filteredData.slice(0, 3)); // Debug log
 
     // Update charts with filtered data
     if (filteredData.length > 0) {
@@ -499,6 +505,24 @@ function updateBarChart(chart, data) {
     chart.update();
 }
 
+// Get list of students in current filtered data
+function getCurrentStudentsList() {
+    const students = new Set();
+    const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+    
+    dataToUse.forEach(record => {
+        const studentName = `${record.firstname} ${record.lastname}`;
+        const studentInfo = {
+            name: studentName,
+            grade: record.grade_level || 'Unknown',
+            course: record.name || 'Unknown Course'
+        };
+        students.add(JSON.stringify(studentInfo));
+    });
+    
+    return Array.from(students).map(s => JSON.parse(s));
+}
+
 // Download attendance data as CSV with real data
 async function downloadAttendanceData() {
     try {
@@ -512,6 +536,9 @@ async function downloadAttendanceData() {
 
         // Calculate current statistics for export
         const stats = calculateAttendanceStats(dataToExport);
+
+        // Get current students list
+        const currentStudents = getCurrentStudentsList();
 
         // Get current filter values
         const subjectSelect = document.querySelector('.filter-select');
@@ -529,7 +556,8 @@ async function downloadAttendanceData() {
             ['Generated on:', new Date().toLocaleDateString()],
             ['Subject Filter:', subject === 'all' ? 'All Subjects' : subject],
             ['Grade Filter:', grade === 'all' ? 'All Grades' : grade],
-            ['Total Students:', stats.uniqueStudents.size],
+            ['Total Students in View:', stats.uniqueStudents.size],
+            ['Total Records:', dataToExport.length],
             [''],
             ['Period', 'Present', 'Late', 'Absent', 'Excused', 'Total', 'Attendance %'],
             ['Daily', stats.daily.present, stats.daily.late, stats.daily.absent, stats.daily.excused, stats.daily.total,
@@ -547,6 +575,27 @@ async function downloadAttendanceData() {
             ['Week 4', stats.weeklyData.present[3] + '%', stats.weeklyData.late[3] + '%', stats.weeklyData.absent[3] + '%']
         ];
 
+        // Add students list section
+        if (currentStudents.length > 0) {
+            summaryData.push(
+                [''],
+                ['Students Included in This Report'],
+                ['Student Name', 'Grade Level', 'Course']
+            );
+            
+            // Sort students by name for better readability
+            currentStudents.sort((a, b) => a.name.localeCompare(b.name));
+            
+            currentStudents.forEach(student => {
+                summaryData.push([
+                    student.name,
+                    student.grade,
+                    student.course
+                ]);
+            });
+        }
+        ];
+
         // Create summary worksheet
         const summaryWS = XLSX.utils.aoa_to_sheet(summaryData);
         XLSX.utils.book_append_sheet(workbook, summaryWS, 'Summary');
@@ -554,7 +603,7 @@ async function downloadAttendanceData() {
         // Detailed records data
         if (dataToExport.length > 0) {
             const detailedData = [
-                ['Student Name', 'Course', 'Grade Level', 'Date', 'Attendance Status']
+                ['Student Name', 'Course', 'Grade Level', 'Date', 'Time', 'Attendance Status']
             ];
 
             dataToExport.forEach(record => {
@@ -565,6 +614,7 @@ async function downloadAttendanceData() {
                     `${record.firstname} ${record.lastname}`,
                     record.name || 'N/A',
                     record.grade_level || 'N/A',
+                    date,
                     date,
                     attendanceStatus
                 ]);
@@ -593,6 +643,9 @@ async function downloadAttendanceData() {
 
 // Fallback CSV download function
 function downloadCSVFallback() {
+
+    // Get current students list
+    const currentStudents = getCurrentStudentsList();
 
     // Get current filter values
     const subjectSelect = document.querySelector('.filter-select');
@@ -639,11 +692,26 @@ function downloadCSVFallback() {
         ['Generated on:', new Date().toLocaleDateString()],
         ['Subject:', subject],
         ['Grade:', grade],
+        ['Students Count:', currentStudents.length],
         [''], // Empty row for spacing
     ];
 
     // Combine header info with attendance data
     const fullData = [...headerInfo, ...attendanceData];
+
+    // Add students list if available
+    if (currentStudents.length > 0) {
+        fullData.push(
+            [''], // Empty row
+            ['Students in This Report'],
+            ['Student Name', 'Grade Level', 'Course']
+        );
+        
+        currentStudents.sort((a, b) => a.name.localeCompare(b.name));
+        currentStudents.forEach(student => {
+            fullData.push([student.name, student.grade, student.course]);
+        });
+    }
 
     // Convert to CSV format
     const csvContent = fullData.map(row =>
