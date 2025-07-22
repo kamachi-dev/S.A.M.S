@@ -171,6 +171,7 @@ async function fetchDashboardData() {
         
         console.log('Enhanced dashboard data received:', data.attendance);
         console.log('Students data received:', data.students);
+        
         return data.attendance;
 
     } catch (error) {
