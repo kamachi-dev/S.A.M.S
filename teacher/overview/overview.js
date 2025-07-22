@@ -269,24 +269,39 @@ function filterData() {
             searchMatch = studentName.includes(searchTerm);
         }
 
-        const matches = subjectMatch && gradeMatch && searchMatch;
-        
-        // Debug logging for grade filter issues
-        if (selectedGrade !== 'all' && record.grade_level) {
-            console.log(`Grade filter debug - Record: "${record.grade_level}" vs Filter: "${selectedGrade}" = ${gradeMatch}`);
-        }
-
-        return matches;
+        return subjectMatch && gradeMatch && searchMatch;
     });
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Provider': window.provider,
-                    'Token': window.token,
-                }
-            }),
-            fetch(`${base_url}/api/getStudentTeacher.php`, {
+
+    console.log('Filtered data count:', filteredData.length);
+    console.log('Sample filtered records:', filteredData.slice(0, 3)); // Debug log
+
+    // Update charts with filtered data
+    if (filteredData.length > 0) {
+        const stats = calculateAttendanceStats(filteredData);
+        updateChartsWithData(stats);
+    } else {
+        // Show empty state if no data matches filters
+        const emptyStats = {
+            daily: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+            term: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+            year: { present: 0, late: 0, absent: 0, excused: 0, total: 0 },
+            uniqueStudents: new Set(),
+            weeklyData: {
+                present: [0, 0, 0, 0],
+                absent: [0, 0, 0, 0],
+                late: [0, 0, 0, 0]
+            }
+        };
+        updateChartsWithData(emptyStats);
+    }
+}
+
+// Fallback API fetch function
+async function fetchFallbackData() {
+    try {
+        // Fallback to original API if new one fails
+        const [attendanceResponse, studentsResponse] = await Promise.all([
+            fetch(`${base_url}/api/getTeacherDashboard.php`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -377,11 +392,15 @@ function populateFilterDropdowns(data) {
 function filterData() {
     const subjectSelect = document.querySelector('.filter-select');
     const gradeSelect = document.querySelectorAll('.filter-select')[1];
+    const searchInput = document.getElementById('studentSearch');
 
     const selectedSubject = subjectSelect ? subjectSelect.value : 'all';
     const selectedGrade = gradeSelect ? gradeSelect.value : 'all';
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    
+    currentSearchTerm = searchTerm; // Store for Excel export
 
-    console.log('Filtering by:', { subject: selectedSubject, grade: selectedGrade });
+    console.log('Filtering by:', { subject: selectedSubject, grade: selectedGrade, search: searchTerm });
 
     filteredData = allDashboardData.filter(record => {
         const subjectMatch = selectedSubject === 'all' || record.name === selectedSubject;
@@ -404,7 +423,14 @@ function filterData() {
             }
         }
 
-        return subjectMatch && gradeMatch;
+        // Student name search filter
+        let searchMatch = true;
+        if (searchTerm !== '') {
+            const studentName = `${record.firstname} ${record.lastname}`.toLowerCase();
+            searchMatch = studentName.includes(searchTerm);
+        }
+
+        return subjectMatch && gradeMatch && searchMatch;
     });
 
     console.log('Filtered data count:', filteredData.length);
