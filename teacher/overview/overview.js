@@ -74,25 +74,52 @@ function initializeCharts() {
 
 // Initialize bar charts
 function initializeBarCharts() {
-    const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-
+    const currentDate = new Date();
+    const currentMonthName = currentDate.toLocaleDateString('en-US', { month: 'long' });
+    const currentYear = currentDate.getFullYear();
+    
+    // Create more descriptive week labels with actual date ranges
+    const weekLabels = getWeekLabelsForCurrentMonth();
+    
     // Present bar chart (blue)
     presentBarChart = new Chart(document.getElementById('presentBar').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: weeks,
+            labels: weekLabels,
             datasets: [{
-                label: 'Present (%)',
+                label: `Present % - ${currentMonthName} ${currentYear}`,
                 data: [0, 0, 0, 0],
                 backgroundColor: '#0093ff'
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: true } },
+            plugins: { 
+                legend: { display: true },
+                title: {
+                    display: true,
+                    text: `Weekly Present Attendance - ${currentMonthName} ${currentYear}`,
+                    font: { size: 14, weight: 'bold' },
+                    padding: { bottom: 10 }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, max: 100, grid: { color: "#e7e7e7" } },
-                x: { grid: { display: false } }
+                y: { 
+                    beginAtZero: true, 
+                    max: 100, 
+                    grid: { color: "#e7e7e7" },
+                    title: {
+                        display: true,
+                        text: 'Percentage (%)'
+                    }
+                },
+                x: { 
+                    grid: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Week of Month'
+                    }
+                }
             }
         }
     });
@@ -101,19 +128,41 @@ function initializeBarCharts() {
     absentBarChart = new Chart(document.getElementById('absentBar').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: weeks,
+            labels: weekLabels,
             datasets: [{
-                label: 'Absent (%)',
+                label: `Absent % - ${currentMonthName} ${currentYear}`,
                 data: [0, 0, 0, 0],
                 backgroundColor: '#ef2722'
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: true } },
+            plugins: { 
+                legend: { display: true },
+                title: {
+                    display: true,
+                    text: `Weekly Absent Attendance - ${currentMonthName} ${currentYear}`,
+                    font: { size: 14, weight: 'bold' },
+                    padding: { bottom: 10 }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, max: 100, grid: { color: "#e7e7e7" } },
-                x: { grid: { display: false } }
+                y: { 
+                    beginAtZero: true, 
+                    max: 100, 
+                    grid: { color: "#e7e7e7" },
+                    title: {
+                        display: true,
+                        text: 'Percentage (%)'
+                    }
+                },
+                x: { 
+                    grid: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Week of Month'
+                    }
+                }
             }
         }
     });
@@ -122,22 +171,70 @@ function initializeBarCharts() {
     lateBarChart = new Chart(document.getElementById('lateBar').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: weeks,
+            labels: weekLabels,
             datasets: [{
-                label: 'Late (%)',
+                label: `Late % - ${currentMonthName} ${currentYear}`,
                 data: [0, 0, 0, 0],
                 backgroundColor: '#ffcd03'
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: true } },
+            plugins: { 
+                legend: { display: true },
+                title: {
+                    display: true,
+                    text: `Weekly Late Attendance - ${currentMonthName} ${currentYear}`,
+                    font: { size: 14, weight: 'bold' },
+                    padding: { bottom: 10 }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, max: 100, grid: { color: "#e7e7e7" } },
-                x: { grid: { display: false } }
+                y: { 
+                    beginAtZero: true, 
+                    max: 100, 
+                    grid: { color: "#e7e7e7" },
+                    title: {
+                        display: true,
+                        text: 'Percentage (%)'
+                    }
+                },
+                x: { 
+                    grid: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Week of Month'
+                    }
+                }
             }
         }
     });
+}
+
+// Helper function to generate descriptive week labels
+function getWeekLabelsForCurrentMonth() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+    
+    // Get first day of current month
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    
+    const weekLabels = [];
+    
+    for (let week = 0; week < 4; week++) {
+        const weekStart = Math.max(1, (week * 7) + 1);
+        const weekEnd = Math.min(lastDay.getDate(), (week + 1) * 7);
+        
+        if (weekStart <= lastDay.getDate()) {
+            weekLabels.push(`Week ${week + 1} (${weekStart}-${weekEnd})`);
+        } else {
+            weekLabels.push(`Week ${week + 1}`);
+        }
+    }
+    
+    return weekLabels;
 }
 
 // Fetch dashboard data from API
