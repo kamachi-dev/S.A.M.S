@@ -345,16 +345,21 @@
 
 .advanced-analytics-section {
     margin-top: 30px;
+    margin-bottom: 30px;
     width: 100%;
+    padding: 20px 0;
+    background: rgba(255, 255, 255, 0.1); /* Temporary background to make it visible */
+    border: 2px dashed #ff0000; /* Temporary red border for debugging */
+    text-align: center;
 }
 
 .analytics-toggle {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    padding: 15px 30px;
+    padding: 20px 40px; /* Made larger */
     border-radius: 25px;
-    font-size: 16px;
+    font-size: 18px; /* Made larger */
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -362,6 +367,8 @@
     display: block;
     margin: 0 auto 20px auto;
     font-family: inherit;
+    position: relative;
+    z-index: 1000; /* Ensure it's on top */
 }
 
 .analytics-toggle:hover {
