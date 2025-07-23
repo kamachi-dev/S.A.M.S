@@ -1634,6 +1634,57 @@ async function notifyParent(studentName, attendancePercentage, courseName) {
 // Make function globally available
 window.notifyParent = notifyParent;
 
+// Simple notification function using existing system
+function notifyParent(studentName, attendancePercentage, courseName) {
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = 'Sending...';
+    button.disabled = true;
+
+    fetch(`${base_url}/api/sendAttendanceNotification.php`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'Provider': window.provider,
+            'Token': window.token,
+        },
+        body: JSON.stringify({
+            studentName: studentName,
+            courseName: courseName
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (!window.verifyToken(result)) return;
+        
+        if (result.success) {
+            button.textContent = 'Sent ✓';
+            button.style.backgroundColor = '#28a745';
+            button.style.color = 'white';
+            
+            alert(`✅ Notification sent!\n\nStudent: ${result.data.student_name}\nParent will see: "Your child's attendance is at risk!" in their notifications.`);
+        } else {
+            throw new Error(result.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.textContent = 'Failed ✗';
+        button.style.backgroundColor = '#dc3545';
+        button.style.color = 'white';
+        alert('Failed to send notification: ' + error.message);
+    })
+    .finally(() => {
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = '';
+            button.style.color = '';
+            button.disabled = false;
+        }, 3000);
+    });
+}
+
 // Update the existing updateChartsWithData function to also update advanced analytics
 const originalUpdateChartsWithData = updateChartsWithData;
 updateChartsWithData = function(stats) {
