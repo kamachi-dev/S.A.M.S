@@ -65,8 +65,8 @@ function displayStudents(students) {
             groupedStudents[gradeLevel] = {};
         }
 
-        // For now, we'll use a default section since the API might not provide section info
-        const section = student.department ?? 'unassigned'; // You can modify this based on your data structure
+        // Group students by their enrolled course instead of department
+        const section = student.name ?? 'unassigned'; // Use course name (Mathematics, Science, etc.)
         if (!groupedStudents[gradeLevel][section]) {
             groupedStudents[gradeLevel][section] = [];
         }
@@ -135,7 +135,7 @@ function createStudentCard(student) {
             <div class="student-name">${fullName}</div>
         </div>
         <div class="action-buttons">
-            <button class="details-btn" onclick="showStudentDetails('${fullName}', '${studentId}', '${student.phone || 'N/A'}', '${student.email || 'N/A'}', '${student.grade_level || 'N/A'}')">Details</button>
+            <button class="details-btn" onclick="showStudentDetails('${fullName}', '${studentId}', '${student.phone || 'N/A'}', '${student.email || 'N/A'}', '${student.grade_level || 'N/A'}', '${student.name || 'N/A'}')">Details</button>
         </div>
     `;
 
@@ -246,12 +246,12 @@ function updateStudentCount() {
 }
 
 // Modal functionality
-function showStudentDetails(name, studentId, phone, email, gradeSection) {
+function showStudentDetails(name, studentId, phone, email, gradeSection, courseName) {
     document.getElementById('modalName').textContent = name;
     document.getElementById('modalStudentId').textContent = studentId;
     document.getElementById('modalPhone').textContent = phone;
     document.getElementById('modalEmail').textContent = email;
-    document.getElementById('modalGradeSection').textContent = gradeSection;
+    document.getElementById('modalGradeSection').textContent = `${gradeSection} - ${courseName}`;
     document.getElementById('detailsModal').style.display = 'block';
 }
 
