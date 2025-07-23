@@ -1643,6 +1643,11 @@ function notifyParent(studentName, attendancePercentage, courseName) {
     button.textContent = 'Sending...';
     button.disabled = true;
 
+    console.log('🔔 Notification Debug Info:');
+    console.log('Student Name:', studentName);
+    console.log('Course Name:', courseName);
+    console.log('Attendance %:', attendancePercentage);
+
     fetch(`${base_url}/api/sendAttendanceNotification.php`, {
         method: 'POST',
         credentials: 'include',
@@ -1658,6 +1663,8 @@ function notifyParent(studentName, attendancePercentage, courseName) {
     })
     .then(response => response.json())
     .then(result => {
+        console.log('📨 API Response:', result);
+        
         if (!window.verifyToken(result)) return;
         
         if (result.success) {
@@ -1667,15 +1674,15 @@ function notifyParent(studentName, attendancePercentage, courseName) {
             
             alert(`✅ Notification sent!\n\nStudent: ${result.data.student_name}\nParent will see: "Your child's attendance is at risk!" in their notifications.`);
         } else {
-            throw new Error(result.error);
+            throw new Error(result.error || 'Unknown error');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('❌ Error:', error);
         button.textContent = 'Failed ✗';
         button.style.backgroundColor = '#dc3545';
         button.style.color = 'white';
-        alert('Failed to send notification: ' + error.message);
+        alert(`Failed to send notification: ${error.message}\n\nCheck browser console for debug info.`);
     })
     .finally(() => {
         setTimeout(() => {
