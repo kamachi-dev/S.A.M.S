@@ -1132,6 +1132,19 @@ async function initializeDashboard() {
     // Initialize charts first
     initializeCharts();
 
+    // Initialize advanced analytics charts
+    setTimeout(() => {
+        initializeAdvancedCharts();
+        // Generate initial data for advanced analytics
+        const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+        if (dataToUse.length > 0) {
+            updateAdvancedAnalytics(dataToUse);
+        } else {
+            // Initialize with placeholder data
+            generateStudentRiskAlerts([]);
+        }
+    }, 500); // Delay to ensure DOM is ready
+
     // Check if we have the required authentication
     if (!window.token) {
         console.error('No authentication token found');
@@ -1159,6 +1172,9 @@ async function initializeDashboard() {
         const stats = calculateAttendanceStats(dashboardData);
         updateChartsWithData(stats);
         console.log('Dashboard updated with real data:', stats);
+
+        // Update advanced analytics with real data
+        updateAdvancedAnalytics(dashboardData);
     } else {
         console.log('Using placeholder data - API data not available');
         // Setup filter listeners even with placeholder data
@@ -1168,7 +1184,6 @@ async function initializeDashboard() {
 
 // Make functions globally available
 window.downloadAttendanceData = downloadAttendanceData;
-window.toggleAdvancedAnalytics = toggleAdvancedAnalytics;
 
 // ===== ADVANCED ANALYTICS FUNCTIONS =====
 
@@ -1540,51 +1555,15 @@ function updateRiskAlerts(records) {
     alertsContainer.innerHTML = alertsHTML;
 }
 
-// Toggle advanced analytics section
-function toggleAdvancedAnalytics() {
-    const analyticsContent = document.querySelector('.analytics-content');
-    const toggleButton = document.querySelector('.analytics-toggle');
-    
-    if (analyticsContent.style.display === 'none' || analyticsContent.style.display === '') {
-        analyticsContent.style.display = 'block';
-        toggleButton.innerHTML = `
-            <img src="/assets/icons/information-button.png" alt="Analytics" class="analytics-icon">
-            Hide Advanced Analytics
-        `;
-        
-        // Initialize charts if they haven't been initialized yet
-        if (!trendChart) {
-            setTimeout(() => {
-                initializeAdvancedCharts();
-                // Update with current data
-                const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
-                updateAdvancedAnalytics(dataToUse);
-            }, 100); // Small delay to ensure DOM is ready
-        } else {
-            // Update with current data
-            const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
-            updateAdvancedAnalytics(dataToUse);
-        }
-        
-    } else {
-        analyticsContent.style.display = 'none';
-        toggleButton.innerHTML = `
-            <img src="/assets/icons/information-button.png" alt="Analytics" class="analytics-icon">
-            Show Advanced Analytics
-        `;
-    }
-}
-
 // Update the existing updateChartsWithData function to also update advanced analytics
 const originalUpdateChartsWithData = updateChartsWithData;
 updateChartsWithData = function(stats) {
     // Call original function
     originalUpdateChartsWithData(stats);
     
-    // Update advanced analytics if they're visible
-    const analyticsContent = document.querySelector('.analytics-content');
-    if (analyticsContent && analyticsContent.style.display === 'block') {
-        const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+    // Update advanced analytics with current data
+    const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+    if (dataToUse.length > 0) {
         updateAdvancedAnalytics(dataToUse);
     }
 };

@@ -143,30 +143,33 @@
 
                         <!-- Advanced Analytics Section -->
                         <div class="advanced-analytics-section">
-                            <button class="analytics-toggle" onclick="toggleAdvancedAnalytics()">
-                                <img src="/assets/icons/information-button.png" alt="Analytics" class="analytics-icon">
-                                Show Advanced Analytics
-                            </button>
+                            <div class="analytics-header">
+                                <h3>Advanced Analytics</h3>
+                            </div>
                             
-                            <div class="analytics-content" style="display: none;">
+                            <div class="analytics-content">
                                 <div class="analytics-grid">
                                     <!-- 30-Day Trend -->
                                     <div class="analytics-chart trend-chart">
+                                        <h4>30-Day Attendance Trend</h4>
                                         <canvas id="trendChart"></canvas>
                                     </div>
                                     
                                     <!-- Day Pattern -->
                                     <div class="analytics-chart day-pattern-chart">
+                                        <h4>Day-of-Week Pattern</h4>
                                         <canvas id="dayPatternChart"></canvas>
                                     </div>
                                     
                                     <!-- Monthly Comparison -->
                                     <div class="analytics-chart comparative-chart">
+                                        <h4>6-Month Comparison</h4>
                                         <canvas id="comparativeChart"></canvas>
                                     </div>
                                     
                                     <!-- Student Risk Alerts -->
                                     <div class="analytics-alerts">
+                                        <h4>Student Risk Alerts</h4>
                                         <div id="riskAlerts"></div>
                                     </div>
                                 </div>

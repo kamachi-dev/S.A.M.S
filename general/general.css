@@ -19,7 +19,8 @@ body {
     width: 100%;
     display: flex;
     margin: 0;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     justify-content: center;
     font-family: sans-serif;
 }
