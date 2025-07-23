@@ -348,27 +348,37 @@
     margin-bottom: 30px;
     width: 100%;
     padding: 20px 0;
-    background: rgba(255, 255, 255, 0.1); /* Temporary background to make it visible */
-    border: 2px dashed #ff0000; /* Temporary red border for debugging */
     text-align: center;
 }
 
 .analytics-toggle {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     color: white;
     border: none;
-    padding: 20px 40px; /* Made larger */
-    border-radius: 25px;
-    font-size: 18px; /* Made larger */
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    display: block;
-    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: inherit;
     position: relative;
-    z-index: 1000; /* Ensure it's on top */
+    z-index: 1000;
+}
+
+.analytics-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.analytics-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1); /* Makes the icon white */
 }
 
 .analytics-toggle:hover {

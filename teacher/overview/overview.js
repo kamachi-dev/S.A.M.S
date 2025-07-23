@@ -1547,7 +1547,10 @@ function toggleAdvancedAnalytics() {
     
     if (analyticsContent.style.display === 'none' || analyticsContent.style.display === '') {
         analyticsContent.style.display = 'block';
-        toggleButton.innerHTML = '📊 Hide Advanced Analytics';
+        toggleButton.innerHTML = `
+            <img src="/assets/icons/information-button.png" alt="Analytics" class="analytics-icon">
+            Hide Advanced Analytics
+        `;
         
         // Initialize charts if they haven't been initialized yet
         if (!trendChart) {
@@ -1565,7 +1568,10 @@ function toggleAdvancedAnalytics() {
         
     } else {
         analyticsContent.style.display = 'none';
-        toggleButton.innerHTML = '📊 Show Advanced Analytics';
+        toggleButton.innerHTML = `
+            <img src="/assets/icons/information-button.png" alt="Analytics" class="analytics-icon">
+            Show Advanced Analytics
+        `;
     }
 }
 
