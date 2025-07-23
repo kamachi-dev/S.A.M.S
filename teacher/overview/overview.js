@@ -3,6 +3,7 @@ base_url = 'https://sams-backend-u79d.onrender.com';
 // Global variables for charts
 let dailyChart, termChart, yearChart;
 let presentBarChart, absentBarChart, lateBarChart;
+let trendChart, dayPatternChart, comparativeChart; // Advanced analytics charts
 let allDashboardData = []; // Store all data for filtering
 let filteredData = []; // Store currently filtered data
 let allStudentsData = []; // Store enrolled students data for accurate count
@@ -1167,6 +1168,420 @@ async function initializeDashboard() {
 
 // Make functions globally available
 window.downloadAttendanceData = downloadAttendanceData;
+window.toggleAdvancedAnalytics = toggleAdvancedAnalytics;
+
+// ===== ADVANCED ANALYTICS FUNCTIONS =====
+
+// Initialize advanced analytics charts
+function initializeAdvancedCharts() {
+    // 1. 30-Day Trend Line Chart
+    const trendCanvas = document.getElementById('trendChart');
+    if (trendCanvas) {
+        trendChart = new Chart(trendCanvas.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: getLast30DaysLabels(),
+                datasets: [{
+                    label: 'Daily Attendance %',
+                    data: Array(30).fill(null),
+                    borderColor: '#0093ff',
+                    backgroundColor: 'rgba(0, 147, 255, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '30-Day Attendance Trend',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Attendance %' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Days Ago' }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. Day-of-Week Pattern Chart
+    const dayPatternCanvas = document.getElementById('dayPatternChart');
+    if (dayPatternCanvas) {
+        dayPatternChart = new Chart(dayPatternCanvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                datasets: [{
+                    label: 'Average Attendance %',
+                    data: [0, 0, 0, 0, 0],
+                    backgroundColor: [
+                        '#28a745',  // Monday - Green
+                        '#17a2b8',  // Tuesday - Teal  
+                        '#ffc107',  // Wednesday - Yellow
+                        '#fd7e14',  // Thursday - Orange
+                        '#dc3545'   // Friday - Red (typically lowest)
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Attendance by Day of Week',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Average Attendance %' }
+                    }
+                }
+            }
+        });
+    }
+
+    // 3. Monthly Comparison Chart  
+    const comparativeCanvas = document.getElementById('comparativeChart');
+    if (comparativeCanvas) {
+        comparativeChart = new Chart(comparativeCanvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: getLast6MonthsLabels(),
+                datasets: [{
+                    label: 'Monthly Attendance %',
+                    data: [0, 0, 0, 0, 0, 0],
+                    backgroundColor: '#6f42c1',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Last 6 Months Comparison',
+                        font: { size: 14, weight: 'bold' }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Monthly Average %' }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// Calculate 30-day trend data
+function calculate30DayTrend(records) {
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+    
+    const dailyData = {};
+    
+    // Group records by day
+    records.forEach(record => {
+        const recordDate = new Date(record.sent);
+        if (recordDate >= thirtyDaysAgo) {
+            const dateKey = recordDate.toDateString();
+            
+            if (!dailyData[dateKey]) {
+                dailyData[dateKey] = { present: 0, late: 0, absent: 0, total: 0 };
+            }
+            
+            const attendance = parseInt(record.attendance);
+            if (attendance === 3) dailyData[dateKey].present++;
+            else if (attendance === 2) dailyData[dateKey].late++;
+            else if (attendance === 1) dailyData[dateKey].absent++;
+            
+            if (attendance !== 0) dailyData[dateKey].total++; // Exclude excused
+        }
+    });
+    
+    // Generate 30-day trend percentages
+    const trendData = [];
+    for (let i = 29; i >= 0; i--) {
+        const date = new Date(today.getTime() - (i * 24 * 60 * 60 * 1000));
+        const dateKey = date.toDateString();
+        
+        if (dailyData[dateKey] && dailyData[dateKey].total > 0) {
+            const { present, late, total } = dailyData[dateKey];
+            const percentage = ((present + late * 0.5) / total * 100).toFixed(1);
+            trendData.push(parseFloat(percentage));
+        } else {
+            trendData.push(null); // No data for this day
+        }
+    }
+    
+    return trendData;
+}
+
+// Calculate day-of-week patterns
+function calculateDayPatterns(records) {
+    const dayData = Array(5).fill(0).map(() => ({ present: 0, late: 0, absent: 0, total: 0 }));
+    
+    records.forEach(record => {
+        const recordDate = new Date(record.sent);
+        const dayOfWeek = recordDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        
+        // Only process Monday-Friday (1-5)
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            const dayIndex = dayOfWeek - 1; // Convert to 0-4 index
+            const attendance = parseInt(record.attendance);
+            
+            if (attendance === 3) dayData[dayIndex].present++;
+            else if (attendance === 2) dayData[dayIndex].late++;
+            else if (attendance === 1) dayData[dayIndex].absent++;
+            
+            if (attendance !== 0) dayData[dayIndex].total++;
+        }
+    });
+    
+    // Calculate percentages for each day
+    return dayData.map(day => {
+        if (day.total === 0) return 0;
+        return ((day.present + day.late * 0.5) / day.total * 100).toFixed(1);
+    }).map(p => parseFloat(p));
+}
+
+// Calculate monthly comparison data
+function calculateMonthlyComparison(records) {
+    const today = new Date();
+    const monthlyData = Array(6).fill(0).map(() => ({ present: 0, late: 0, absent: 0, total: 0 }));
+    
+    records.forEach(record => {
+        const recordDate = new Date(record.sent);
+        const monthsAgo = (today.getFullYear() - recordDate.getFullYear()) * 12 + 
+                         (today.getMonth() - recordDate.getMonth());
+        
+        if (monthsAgo >= 0 && monthsAgo < 6) {
+            const attendance = parseInt(record.attendance);
+            
+            if (attendance === 3) monthlyData[5 - monthsAgo].present++;
+            else if (attendance === 2) monthlyData[5 - monthsAgo].late++;
+            else if (attendance === 1) monthlyData[5 - monthsAgo].absent++;
+            
+            if (attendance !== 0) monthlyData[5 - monthsAgo].total++;
+        }
+    });
+    
+    return monthlyData.map(month => {
+        if (month.total === 0) return 0;
+        return ((month.present + month.late * 0.5) / month.total * 100).toFixed(1);
+    }).map(p => parseFloat(p));
+}
+
+// Generate student risk alerts
+function generateStudentRiskAlerts(records) {
+    const studentStats = new Map();
+    
+    // Calculate individual student attendance rates
+    records.forEach(record => {
+        const studentKey = `${record.firstname} ${record.lastname}`;
+        
+        if (!studentStats.has(studentKey)) {
+            studentStats.set(studentKey, { 
+                name: studentKey,
+                grade: record.grade_level || 'N/A',
+                course: record.name || 'N/A',
+                present: 0, 
+                late: 0, 
+                absent: 0, 
+                total: 0 
+            });
+        }
+        
+        const stats = studentStats.get(studentKey);
+        const attendance = parseInt(record.attendance);
+        
+        if (attendance === 3) stats.present++;
+        else if (attendance === 2) stats.late++;
+        else if (attendance === 1) stats.absent++;
+        
+        if (attendance !== 0) stats.total++;
+    });
+    
+    // Identify at-risk students
+    const riskAlerts = [];
+    
+    studentStats.forEach(stats => {
+        if (stats.total > 0) {
+            const percentage = (stats.present + stats.late * 0.5) / stats.total * 100;
+            
+            if (percentage < 70) {
+                riskAlerts.push({
+                    name: stats.name,
+                    grade: stats.grade,
+                    course: stats.course,
+                    percentage: percentage.toFixed(1),
+                    level: 'critical'
+                });
+            } else if (percentage < 85) {
+                riskAlerts.push({
+                    name: stats.name,
+                    grade: stats.grade,
+                    course: stats.course,
+                    percentage: percentage.toFixed(1),
+                    level: 'warning'
+                });
+            }
+        }
+    });
+    
+    return riskAlerts.sort((a, b) => parseFloat(a.percentage) - parseFloat(b.percentage));
+}
+
+// Helper functions for labels
+function getLast30DaysLabels() {
+    const labels = [];
+    for (let i = 29; i >= 0; i--) {
+        labels.push(i === 0 ? 'Today' : `${i}d ago`);
+    }
+    return labels;
+}
+
+function getLast6MonthsLabels() {
+    const labels = [];
+    const today = new Date();
+    
+    for (let i = 5; i >= 0; i--) {
+        const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        labels.push(date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }));
+    }
+    
+    return labels;
+}
+
+// Update advanced analytics with data
+function updateAdvancedAnalytics(records) {
+    if (!records || records.length === 0) return;
+    
+    // Update 30-day trend
+    if (trendChart) {
+        const trendData = calculate30DayTrend(records);
+        trendChart.data.datasets[0].data = trendData;
+        trendChart.update();
+    }
+    
+    // Update day patterns
+    if (dayPatternChart) {
+        const dayData = calculateDayPatterns(records);
+        dayPatternChart.data.datasets[0].data = dayData;
+        dayPatternChart.update();
+    }
+    
+    // Update monthly comparison
+    if (comparativeChart) {
+        const monthlyData = calculateMonthlyComparison(records);
+        comparativeChart.data.datasets[0].data = monthlyData;
+        comparativeChart.update();
+    }
+    
+    // Update risk alerts
+    updateRiskAlerts(records);
+}
+
+// Update risk alerts section
+function updateRiskAlerts(records) {
+    const riskAlerts = generateStudentRiskAlerts(records);
+    const alertsContainer = document.getElementById('riskAlerts');
+    
+    if (!alertsContainer) return;
+    
+    if (riskAlerts.length === 0) {
+        alertsContainer.innerHTML = '<div class="no-alerts">✅ No students at risk - Great job!</div>';
+        return;
+    }
+    
+    let alertsHTML = '<div class="risk-alerts-header">⚠️ Students Needing Attention:</div>';
+    
+    riskAlerts.forEach(alert => {
+        const alertClass = alert.level === 'critical' ? 'alert-critical' : 'alert-warning';
+        const emoji = alert.level === 'critical' ? '🚨' : '⚠️';
+        
+        alertsHTML += `
+            <div class="risk-alert ${alertClass}">
+                <span class="alert-emoji">${emoji}</span>
+                <div class="alert-info">
+                    <div class="alert-name">${alert.name}</div>
+                    <div class="alert-details">${alert.grade} • ${alert.course} • ${alert.percentage}% attendance</div>
+                </div>
+                <div class="alert-action">
+                    <button class="contact-btn" onclick="alert('Contact parent feature coming soon!')">Contact Parent</button>
+                </div>
+            </div>
+        `;
+    });
+    
+    alertsContainer.innerHTML = alertsHTML;
+}
+
+// Toggle advanced analytics section
+function toggleAdvancedAnalytics() {
+    const analyticsContent = document.querySelector('.analytics-content');
+    const toggleButton = document.querySelector('.analytics-toggle');
+    
+    if (analyticsContent.style.display === 'none' || analyticsContent.style.display === '') {
+        analyticsContent.style.display = 'block';
+        toggleButton.innerHTML = '📊 Hide Advanced Analytics';
+        
+        // Initialize charts if they haven't been initialized yet
+        if (!trendChart) {
+            setTimeout(() => {
+                initializeAdvancedCharts();
+                // Update with current data
+                const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+                updateAdvancedAnalytics(dataToUse);
+            }, 100); // Small delay to ensure DOM is ready
+        } else {
+            // Update with current data
+            const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+            updateAdvancedAnalytics(dataToUse);
+        }
+        
+    } else {
+        analyticsContent.style.display = 'none';
+        toggleButton.innerHTML = '📊 Show Advanced Analytics';
+    }
+}
+
+// Update the existing updateChartsWithData function to also update advanced analytics
+const originalUpdateChartsWithData = updateChartsWithData;
+updateChartsWithData = function(stats) {
+    // Call original function
+    originalUpdateChartsWithData(stats);
+    
+    // Update advanced analytics if they're visible
+    const analyticsContent = document.querySelector('.analytics-content');
+    if (analyticsContent && analyticsContent.style.display === 'block') {
+        const dataToUse = filteredData.length > 0 ? filteredData : allDashboardData;
+        updateAdvancedAnalytics(dataToUse);
+    }
+};
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initializeDashboard);

@@ -140,6 +140,37 @@
                                 <canvas id="lateBar"></canvas>
                             </div>
                         </div>
+
+                        <!-- Advanced Analytics Section -->
+                        <div class="advanced-analytics-section">
+                            <button class="analytics-toggle" onclick="toggleAdvancedAnalytics()">
+                                📊 Show Advanced Analytics
+                            </button>
+                            
+                            <div class="analytics-content" style="display: none;">
+                                <div class="analytics-grid">
+                                    <!-- 30-Day Trend -->
+                                    <div class="analytics-chart trend-chart">
+                                        <canvas id="trendChart"></canvas>
+                                    </div>
+                                    
+                                    <!-- Day Pattern -->
+                                    <div class="analytics-chart day-pattern-chart">
+                                        <canvas id="dayPatternChart"></canvas>
+                                    </div>
+                                    
+                                    <!-- Monthly Comparison -->
+                                    <div class="analytics-chart comparative-chart">
+                                        <canvas id="comparativeChart"></canvas>
+                                    </div>
+                                    
+                                    <!-- Student Risk Alerts -->
+                                    <div class="analytics-alerts">
+                                        <div id="riskAlerts"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
