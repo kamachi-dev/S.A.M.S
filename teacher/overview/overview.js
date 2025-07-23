@@ -1555,7 +1555,7 @@ function updateRiskAlerts(records) {
     alertsContainer.innerHTML = alertsHTML;
 }
 
-// Function to send attendance notification to parent
+// Function to send email notification to parent
 async function notifyParent(studentName, attendancePercentage, courseName) {
     try {
         const button = event.target;
@@ -1563,55 +1563,59 @@ async function notifyParent(studentName, attendancePercentage, courseName) {
         button.textContent = 'Sending...';
         button.disabled = true;
 
-        console.log('🔄 Sending notification for:', studentName);
+        console.log('� Sending email notification for:', studentName);
         
-        // Send notification using the new comprehensive API
-        const response = await fetch('https://sams-backend-u79d.onrender.com/api/sendParentNotification.php', {
+        // Prompt for parent email (in real app, this would come from database)
+        const parentEmail = prompt(`Enter parent's email address for ${studentName}:`, 'parent@example.com');
+        
+        if (!parentEmail || parentEmail.trim() === '') {
+            button.textContent = originalText;
+            button.disabled = false;
+            alert('❌ Parent email is required to send notification');
+            return;
+        }
+        
+        // Get teacher name from login (or use placeholder)
+        const teacherName = window.userFirstName ? `${window.userFirstName} ${window.userLastName || ''}` : 'SAMS Teacher';
+        
+        // Send email notification
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/emailNotification.php', {
             method: 'POST',
-            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Provider': window.provider,
-                'Token': window.token,
             },
             body: JSON.stringify({
                 studentName: studentName,
-                attendancePercentage: attendancePercentage,
+                parentEmail: parentEmail.trim(),
+                teacherName: teacherName,
                 courseName: courseName
             })
         });
 
-        console.log('📨 Response status:', response.status);
+        console.log('� Email response status:', response.status);
         const result = await response.json();
-        console.log('📨 Response data:', result);
-
-        // Check token validity
-        if (!window.verifyToken(result)) return;
+        console.log('� Email result:', result);
 
         if (result.success) {
-            button.textContent = 'Sent ✓';
+            button.textContent = 'Email Sent ✓';
             button.style.backgroundColor = '#28a745';
             button.style.color = 'white';
             
-            const parentName = result.data.parent_name || 'Parent';
-            const studentDisplayName = result.data.student_name || studentName;
-            
-            alert(`✅ Attendance notification sent!\n\nStudent: ${studentDisplayName}\nParent: ${parentName}\nMessage: "Your child's attendance is at risk!"\n\nThe parent will see this notification in their messages.`);
+            alert(`✅ Attendance alert email sent successfully!\n\n📧 To: ${parentEmail}\n👤 Student: ${studentName}\n📚 Course: ${courseName}\n\nThe parent will receive the email notification immediately.`);
             
             setTimeout(() => {
                 button.textContent = originalText;
                 button.style.backgroundColor = '';
                 button.style.color = '';
                 button.disabled = false;
-            }, 3000);
+            }, 5000);
         } else {
-            throw new Error(result.error || 'Failed to send notification');
+            throw new Error(result.error || 'Failed to send email');
         }
     } catch (error) {
-        console.error('❌ Error sending notification:', error);
+        console.error('❌ Error sending email:', error);
         
         const button = event.target;
-        const originalText = button.textContent;
         button.textContent = 'Failed ✗';
         button.style.backgroundColor = '#dc3545';
         button.style.color = 'white';
@@ -1623,7 +1627,7 @@ async function notifyParent(studentName, attendancePercentage, courseName) {
             button.disabled = false;
         }, 3000);
         
-        alert(`❌ Failed to send notification: ${error.message}`);
+        alert(`❌ Failed to send email: ${error.message}`);
     }
 }
 
