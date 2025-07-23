@@ -572,10 +572,10 @@ function updateTeacher(teacherObj) {
         department: teacherObj.department || 'Unassigned',
         // Don't concatenate courses - show a clear message for multiple courses
         courseName: Array.isArray(teacherObj.courseNames) && teacherObj.courseNames.length > 1 
-            ? 'Cannot Update Teacher with Multiple Courses' 
+            ? 'Multiple Courses - Department Update Only' 
             : (Array.isArray(teacherObj.courseNames) ? teacherObj.courseNames[0] : (teacherObj.courseName || 'Unassigned')),
         courseCode: Array.isArray(teacherObj.courseCodes) && teacherObj.courseCodes.length > 1 
-            ? 'Cannot Update Teacher with Multiple Courses' 
+            ? 'Multiple Courses - Department Update Only' 
             : (Array.isArray(teacherObj.courseCodes) ? teacherObj.courseCodes[0] : (teacherObj.courseCode || 'Unassigned')),
         id: teacherObj.id // if available
     };
