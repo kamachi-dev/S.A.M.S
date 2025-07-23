@@ -78,6 +78,22 @@ function getCourseRecords(id) {
             if (!window.verifyToken(data)) return;
             if (JSON.stringify(data) === JSON.stringify(prevConvo)) return;
             prevConvo = data;
+            
+            // Debug: Log the received data
+            console.log('Received course records data:', data);
+            console.log('Data length:', data ? data.length : 'null/undefined');
+            if (data && data.length > 0) {
+                data.forEach((record, index) => {
+                    console.log(`Record ${index}:`, {
+                        attendance: record.attendance,
+                        type: record.type,
+                        message: record.message,
+                        firstname: record.firstname,
+                        lastname: record.lastname
+                    });
+                });
+            }
+            
             let i = 0;
             const messageContainer = document.querySelector('.middle-part');
             messageContainer.innerHTML = '';
