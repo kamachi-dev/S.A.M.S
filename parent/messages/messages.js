@@ -88,9 +88,26 @@ function getCourseRecords(id) {
 
             data.forEach((message, i) => {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = `sender ${attendanceArr[parseInt(message['attendance'])].toLocaleLowerCase()}`;
-                messageDiv.innerHTML = `${attendanceArr[parseInt(message['attendance'])]} : ${message['firstname']} ${message['lastname']}
-                    <p>${formatTimestamp(message.sent)}</p>`;
+                const attendanceIndex = parseInt(message['attendance']);
+                const attendanceType = attendanceArr[attendanceIndex];
+                
+                // Special handling for notifications
+                if (attendanceIndex === 4 && message['message']) {
+                    messageDiv.className = `sender notification`;
+                    // Display the full notification message from database
+                    messageDiv.innerHTML = `<div style="white-space: pre-line; padding: 10px;">${message['message']}</div>
+                        <p>${formatTimestamp(message.sent)}</p>`;
+                } else if (attendanceIndex === 4) {
+                    // Fallback if no message content
+                    messageDiv.className = `sender notification`;
+                    messageDiv.innerHTML = `${attendanceType}<br><strong>Your child's attendance is at risk!</strong><br>From: ${message['firstname']} ${message['lastname']} (Teacher)
+                        <p>${formatTimestamp(message.sent)}</p>`;
+                } else {
+                    messageDiv.className = `sender ${attendanceType.toLowerCase().replace('🚨 ', '')}`;
+                    messageDiv.innerHTML = `${attendanceType} : ${message['firstname']} ${message['lastname']}
+                        <p>${formatTimestamp(message.sent)}</p>`;
+                }
+                
                 if (i > 0) {
                     const prevMsg = data[i - 1];
                     const prevTime = new Date(prevMsg.sent).getTime();
@@ -133,7 +150,16 @@ function getCourses() {
                     clone.id = `course-${course['id']}`;
                     clone.querySelector('#pfp').src = course['pfp'] == null ? '/assets/icons/placeholder-parent.jpeg' : course['pfp'];
                     clone.querySelector('.course-name').textContent = course['name'];
-                    clone.querySelector('.course-preview').textContent = `${attendanceArr[parseInt(course['attendance'])]} : ${course['firstname']} ${course['lastname']}`;
+                    
+                    // Special handling for notifications in course preview
+                    const attendanceIndex = parseInt(course['attendance']);
+                    if (attendanceIndex === 4) {
+                        clone.querySelector('.course-preview').textContent = `🚨 Teacher Alert: Attendance Risk - ${course['firstname']} ${course['lastname']}`;
+                        clone.style.borderLeft = '4px solid #ff4444';
+                    } else {
+                        clone.querySelector('.course-preview').textContent = `${attendanceArr[attendanceIndex]} : ${course['firstname']} ${course['lastname']}`;
+                    }
+                    
                     clone.querySelector('.course-status').textContent = formatTimestamp(course['sent']);
                     clone.addEventListener('click', () => {
                         course_id = course['id'];
@@ -156,7 +182,8 @@ const attendanceArr = [
     'Excused',
     'Absent',
     'Late',
-    'Present'
+    'Present',
+    '🚨 Notification'
 ];
 let prevConvo = null;
 let course_id = null;

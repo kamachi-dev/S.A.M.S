@@ -291,6 +291,21 @@
     background-color: #797979;
 }
 
+.notification {
+    background-color: #ff4444 !important;
+    border: 2px solid #cc0000 !important;
+    box-shadow: 0 4px 8px rgba(255, 68, 68, 0.3) !important;
+    animation: pulse 2s infinite;
+    font-weight: bold !important;
+    color: white !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
 .sender>p {
     color: rgb(220, 220, 220);
     font-size: x-small;

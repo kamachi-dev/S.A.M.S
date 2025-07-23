@@ -1555,7 +1555,7 @@ function updateRiskAlerts(records) {
     alertsContainer.innerHTML = alertsHTML;
 }
 
-// Function to send attendance notification to parent via existing system
+// Function to send attendance notification to parent
 async function notifyParent(studentName, attendancePercentage, courseName) {
     try {
         const button = event.target;
@@ -1563,8 +1563,10 @@ async function notifyParent(studentName, attendancePercentage, courseName) {
         button.textContent = 'Sending...';
         button.disabled = true;
 
-        // Use your existing message system structure
-        const response = await fetch(`${base_url}/api/sendParentNotification.php`, {
+        console.log('🔄 Sending notification for:', studentName);
+        
+        // Send notification using the new comprehensive API
+        const response = await fetch('https://sams-backend-u79d.onrender.com/api/sendParentNotification.php', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -1573,37 +1575,55 @@ async function notifyParent(studentName, attendancePercentage, courseName) {
                 'Token': window.token,
             },
             body: JSON.stringify({
-                student_name: studentName,
-                attendance_percentage: attendancePercentage,
-                course_name: courseName,
-                notification_type: 'attendance_alert'
+                studentName: studentName,
+                attendancePercentage: attendancePercentage,
+                courseName: courseName
             })
         });
 
+        console.log('📨 Response status:', response.status);
         const result = await response.json();
+        console.log('📨 Response data:', result);
 
-        if (!window.verifyToken(result)) {
-            throw new Error('Authentication failed');
-        }
+        // Check token validity
+        if (!window.verifyToken(result)) return;
 
         if (result.success) {
-            button.textContent = 'Sent!';
+            button.textContent = 'Sent ✓';
             button.style.backgroundColor = '#28a745';
-            alert(`Notification sent to ${studentName}'s parent - they will see it in their Messages section!`);
+            button.style.color = 'white';
+            
+            const parentName = result.data.parent_name || 'Parent';
+            const studentDisplayName = result.data.student_name || studentName;
+            
+            alert(`✅ Attendance notification sent!\n\nStudent: ${studentDisplayName}\nParent: ${parentName}\nMessage: "Your child's attendance is at risk!"\n\nThe parent will see this notification in their messages.`);
             
             setTimeout(() => {
                 button.textContent = originalText;
                 button.style.backgroundColor = '';
+                button.style.color = '';
                 button.disabled = false;
             }, 3000);
         } else {
             throw new Error(result.error || 'Failed to send notification');
         }
     } catch (error) {
-        console.error('Error sending notification:', error);
-        button.textContent = originalText;
-        button.disabled = false;
-        alert(`Failed to send notification: ${error.message}`);
+        console.error('❌ Error sending notification:', error);
+        
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Failed ✗';
+        button.style.backgroundColor = '#dc3545';
+        button.style.color = 'white';
+        
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = '';
+            button.style.color = '';
+            button.disabled = false;
+        }, 3000);
+        
+        alert(`❌ Failed to send notification: ${error.message}`);
     }
 }
 
