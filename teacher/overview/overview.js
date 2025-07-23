@@ -1485,7 +1485,7 @@ function getLast6MonthsLabels() {
     
     for (let i = 5; i >= 0; i--) {
         const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
-        labels.push(date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }));
+        labels.push(date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }));
     }
     
     return labels;
@@ -1546,7 +1546,7 @@ function updateRiskAlerts(records) {
                     <div class="alert-details">${alert.grade} • ${alert.course} • ${alert.percentage}% attendance</div>
                 </div>
                 <div class="alert-action">
-                    <button class="contact-btn" onclick="alert('Contact parent feature coming soon!')">Contact Parent</button>
+                    <button class="contact-btn" onclick="notifyParent('${alert.name.replace(/'/g, "\\'")}', '${alert.percentage}', '${alert.course.replace(/'/g, "\\'")}')">Notify Parent</button>
                 </div>
             </div>
         `;
@@ -1554,6 +1554,61 @@ function updateRiskAlerts(records) {
     
     alertsContainer.innerHTML = alertsHTML;
 }
+
+// Function to send attendance notification to parent via existing system
+async function notifyParent(studentName, attendancePercentage, courseName) {
+    try {
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Sending...';
+        button.disabled = true;
+
+        // Use your existing message system structure
+        const response = await fetch(`${base_url}/api/sendParentNotification.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Provider': window.provider,
+                'Token': window.token,
+            },
+            body: JSON.stringify({
+                student_name: studentName,
+                attendance_percentage: attendancePercentage,
+                course_name: courseName,
+                notification_type: 'attendance_alert'
+            })
+        });
+
+        const result = await response.json();
+
+        if (!window.verifyToken(result)) {
+            throw new Error('Authentication failed');
+        }
+
+        if (result.success) {
+            button.textContent = 'Sent!';
+            button.style.backgroundColor = '#28a745';
+            alert(`Notification sent to ${studentName}'s parent - they will see it in their Messages section!`);
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+                button.disabled = false;
+            }, 3000);
+        } else {
+            throw new Error(result.error || 'Failed to send notification');
+        }
+    } catch (error) {
+        console.error('Error sending notification:', error);
+        button.textContent = originalText;
+        button.disabled = false;
+        alert(`Failed to send notification: ${error.message}`);
+    }
+}
+
+// Make function globally available
+window.notifyParent = notifyParent;
 
 // Update the existing updateChartsWithData function to also update advanced analytics
 const originalUpdateChartsWithData = updateChartsWithData;
