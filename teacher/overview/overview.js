@@ -1412,17 +1412,19 @@ function calculateMonthlyComparison(records) {
 
 // Generate student risk alerts
 function generateStudentRiskAlerts(records) {
-    const studentStats = new Map();
+    const courseStudentStats = new Map();
     
-    // Calculate individual student attendance rates
+    // Calculate attendance per course per student (fixed to avoid course mix-up)
     records.forEach(record => {
-        const studentKey = `${record.firstname} ${record.lastname}`;
+        const studentName = `${record.firstname} ${record.lastname}`;
+        const courseName = record.name || 'N/A';
+        const key = `${courseName}_${studentName}`; // Unique key per course-student combination
         
-        if (!studentStats.has(studentKey)) {
-            studentStats.set(studentKey, { 
-                name: studentKey,
+        if (!courseStudentStats.has(key)) {
+            courseStudentStats.set(key, { 
+                name: studentName,
                 grade: record.grade_level || 'N/A',
-                course: record.name || 'N/A',
+                course: courseName,
                 present: 0, 
                 late: 0, 
                 absent: 0, 
@@ -1430,7 +1432,7 @@ function generateStudentRiskAlerts(records) {
             });
         }
         
-        const stats = studentStats.get(studentKey);
+        const stats = courseStudentStats.get(key);
         const attendance = parseInt(record.attendance);
         
         if (attendance === 3) stats.present++;
@@ -1440,10 +1442,10 @@ function generateStudentRiskAlerts(records) {
         if (attendance !== 0) stats.total++;
     });
     
-    // Identify at-risk students
+    // Identify at-risk students per course
     const riskAlerts = [];
     
-    studentStats.forEach(stats => {
+    courseStudentStats.forEach(stats => {
         if (stats.total > 0) {
             const percentage = (stats.present + stats.late * 0.5) / stats.total * 100;
             
@@ -1451,7 +1453,7 @@ function generateStudentRiskAlerts(records) {
                 riskAlerts.push({
                     name: stats.name,
                     grade: stats.grade,
-                    course: stats.course,
+                    course: stats.course, // Now shows correct course where student is at risk
                     percentage: percentage.toFixed(1),
                     level: 'critical'
                 });
@@ -1459,7 +1461,7 @@ function generateStudentRiskAlerts(records) {
                 riskAlerts.push({
                     name: stats.name,
                     grade: stats.grade,
-                    course: stats.course,
+                    course: stats.course, // Now shows correct course where student is at risk
                     percentage: percentage.toFixed(1),
                     level: 'warning'
                 });
