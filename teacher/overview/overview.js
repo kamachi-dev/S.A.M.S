@@ -1673,6 +1673,31 @@ function notifyParent(studentName, attendancePercentage, courseName) {
             button.style.color = 'white';
             
             alert(`✅ Notification sent!\n\nStudent: ${result.data.student_name}\nParent will see: "Your child's attendance is at risk!" in their notifications.`);
+        } else if (result.error === 'Notification cooldown active') {
+            // Handle cooldown - show remaining time and disable button longer
+            const cooldownTime = result.cooldown_remaining || 60;
+            button.textContent = `Wait ${cooldownTime}s`;
+            button.style.backgroundColor = '#ffc107';
+            button.style.color = '#000';
+            
+            alert(`⏰ Please wait ${cooldownTime} seconds before sending another notification to prevent spam.`);
+            
+            // Start countdown timer
+            let remainingTime = cooldownTime;
+            const countdownInterval = setInterval(() => {
+                remainingTime--;
+                if (remainingTime > 0) {
+                    button.textContent = `Wait ${remainingTime}s`;
+                } else {
+                    clearInterval(countdownInterval);
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                    button.disabled = false;
+                }
+            }, 1000);
+            
+            return; // Don't run the finally block
         } else {
             throw new Error(result.error || 'Unknown error');
         }
