@@ -192,9 +192,22 @@ async function deleteFetchedParent(email, button) {
                 })
             });
 
-            const data = await response.json();
+            // Add detailed logging for debugging
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
 
-            if (!window.verifyToken(data)) return;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Response data:', data);
+
+            // Check if verifyToken exists and handle its return value properly
+            if (window.verifyToken && !window.verifyToken(data)) {
+                console.log('Token verification failed');
+                return;
+            }
 
             if (data.success) {
                 // Show success message with details
@@ -232,7 +245,21 @@ async function deleteFetchedParent(email, button) {
 
         } catch (error) {
             console.error('Error deleting parent:', error);
-            alert('An error occurred while deleting the parent. Please try again.');
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                email: email
+            });
+            
+            // More specific error message
+            let errorMessage = 'An error occurred while deleting the parent. Please try again.';
+            if (error.message.includes('HTTP error')) {
+                errorMessage = `Network error: ${error.message}. The deletion might have succeeded - please refresh the page to check.`;
+            } else if (error.message.includes('JSON')) {
+                errorMessage = 'Response parsing error. The deletion might have succeeded - please refresh the page to check.';
+            }
+            
+            alert(errorMessage);
 
             // Reset button state
             button.disabled = false;
