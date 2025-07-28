@@ -833,11 +833,11 @@ async function downloadAttendanceData() {
             [''],
             ['Period', 'Present', 'Late', 'Absent', 'Excused', 'Total', 'Attendance %'],
             ['Daily', stats.daily.present, stats.daily.late, stats.daily.absent, stats.daily.excused, stats.daily.total,
-                stats.daily.total > 0 ? (((stats.daily.present + stats.daily.late) / stats.daily.total) * 100).toFixed(2) + '%' : '0%'],
+                (stats.daily.present + stats.daily.late + stats.daily.absent) > 0 ? (((stats.daily.present + stats.daily.late * 0.5) / (stats.daily.present + stats.daily.late + stats.daily.absent)) * 100).toFixed(2) + '%' : '0%'],
             ['Term', stats.term.present, stats.term.late, stats.term.absent, stats.term.excused, stats.term.total,
-                stats.term.total > 0 ? (((stats.term.present + stats.term.late) / stats.term.total) * 100).toFixed(2) + '%' : '0%'],
+                (stats.term.present + stats.term.late + stats.term.absent) > 0 ? (((stats.term.present + stats.term.late * 0.5) / (stats.term.present + stats.term.late + stats.term.absent)) * 100).toFixed(2) + '%' : '0%'],
             ['Year', stats.year.present, stats.year.late, stats.year.absent, stats.year.excused, stats.year.total,
-                stats.year.total > 0 ? (((stats.year.present + stats.year.late) / stats.year.total) * 100).toFixed(2) + '%' : '0%'],
+                (stats.year.present + stats.year.late + stats.year.absent) > 0 ? (((stats.year.present + stats.year.late * 0.5) / (stats.year.present + stats.year.late + stats.year.absent)) * 100).toFixed(2) + '%' : '0%'],
             [''],
             ['Weekly Breakdown (Percentages)'],
             ['Week', 'Present %', 'Late %', 'Absent %'],
@@ -897,16 +897,19 @@ async function downloadAttendanceData() {
             const sortedStudents = Array.from(studentStats.values()).sort((a, b) => a.name.localeCompare(b.name));
             
             sortedStudents.forEach(student => {
+                // Only count non-excused records in total for percentage calculation
+                const nonExcusedTotal = student.present + student.late + student.absent;
+                
                 // Calculate attendance percentage (Present + Late counts as attended)
-                const attendancePercentage = student.total > 0 
-                    ? (((student.present + student.late * 0.5) / student.total) * 100).toFixed(2) + '%'
+                const attendancePercentage = nonExcusedTotal > 0 
+                    ? (((student.present + student.late * 0.5) / nonExcusedTotal) * 100).toFixed(2) + '%'
                     : '0%';
                 
                 summaryData.push([
                     student.name,
                     student.grade,
                     student.course,
-                    student.present + student.late + student.absent + student.excused,
+                    student.present + student.late + student.absent + student.excused, // Total records
                     student.present,
                     student.late,
                     student.absent,
