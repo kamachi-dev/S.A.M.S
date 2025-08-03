@@ -1,0 +1,8 @@
+[build]
+    functions = "api" # your serverless folder name
+    publish = "dist"  # React build output folder
+
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
