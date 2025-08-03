@@ -20,11 +20,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/auth",
-    passport.authenticate("google", { scope: ["profile", "email"] })
+    passport.authenticate("google", { scope: ["profile", "email"], session: false })
 );
 
 app.get("/api/auth/callback",
-    passport.authenticate("google", { failureRedirect: "/" }),
+    passport.authenticate("google", { failureRedirect: "/", session: false }),
     (req, res) => {
         res.redirect("/profile");
     }
