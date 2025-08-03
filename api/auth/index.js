@@ -19,18 +19,18 @@ app.get("/", (req, res) => {
     res.send(`<a href="/auth/google">Login with Google</a>`);
 });
 
-app.get("/auth/google",
+app.get("/api/auth/google",
     passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-app.get("/auth/callback",
+app.get("/api/auth/callback",
     passport.authenticate("google", { failureRedirect: "/" }),
     (req, res) => {
         res.redirect("/profile");
     }
 );
 
-app.get("/profile", (req, res) => {
+app.get("/api/profile", (req, res) => {
     if (!req.user) return res.redirect("/");
     res.send(`
         <h1>Hello ${req.user.displayName}!</h1>
