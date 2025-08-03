@@ -16,10 +16,10 @@ passport.use(new GoogleStrategy({
 app.use(passport.initialize());
 
 app.get("/", (req, res) => {
-    res.send(`<a href="/auth/google">Login with Google</a>`);
+    res.send(`<a href="/auth">Login with Google</a>`);
 });
 
-app.get("/api/auth/google",
+app.get("/api/auth",
     passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
