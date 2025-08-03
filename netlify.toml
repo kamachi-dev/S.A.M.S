@@ -1,6 +1,7 @@
 [build]
-    functions = "api" # your serverless folder name
-    publish = "dist"  # React build output folder
+    command = "npm run build"
+    functions = "api"
+    publish = "dist"
 
 [[redirects]]
     from = "/*"
