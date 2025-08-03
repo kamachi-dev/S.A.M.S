@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cookie": "^1.0.2",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "react": "^19.1.0",
