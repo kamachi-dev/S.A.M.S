@@ -1,0 +1,432 @@
+/* Engagement Monitoring Styles */
+.engagement-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.engagement-header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.engagement-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #0093ff, #0056b3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.engagement-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Control Panel */
+.control-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.control-panel h3 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.control-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: end;
+}
+
+.control-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.control-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.control-group select:focus {
+    outline: none;
+    border-color: #0093ff;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0093ff, #0056b3);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,147,255,0.3);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef2722, #c73028);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239,39,34,0.3);
+}
+
+/* Monitoring Section */
+.monitoring-section {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.video-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+    min-height: 400px;
+}
+
+.video-container h3 {
+    padding: 20px;
+    margin: 0;
+    background: linear-gradient(135deg, #0093ff, #0056b3);
+    color: white;
+    font-size: 1.2rem;
+}
+
+.camera-feed-wrapper {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: #000;
+}
+
+#cameraFeed, #engagementCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#engagementCanvas {
+    z-index: 2;
+}
+
+.camera-placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.camera-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Live Stats */
+.live-stats {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.live-stats h3 {
+    padding: 20px;
+    margin: 0;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    font-size: 1.2rem;
+}
+
+.stats-grid {
+    padding: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #0093ff;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #0093ff;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Charts Section */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.chart-container h3 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 300px;
+}
+
+/* History Section */
+.history-section {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.history-section h3 {
+    padding: 20px;
+    margin: 0;
+    background: linear-gradient(135deg, #6f42c1, #5a3bb5);
+    color: white;
+    font-size: 1.2rem;
+}
+
+.history-filters {
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    gap: 20px;
+    align-items: end;
+}
+
+.filter-group {
+    flex: 1;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto;
+    max-height: 400px;
+}
+
+.engagement-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.engagement-table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    position: sticky;
+    top: 0;
+}
+
+.engagement-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.engagement-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Engagement Level Badges */
+.high-engagement {
+    background: #d4edda;
+    color: #155724;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.medium-engagement {
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.low-engagement {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .monitoring-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .engagement-container {
+        padding: 15px;
+    }
+    
+    .control-form {
+        flex-direction: column;
+    }
+    
+    .control-buttons {
+        justify-content: center;
+    }
+    
+    .history-filters {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .engagement-header h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .engagement-table {
+        font-size: 0.8rem;
+    }
+    
+    .engagement-table th,
+    .engagement-table td {
+        padding: 8px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chart-container,
+.control-panel,
+.video-container,
+.live-stats,
+.history-section {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Loading States */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    to { left: 100%; }
+}

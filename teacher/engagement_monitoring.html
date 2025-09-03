@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS: Engagement Monitoring</title>
+    <link rel="icon" type="image/x-icon" href="../assets/HatLogo.png">
+    <link rel="stylesheet" href="../general/general.css">
+    <link rel="stylesheet" href="teacher.css">
+    <link rel="stylesheet" href="engagement/engagement.css">
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <div class="left-section">
+            <div class="hamburger-menu" onclick="toggleSidebar()">
+                <img src="../assets/icons/Hamburger.png" alt="Menu">
+            </div>
+            <div class="logo-section">
+                <img src="../assets/MMCL_Logo_Horizontal.webp" alt="MMCL Logo" class="logo">
+                <div class="sams-title">
+                    <h1>S.A.M.S</h1>
+                    <p>Student Attendance Monitoring System</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="user-profile" onclick="showUserProfile()">
+                <img src="" alt="User" id="userProfilePic">
+            </div>
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <ul>
+            <li><a href="overview.html"><img src="../assets/icons/Overview.png"> Overview</a></li>
+            <li><a href="studentInfo.html"><img src="../assets/icons/Student Info.png"> Student Info</a></li>
+            <li><a href="attendance_setup.html"><img src="../assets/icons/settings.png"> Attendance Setup</a></li>
+            <li class="active"><a href="engagement_monitoring.html"><img src="../assets/icons/information-button.png"> Engagement Monitoring</a></li>
+            <li><a href="../parent/messages.html"><img src="../assets/icons/message.png"> Messages</a></li>
+            <li><a href="../parent/userProfile.html"><img src="../assets/icons/User Profile.png"> User Profile</a></li>
+            <li><a href="#" onclick="signout()"><img src="../assets/icons/smol-signout.png"> Sign out</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="content-header">
+            <h2>Student Engagement Monitoring</h2>
+            <p>Real-time analysis of student attention and emotional engagement during class</p>
+        </div>
+
+        <div class="engagement-controls">
+            <div class="control-group">
+                <label for="courseSelect">Select Course:</label>
+                <select id="courseSelect">
+                    <option value="">Select a course...</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <button id="startMonitoringBtn" class="start-btn" onclick="startEngagementMonitoring()">
+                    🎥 Start Monitoring
+                </button>
+                <button id="stopMonitoringBtn" class="stop-btn" onclick="stopEngagementMonitoring()" style="display: none;">
+                    ⏹️ Stop Monitoring
+                </button>
+            </div>
+        </div>
+
+        <div class="engagement-dashboard">
+            <!-- Live Feed Section -->
+            <div class="live-feed-section">
+                <h3>📹 Live Camera Feed</h3>
+                <div class="camera-container">
+                    <video id="cameraFeed" width="640" height="480" style="display: none;"></video>
+                    <canvas id="engagementCanvas" width="640" height="480"></canvas>
+                    <div class="camera-placeholder" id="cameraPlaceholder">
+                        <p>📷 Camera feed will appear here when monitoring starts</p>
+                    </div>
+                </div>
+                
+                <div class="live-stats">
+                    <div class="stat-card">
+                        <h4>👥 Students Detected</h4>
+                        <span id="detectedCount">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>📊 Avg Engagement</h4>
+                        <span id="avgEngagement">0%</span>
+                    </div>
+                    <div class="stat-card">
+                        <h4>⏱️ Session Duration</h4>
+                        <span id="sessionDuration">00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Engagement Analytics -->
+            <div class="analytics-section">
+                <h3>📈 Real-time Analytics</h3>
+                
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h4>Engagement Over Time</h4>
+                        <canvas id="engagementTrendChart" width="400" height="200"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h4>Emotion Distribution</h4>
+                        <canvas id="emotionPieChart" width="400" height="200"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h4>Attention Levels</h4>
+                        <canvas id="attentionBarChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student List -->
+            <div class="student-list-section">
+                <h3>👨‍🎓 Individual Student Status</h3>
+                <div class="student-engagement-list" id="studentEngagementList">
+                    <p class="no-data">Start monitoring to see individual student engagement data</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Engagement History -->
+        <div class="engagement-history">
+            <h3>📊 Today's Engagement Summary</h3>
+            <div class="history-filters">
+                <select id="dateFilter">
+                    <option value="">Today</option>
+                </select>
+                <select id="courseHistoryFilter">
+                    <option value="all">All Courses</option>
+                </select>
+            </div>
+            
+            <div class="engagement-table">
+                <table id="engagementHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Engagement</th>
+                            <th>Dominant Emotion</th>
+                            <th>Attention Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6">No engagement data available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../general/general.js"></script>
+    <script src="teacher.js"></script>
+    <script src="engagement/engagement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
